@@ -14,14 +14,10 @@ function editor(params){
 
 
 }
-/**
- block: {
-     getName => 'image' | 'paragraph' | ... ??
- } 
-  
-  
- 
- */
+
+function makeBlockWithToolbox(blockdiv){
+
+}
 
  /**
   * 
