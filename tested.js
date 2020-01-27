@@ -2,7 +2,7 @@ function editor(params){
     /*
     {
     selector: "#id",
-    blocks: [..,...,..],
+    blocks: {'name' : fabric func , ....},
     ...
     }
     */
@@ -14,13 +14,22 @@ function editor(params){
 
 
 }
+/**
+ block: {
+     getName => 'image' | 'paragraph' | ... ??
+ } 
+  
+  
+ 
+ */
 
-function paragraphBlock(){
+ /**
+  * 
+  * @param {Object} data - obj | null
+  */
 
-    //render new empty block
+function paragraphBlock( data , editor){
 
-    //render block with data
-
-    //render ...
+    //render 
 
 }
