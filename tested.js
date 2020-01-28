@@ -46,10 +46,10 @@ function editor(params) {
         let bID = this._makeID();
 
         //create block of type 
-        if (name in this.editors) {
+        if (type in this.editors) {
             let belement = document.createElement("div");
             belement.classList.add("block_content_container")
-            var block = this.editors[name](data, belement, bID, this);
+            var block = this.editors[type](data, belement, bID, this);
         } else {
             console.log("no editor for", name);
             return null;
