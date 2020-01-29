@@ -1,5 +1,8 @@
-function editor({selector }) {
+function editor({
+    selector
+}) {
     const my = this;
+    //
     let mine = document.createElement("div");
     mine.classList.add("block_editor_outer_container");
     let they = document.querySelector(selector);
@@ -12,6 +15,11 @@ function editor({selector }) {
 
     var _current_id = 0;
 
+    this._makeID = function () {
+        _current_id++;
+        return _current_id;
+    }
+
     this.start = function (blocks) {
         this.element.innerHTML = "";
         this.blocks = [];
@@ -19,11 +27,6 @@ function editor({selector }) {
             blocks.forEach(e => this.addNewBlockFromSource(e));
         }
 
-    }
-
-    this._makeID = function () {
-        _current_id++;
-        return _current_id;
     }
 
     this.blockByID = function (id) {
@@ -39,10 +42,9 @@ function editor({selector }) {
             }
         });
         return r;
-
     }
+
     this.Index2ID = function (idx) {
-        //
         return this.element.querySelectorAll(".block_editor_unit").item(idx).dataset.block_id;
     }
 
@@ -83,11 +85,12 @@ function editor({selector }) {
         let nextnext = this.blockElementByIndex(bindex + 2);
         let theblock = this.blockElementByID(id);
         if (nextnext) {
-            nextnext.insertBefore(theblock)
+            nextnext.insertBefore(theblock);
         } else {
             //we at prelast element
-            this.element.appendChild(theblock)
+            this.element.appendChild(theblock);
         }
+        return true;
     }
 
     this.registerEditor = function ({
@@ -105,38 +108,33 @@ function editor({selector }) {
         };
     }
 
-
-    this.addNewBlock = function (type, data, refid) { //ref=?
-        //if there is ref id, insert after
+    this.addNewBlock = function (type, data, refid) { //ref=instert after that block
+        //if there is ref id, we have to insert after
         //find next element
         if (refid) {
             let nextidx = this.ID2Index(refid) + 1;
-            var refel = this.element.querySelectorAll(".block_editor_unit").item(nextidx);
+            var refel = this.element.blockElementByIndex(nextidx);
         }
-        //let nextn = refid
-
-        //generate ID
-        let bID = this._makeID();
 
         //create block of type 
         if (type in this.editors) {
-            let belement = document.createElement("div");
-            belement.classList.add("block_content_container")
-            var block = this.editors[type].make(data, belement, bID, this);
+            let bID = this._makeID();
+            let bcontent = document.createElement("div");
+            bcontent.classList.add("block_content_container");
+            var block = this.editors[type].make(data, bcontent, bID, this); //block made
+            this.blocks[bID] = block;
         } else {
             console.log("no editor for", name);
             return null;
         }
 
-        //create DOM element
+        //create DOM element for editor
         let domblock = document.createElement("div");
         domblock.appendChild(block.element);
         domblock.classList.add("block_editor_unit");
         domblock.dataset.block_id = bID;
         domblock.dataset.block_type = btype;
 
-        //add block to my dictionary
-        this.blocks[bID] = block;
         //add corresponding dom el. to container
         if (refid && refel) {
             refel.insertBefore(domblock);
@@ -176,16 +174,14 @@ function editor({selector }) {
 
 
 
-function addToolbox(block) {
+function addToolbar(block) {
     let tbx = document.createElement("div");
-    tbx.classList.add("toolbox");
-    block.element.appendChild(tbx);
-    block.addToToolbox = function (el) {
+    tbx.classList.add("block_toolbar");
+    block.element.parentNode.appendChild(tbx); //add to editor_item, !not! block content container
+    block.addToToolbar = function (el) {
         tbx.appendChild(el)
     }
 }
-
-
 
 function paragraph(data, el, id, editor) {
     let bc = document.createElement("p");
@@ -218,4 +214,17 @@ function paragraph(data, el, id, editor) {
         }
     })
     return blc;
+}
+
+function divider(data, el, id, editor) {
+    return {
+        element: el,
+        id: id,
+        render: function () {
+            el.innerHTML = "<hr />";
+        },
+        save: function () {
+            return {};
+        }
+    }
 }
