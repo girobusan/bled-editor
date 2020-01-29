@@ -1,20 +1,34 @@
-function editor(params) {
+function editor({selector }) {
+    const my = this;
+    let mine = document.createElement("div");
+    mine.classList.add("block_editor_outer_container");
+    let they = document.querySelector(selector);
+    they.innerHTML = "";
+    they.appendChild(mine);
+    this.element = mine; //this element is mine
 
-    this.element = document.querySelector(params.selector);
+    this.editors = params.editors; //  available blocks editors
+    this.blocks = null; // blocks array
 
-    this.editors = params.editors; // {}; //block 
-    this.blocks = {};
-    this._current_id = 0;
+    var _current_id = 0;
+
+    this.start = function (blocks) {
+        this.element.innerHTML = "";
+        this.blocks = [];
+        if (blocks) {
+            blocks.forEach(e => this.addNewBlockFromSource(e));
+        }
+
+    }
 
     this._makeID = function () {
-        this._current_id++;
-        return this._current_id;
+        _current_id++;
+        return _current_id;
     }
 
     this.blockByID = function (id) {
         return this.blocks[id];
     }
-
 
     this.ID2Index = function (id) {
         //
@@ -30,6 +44,65 @@ function editor(params) {
     this.Index2ID = function (idx) {
         //
         return this.element.querySelectorAll(".block_editor_unit").item(idx).dataset.block_id;
+    }
+
+    this.blockElementByID = function (id) {
+        return this.element.querySelectorAll(".block_editor_unit").item(this.ID2Index(id));
+    }
+
+    this.blockElementByIndex = function (idx) {
+        return this.element.querySelectorAll(".block_editor_unit").item(idx);
+    }
+
+    this.addNewBlockFromSource = function (d) {
+        this.addNewBlock(d.type, d.data, null);
+    }
+
+    this.moveUp = function (id) {
+        let bindex = this.ID2Index(id);
+        if (bindex == 0) {
+            return false;
+        }
+        //find prev block
+        let upper = this.blockElementByIndex(bindex - 1);
+        if (upper) {
+            let theblock = this.blockElementByID(id);
+            upper.insertBefore(theblock);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    this.moveDown = function (id) {
+        let bindex = this.ID2Index(id);
+        //last?
+        if (bindex + 1 == Object.keys(this.blocks).length) {
+            return false;
+        }
+        let nextnext = this.blockElementByIndex(bindex + 2);
+        let theblock = this.blockElementByID(id);
+        if (nextnext) {
+            nextnext.insertBefore(theblock)
+        } else {
+            //we at prelast element
+            this.element.appendChild(theblock)
+        }
+    }
+
+    this.registerEditor = function ({
+        type,
+        make,
+        icon,
+        label,
+        paste
+    }) {
+        this.editors[type] = {
+            make,
+            icon,
+            label,
+            paste
+        };
     }
 
 
@@ -49,7 +122,7 @@ function editor(params) {
         if (type in this.editors) {
             let belement = document.createElement("div");
             belement.classList.add("block_content_container")
-            var block = this.editors[type](data, belement, bID, this);
+            var block = this.editors[type].make(data, belement, bID, this);
         } else {
             console.log("no editor for", name);
             return null;
@@ -85,8 +158,6 @@ function editor(params) {
         delete(this.blocks[id]);
     } //remove block
 
-
-
     this.save = function () {
         let dt = [];
         this.element.querySelectorAll(".be_item")
@@ -101,7 +172,6 @@ function editor(params) {
         return mydata;
     }
 
-
 }
 
 
@@ -115,10 +185,7 @@ function addToolbox(block) {
     }
 }
 
-/**
- * 
- * @param {Object} data - obj | null
- */
+
 
 function paragraph(data, el, id, editor) {
     let bc = document.createElement("p");
