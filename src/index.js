@@ -172,9 +172,11 @@ function editor({
 
 }
 
+var constructors = {};
+var templates = {}
 
 
-function addToolbar(block) {
+templates.addToolbar = function(block) {
     let tbx = document.createElement("div");
     tbx.classList.add("block_toolbar");
     block.element.parentNode.appendChild(tbx); //add to editor_item, !not! block content container
@@ -183,7 +185,7 @@ function addToolbar(block) {
     }
 }
 
-function paragraph(data, el, id, editor) {
+constructors.paragraph = function(data, el, id, editor) {
     let bc = document.createElement("p");
     bc.setAttribute("contenteditable", true);
     el.appendChild(bc);
@@ -216,7 +218,7 @@ function paragraph(data, el, id, editor) {
     return blc;
 }
 
-function divider(data, el, id, editor) {
+constructors.divider = function(data, el, id, editor) {
     return {
         element: el,
         id: id,
