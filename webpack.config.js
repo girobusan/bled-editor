@@ -15,7 +15,7 @@ module.exports =  (env, argv) =>( {
 
     mode: "development",
     entry: {
-        "blocked": './src/index.js',
+        "blocked": './src/blockeditor.js',
         "tests" : "./src/testing.js",
         //"styles/preview" : "./src/styles/preview.less"
          //"styles/site" : "./src/styles/site.less"

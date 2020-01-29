@@ -1,4 +1,6 @@
-function editor({
+import * as UI from "./beui";
+
+export function BlockEditor({
     selector
 }) {
     const my = this;
@@ -10,7 +12,7 @@ function editor({
     they.appendChild(mine);
     this.element = mine; //this element is mine
 
-    this.editors = params.editors; //  available blocks editors
+    this.editors = {};// null; //params.editors; //  available blocks editors
     this.blocks = null; // blocks array
 
     var _current_id = 0;
@@ -26,7 +28,6 @@ function editor({
         if (blocks) {
             blocks.forEach(e => this.addNewBlockFromSource(e));
         }
-
     }
 
     this.blockByID = function (id) {
@@ -69,7 +70,7 @@ function editor({
         let upper = this.blockElementByIndex(bindex - 1);
         if (upper) {
             let theblock = this.blockElementByID(id);
-            upper.insertBefore(theblock);
+            this.element.insertBefore(theblock , upper);
             return true;
         } else {
             return false;
@@ -85,7 +86,7 @@ function editor({
         let nextnext = this.blockElementByIndex(bindex + 2);
         let theblock = this.blockElementByID(id);
         if (nextnext) {
-            nextnext.insertBefore(theblock);
+            this.element.insertBefore(theblock , nextnext);
         } else {
             //we at prelast element
             this.element.appendChild(theblock);
@@ -108,23 +109,28 @@ function editor({
         };
     }
 
+    this.focusOn = function(id){
+        let bf = this.blockElementByID(id);
+        bf.focus();
+    }
+
     this.addNewBlock = function (type, data, refid) { //ref=instert after that block
         //if there is ref id, we have to insert after
         //find next element
         if (refid) {
             let nextidx = this.ID2Index(refid) + 1;
-            var refel = this.element.blockElementByIndex(nextidx);
+            var refel = this.blockElementByIndex(nextidx);
         }
 
         //create block of type 
         if (type in this.editors) {
-            let bID = this._makeID();
+            var bID = this._makeID();
             let bcontent = document.createElement("div");
             bcontent.classList.add("block_content_container");
             var block = this.editors[type].make(data, bcontent, bID, this); //block made
             this.blocks[bID] = block;
         } else {
-            console.log("no editor for", name);
+            console.log("no editor for", type);
             return null;
         }
 
@@ -133,16 +139,17 @@ function editor({
         domblock.appendChild(block.element);
         domblock.classList.add("block_editor_unit");
         domblock.dataset.block_id = bID;
-        domblock.dataset.block_type = btype;
+        domblock.dataset.block_type = type;
+        UI.addPlusButton(domblock);
 
         //add corresponding dom el. to container
         if (refid && refel) {
-            refel.insertBefore(domblock);
+            this.element.insertBefore(domblock , refel);
         } else {
             this.element.appendChild(domblock);
         }
         block.render();
-
+        return bID;
     } //add new block
 
     this.removeBlock = function (id) {
@@ -151,18 +158,21 @@ function editor({
         //announce deletion to block
         this.blocks[id].delete();
         //remove dom element
-        this.element.querySelectorAll(".be_unit").item(elidx).remove();
+        this.element.querySelectorAll(".block_editor_unit").item(elidx).remove();
         //del block from registry
         delete(this.blocks[id]);
     } //remove block
 
     this.save = function () {
         let dt = [];
-        this.element.querySelectorAll(".be_item")
-            .forEach(e => dt.push({
+        this.element.querySelectorAll(".block_editor_unit")
+            .forEach(function(e) { 
+                console.log(e);
+                dt.push({
                 "type": e.dataset.block_type,
-                "data": this.blocks[e.dataset.block_id].save()
-            }));
+                "data": my.blocks[e.dataset.block_id].save()
+            })} 
+            );
         let mydata = {
             "blocks": dt
         };
@@ -188,7 +198,9 @@ templates.addToolbar = function(block) {
 constructors.paragraph = function(data, el, id, editor) {
     let bc = document.createElement("p");
     bc.setAttribute("contenteditable", true);
+    //bc.style.whiteSpace = "pre-wrap";
     el.appendChild(bc);
+    let re = /<div|p|h>/gi;
 
     let blc = {
         my: this,
@@ -200,6 +212,9 @@ constructors.paragraph = function(data, el, id, editor) {
         editor: editor,
         _p: bc,
         type: "paragraph",
+        clean: function(t){
+
+        },
         render: function () {
             this._p.innerHTML = this.data.text;
         },
@@ -210,9 +225,13 @@ constructors.paragraph = function(data, el, id, editor) {
         }
     }
 
-    blc._p.addEventListener("keyup", function (e) {
+    blc._p.addEventListener("keydown", function (e) {
         if (e.keyCode == 13) {
-            console.log("enter pressed")
+            let np = blc.editor.addNewBlock("paragraph" , {"text": ""} , blc.id);
+            //np = newly inserted block id
+            blc.editor.blocks[np]._p.focus();
+            console.log("enter pressed");
+            e.preventDefault();
         }
     })
     return blc;
@@ -229,4 +248,21 @@ constructors.divider = function(data, el, id, editor) {
             return {};
         }
     }
+}
+
+export function makeTypicalEditor(el){
+    let editor = new BlockEditor({selector: el});
+    
+    editor.registerEditor({
+        type: "paragraph",
+        make: constructors.paragraph,
+        label: "p"
+    });
+    editor.registerEditor({
+        type: "divider",
+        make: constructors.divider,
+        label: '--'
+    });
+  
+    return editor;
 }
