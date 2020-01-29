@@ -227,11 +227,17 @@ constructors.paragraph = function(data, el, id, editor) {
 
     blc._p.addEventListener("keydown", function (e) {
         if (e.keyCode == 13) {
-            let np = blc.editor.addNewBlock("paragraph" , {"text": ""} , blc.id);
+            
+            console.log("enter pressed" , e.shiftKey==true);
+            if(e.shiftKey){
+                }
+            else{
+                let np = blc.editor.addNewBlock("paragraph" , {"text": ""} , blc.id);
             //np = newly inserted block id
             blc.editor.blocks[np]._p.focus();
-            console.log("enter pressed");
-            e.preventDefault();
+            e.preventDefault()
+
+            };
         }
     })
     return blc;
