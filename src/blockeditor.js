@@ -70,7 +70,7 @@ export function BlockEditor({
         let upper = this.blockElementByIndex(bindex - 1);
         if (upper) {
             let theblock = this.blockElementByID(id);
-            this.element.insertBefore(theblock , upper);
+            this.element.insertBefore(theblock, upper);
             return true;
         } else {
             return false;
@@ -86,7 +86,7 @@ export function BlockEditor({
         let nextnext = this.blockElementByIndex(bindex + 2);
         let theblock = this.blockElementByID(id);
         if (nextnext) {
-            this.element.insertBefore(theblock , nextnext);
+            this.element.insertBefore(theblock, nextnext);
         } else {
             //we at prelast element
             this.element.appendChild(theblock);
@@ -109,7 +109,7 @@ export function BlockEditor({
         };
     }
 
-    this.focusOn = function(id){
+    this.focusOn = function (id) {
         let bf = this.blockElementByID(id);
         bf.focus();
     }
@@ -124,8 +124,17 @@ export function BlockEditor({
 
         //create block of type 
         if (type in this.editors) {
+
+
+            var domblock = document.createElement("div");
             var bID = this._makeID();
             let bcontent = document.createElement("div");
+            domblock.appendChild(bcontent);
+            domblock.classList.add("block_editor_unit");
+            domblock.dataset.block_id = bID;
+            domblock.dataset.block_type = type;
+            UI.addPlusButton(domblock);
+
             bcontent.classList.add("block_content_container");
             var block = this.editors[type].make(data, bcontent, bID, this); //block made
             this.blocks[bID] = block;
@@ -135,16 +144,13 @@ export function BlockEditor({
         }
 
         //create DOM element for editor
-        let domblock = document.createElement("div");
-        domblock.appendChild(block.element);
-        domblock.classList.add("block_editor_unit");
-        domblock.dataset.block_id = bID;
-        domblock.dataset.block_type = type;
-        UI.addPlusButton(domblock);
+
+        // domblock.appendChild(block.element);
+
 
         //add corresponding dom el. to container
         if (refid && refel) {
-            this.element.insertBefore(domblock , refel);
+            this.element.insertBefore(domblock, refel);
         } else {
             this.element.appendChild(domblock);
         }
@@ -160,18 +166,19 @@ export function BlockEditor({
         //remove dom element
         this.element.querySelectorAll(".block_editor_unit").item(elidx).remove();
         //del block from registry
-        delete(this.blocks[id]);
+        delete (this.blocks[id]);
     } //remove block
 
     this.save = function () {
         let dt = [];
         this.element.querySelectorAll(".block_editor_unit")
-            .forEach(function(e) { 
+            .forEach(function (e) {
                 console.log(e);
                 dt.push({
-                "type": e.dataset.block_type,
-                "data": my.blocks[e.dataset.block_id].save()
-            })} 
+                    "type": e.dataset.block_type,
+                    "data": my.blocks[e.dataset.block_id].save()
+                })
+            }
             );
         let mydata = {
             "blocks": dt
@@ -186,16 +193,27 @@ var constructors = {};
 var templates = {}
 
 
-templates.addToolbar = function(block) {
+templates.addToolbar = function (block) {
     let tbx = document.createElement("div");
     tbx.classList.add("block_toolbar");
+    tbx.style.backgroundColor = "black";
+    tbx.style.minHeight = "24px";
+    tbx.style.display = "none";
+    block.element.parentNode.addEventListener("mouseover" , function(){
+        tbx.style.display = "block"
+    });
+    block.element.parentNode.addEventListener("mouseout" , function(){
+        tbx.style.display = "none"
+    })
+
+
     block.element.parentNode.appendChild(tbx); //add to editor_item, !not! block content container
     block.addToToolbar = function (el) {
         tbx.appendChild(el)
     }
 }
 
-constructors.paragraph = function(data, el, id, editor) {
+constructors.paragraph = function (data, el, id, editor) {
     let bc = document.createElement("p");
     bc.setAttribute("contenteditable", true);
     //bc.style.whiteSpace = "pre-wrap";
@@ -212,7 +230,7 @@ constructors.paragraph = function(data, el, id, editor) {
         editor: editor,
         _p: bc,
         type: "paragraph",
-        clean: function(t){
+        clean: function (t) {
 
         },
         render: function () {
@@ -227,23 +245,21 @@ constructors.paragraph = function(data, el, id, editor) {
 
     blc._p.addEventListener("keydown", function (e) {
         if (e.keyCode == 13) {
-            
-            console.log("enter pressed" , e.shiftKey==true);
-            if(e.shiftKey){
-                }
-            else{
-                let np = blc.editor.addNewBlock("paragraph" , {"text": ""} , blc.id);
-            //np = newly inserted block id
-            blc.editor.blocks[np]._p.focus();
-            e.preventDefault()
-
+            console.log("enter pressed", e.shiftKey == true);
+            if (e.shiftKey) {
+                //
+            } else {
+                let np = blc.editor.addNewBlock("paragraph", { "text": "" }, blc.id);
+                //np = newly inserted block id
+                blc.editor.blocks[np]._p.focus();
+                e.preventDefault();
             };
         }
     })
     return blc;
 }
 
-constructors.divider = function(data, el, id, editor) {
+constructors.divider = function (data, el, id, editor) {
     return {
         element: el,
         id: id,
@@ -256,9 +272,54 @@ constructors.divider = function(data, el, id, editor) {
     }
 }
 
-export function makeTypicalEditor(el){
-    let editor = new BlockEditor({selector: el});
-    
+/*
+    {
+        "type": "header",
+        "data": 
+        {
+          "text": "Заголовок",
+          "level": 3
+        }
+    }
+
+
+*/
+
+constructors.header = function (data, el, id, editor) {
+
+    //mytag.
+
+    let blc = {
+        element: el,
+        //id: id,
+        text: data && data.text ? data.text : "Header",
+        level: data && data.level ? data.level : 2,
+        //mytag: 
+        redraw: function (t) {
+            this.element.innerHTML = "";
+            let myh = document.createElement("h" + this.level);
+            myh.setAttribute("contenteditable", true);
+            myh.classList.add("header_preview")
+            myh.innerHTML = t;
+            this.element.appendChild(myh);
+        },
+        render: function () {
+            this.redraw(this.text);
+        },
+        save: function () {
+            let txt = this.element.querySelector(".header_preview").innerHTML;
+            return { "text": txt, "level": 2 }
+
+        }
+
+    }
+    templates.addToolbar(blc);
+    return blc;
+}
+
+export function makeTypicalEditor(el) {
+    let editor = new BlockEditor({ selector: el });
+
     editor.registerEditor({
         type: "paragraph",
         make: constructors.paragraph,
@@ -269,6 +330,11 @@ export function makeTypicalEditor(el){
         make: constructors.divider,
         label: '--'
     });
-  
+    editor.registerEditor({
+        type: "header",
+        make: constructors.header,
+        label: 'H'
+    });
+
     return editor;
 }

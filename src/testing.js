@@ -2,6 +2,13 @@ console.log("testing");
 import * as Editor from "./blockeditor.js";
 var testdata = [
     {
+        "type" : "header",
+        "data" : {
+            "text" : "Драма катода",
+            "level" : 1
+        }
+    },
+    {
         "type" : "paragraph",
         "data" : {
             "text" : "Драма однородно притягивает прозаический дактиль. Весьма перспективной представляется гипотеза, высказанная И.Гальпериным"
