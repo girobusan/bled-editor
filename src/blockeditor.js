@@ -7,12 +7,18 @@ export function BlockEditor({
     //
     let mine = document.createElement("div");
     mine.classList.add("block_editor_outer_container");
+    mine.style.minHeight = "64px";
     let they = document.querySelector(selector);
     they.innerHTML = "";
     they.appendChild(mine);
     this.element = mine; //this element is mine
 
-    this.editors = {};// null; //params.editors; //  available blocks editors
+
+    this.editors = {
+        //"zero":{
+        //
+        //}
+    };// null; //params.editors; //  available blocks editors
     this.blocks = null; // blocks array
     this.addMenu = [];
 
@@ -24,21 +30,35 @@ export function BlockEditor({
     }
 
     this.start = function (blocks) {
-        this.element.innerHTML = "";
+        //add sero block
+
+        //this.element.innerHTML = "";
         this.blocks = [];
         //console.log(this.editors)
         //add menu
-        Object.keys(this.editors).forEach(function(e){
-            console.log("added handler for" , e);
+        Object.keys(this.editors).forEach(function (e) {
+            console.log("added handler for", e);
             let val = my.editors[e];
-            my.addMenu.push({                
-                "label" : val.label,
+            my.addMenu.push({
+                "label": val.label,
                 "icon": val.icon ? val.icon : null,
-                "handler": function(refid){
-                    my.addNewBlock(e, null,refid);
+                "handler": function (refid) {
+                    my.addNewBlock(e, null, refid);
                 }
             })
         })
+        //
+
+        let zero = document.createElement("div");
+        zero.classList.add("starting_block");
+        zero.style.height = "8px";
+        zero.style.wifth = "100%";
+        zero.style.marginLeft = "-32px";
+        zero.dataset.block_id = "start";
+        
+        UI.addPlusButton(zero , this.addMenu);
+        mine.appendChild(zero);
+        //
         if (blocks) {
             blocks.forEach(e => this.addNewBlockFromSource(e));
         }
@@ -131,7 +151,11 @@ export function BlockEditor({
     this.addNewBlock = function (type, data, refid) { //ref=instert after that block
         //if there is ref id, we have to insert after
         //find next element
-        if (refid) {
+        if (refid=="start"){
+          // var start = true;
+           var refel = this.blockElementByIndex(0);
+        }
+        else if (refid) {
             let nextidx = this.ID2Index(refid) + 1;
             var refel = this.blockElementByIndex(nextidx);
         }
@@ -147,13 +171,13 @@ export function BlockEditor({
             domblock.classList.add("block_editor_unit");
             domblock.dataset.block_id = bID;
             domblock.dataset.block_type = type;
-           
+
 
             bcontent.classList.add("block_content_container");
             var block = this.editors[type].make(data, bcontent, bID, this); //block made
             this.blocks[bID] = block;
-            UI.addPlusButton(domblock , this.addMenu);
-            UI.addBlockControls(domblock,null,this);
+            UI.addPlusButton(domblock, this.addMenu);
+            UI.addBlockControls(domblock, null, this);
         } else {
             console.log("no editor for", type);
             return null;
@@ -165,6 +189,9 @@ export function BlockEditor({
 
 
         //add corresponding dom el. to container
+        //if(start){
+
+        //}
         if (refid && refel) {
             this.element.insertBefore(domblock, refel);
         } else {
@@ -178,8 +205,8 @@ export function BlockEditor({
         //find block index
         let elidx = this.ID2Index(id);
         //announce deletion to block
-        if("beforeDelete" in this.blocks[id]){
-        this.blocks[id].beforeDelete();
+        if ("beforeDelete" in this.blocks[id]) {
+            this.blocks[id].beforeDelete();
         }
         //remove dom element
         this.element.querySelectorAll(".block_editor_unit").item(elidx).remove();
@@ -325,13 +352,13 @@ constructors.header = function (data, el, id, editor) {
 
         },
         //mytag: 
-     
+
         render: function () {
             let myh = document.createElement("h" + this.level);
             myh.setAttribute("contenteditable", true);
             myh.classList.add("header_preview");
-            myh.innerHTML = this.text;   
-            this.element.appendChild(myh);        
+            myh.innerHTML = this.text;
+            this.element.appendChild(myh);
             //this.refresh();
         },
         save: function () {

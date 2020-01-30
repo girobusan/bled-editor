@@ -141,6 +141,7 @@ export function addBlockControls(block, items , ed) {
     ctrls.style.position = "absolute";
     ctrls.style.top = "0px";
     ctrls.style.right = "0px";
+    ctrls.style.width = "32px";
     ctrls.style.backgroundColor = "rgb(36.1%, 82.3%, 93.3%)";
     ctrls.style.textAlign = "center";
     ctrls.style.display = "none";
