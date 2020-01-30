@@ -26,9 +26,10 @@ export function BlockEditor({
     this.start = function (blocks) {
         this.element.innerHTML = "";
         this.blocks = [];
-        console.log(this.editors)
+        //console.log(this.editors)
+        //add menu
         Object.keys(this.editors).forEach(function(e){
-            //console.log(e);
+            console.log("added handler for" , e);
             let val = my.editors[e];
             my.addMenu.push({                
                 "label" : val.label,
@@ -146,11 +147,13 @@ export function BlockEditor({
             domblock.classList.add("block_editor_unit");
             domblock.dataset.block_id = bID;
             domblock.dataset.block_type = type;
-            UI.addPlusButton(domblock , this.addMenu);
+           
 
             bcontent.classList.add("block_content_container");
             var block = this.editors[type].make(data, bcontent, bID, this); //block made
             this.blocks[bID] = block;
+            UI.addPlusButton(domblock , this.addMenu);
+            UI.addBlockControls(domblock,null,this);
         } else {
             console.log("no editor for", type);
             return null;
@@ -175,7 +178,9 @@ export function BlockEditor({
         //find block index
         let elidx = this.ID2Index(id);
         //announce deletion to block
-        this.blocks[id].delete();
+        if("beforeDelete" in this.blocks[id]){
+        this.blocks[id].beforeDelete();
+        }
         //remove dom element
         this.element.querySelectorAll(".block_editor_unit").item(elidx).remove();
         //del block from registry
@@ -186,7 +191,7 @@ export function BlockEditor({
         let dt = [];
         this.element.querySelectorAll(".block_editor_unit")
             .forEach(function (e) {
-                console.log(e);
+                //console.log(e);
                 dt.push({
                     "type": e.dataset.block_type,
                     "data": my.blocks[e.dataset.block_id].save()
