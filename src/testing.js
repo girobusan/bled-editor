@@ -5,7 +5,7 @@ var testdata = [
         "type" : "header",
         "data" : {
             "text" : "Драма катода",
-            "level" : 1
+            "level" : 3
         }
     },
     {

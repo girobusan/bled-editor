@@ -14,6 +14,7 @@ export function BlockEditor({
 
     this.editors = {};// null; //params.editors; //  available blocks editors
     this.blocks = null; // blocks array
+    this.addMenu = [];
 
     var _current_id = 0;
 
@@ -25,6 +26,18 @@ export function BlockEditor({
     this.start = function (blocks) {
         this.element.innerHTML = "";
         this.blocks = [];
+        console.log(this.editors)
+        Object.keys(this.editors).forEach(function(e){
+            //console.log(e);
+            let val = my.editors[e];
+            my.addMenu.push({                
+                "label" : val.label,
+                "icon": val.icon ? val.icon : null,
+                "handler": function(refid){
+                    my.addNewBlock(e, null,refid);
+                }
+            })
+        })
         if (blocks) {
             blocks.forEach(e => this.addNewBlockFromSource(e));
         }
@@ -133,7 +146,7 @@ export function BlockEditor({
             domblock.classList.add("block_editor_unit");
             domblock.dataset.block_id = bID;
             domblock.dataset.block_type = type;
-            UI.addPlusButton(domblock);
+            UI.addPlusButton(domblock , this.addMenu);
 
             bcontent.classList.add("block_content_container");
             var block = this.editors[type].make(data, bcontent, bID, this); //block made
@@ -196,9 +209,11 @@ var templates = {}
 templates.addToolbar = function (block) {
     let tbx = document.createElement("div");
     tbx.classList.add("block_toolbar");
-    tbx.style.backgroundColor = "black";
+    tbx.style.backgroundColor = "gray";
     tbx.style.minHeight = "24px";
-    tbx.style.display = "none";
+    tbx.style.display = "block";
+    tbx.style.padding = "4px";
+    /*
     block.element.parentNode.addEventListener("mouseover" , function(){
         tbx.style.display = "block"
     });
@@ -206,7 +221,7 @@ templates.addToolbar = function (block) {
         tbx.style.display = "none"
     })
 
-
+*/
     block.element.parentNode.appendChild(tbx); //add to editor_item, !not! block content container
     block.addToToolbar = function (el) {
         tbx.appendChild(el)
@@ -286,34 +301,61 @@ constructors.divider = function (data, el, id, editor) {
 */
 
 constructors.header = function (data, el, id, editor) {
-
     //mytag.
 
     let blc = {
         element: el,
         //id: id,
         text: data && data.text ? data.text : "Header",
-        level: data && data.level ? data.level : 2,
-        //mytag: 
-        redraw: function (t) {
+        level: data && data.level ? data.level : 1,
+        refresh: function () {
+            //console.log(this.element.querySelector(".header_preview").innerHTML)
+            this.text = this.element.querySelector(".header_preview").innerHTML;
             this.element.innerHTML = "";
             let myh = document.createElement("h" + this.level);
             myh.setAttribute("contenteditable", true);
-            myh.classList.add("header_preview")
-            myh.innerHTML = t;
-            this.element.appendChild(myh);
+            myh.classList.add("header_preview");
+            myh.innerHTML = this.text;
+            this.element.appendChild(myh)
+
         },
+        //mytag: 
+     
         render: function () {
-            this.redraw(this.text);
+            let myh = document.createElement("h" + this.level);
+            myh.setAttribute("contenteditable", true);
+            myh.classList.add("header_preview");
+            myh.innerHTML = this.text;   
+            this.element.appendChild(myh);        
+            //this.refresh();
         },
         save: function () {
             let txt = this.element.querySelector(".header_preview").innerHTML;
-            return { "text": txt, "level": 2 }
+            return { "text": txt, "level": this.level }
 
         }
 
     }
+    let opts = document.createElement("select");
+    opts.style.display = "block";
+    //opts.type="select";
+    for (let i = 1; i < 7; i++) {
+        let opt = document.createElement("option");
+
+        opt.value = i;
+        opt.label = "level " + i;
+        if (i == blc.level) {
+            opt.setAttribute("selected", true)
+        }
+        opts.appendChild(opt);
+    }
+    opts.addEventListener("change", function (e) {
+        let nv = opts[opts.selectedIndex].value;
+        blc.level = nv;
+        blc.refresh();
+    });
     templates.addToolbar(blc);
+    blc.addToToolbar(opts)
     return blc;
 }
 
