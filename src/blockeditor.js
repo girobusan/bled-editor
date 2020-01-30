@@ -244,6 +244,7 @@ templates.addToolbar = function (block) {
     tbx.classList.add("block_toolbar");
     tbx.style.backgroundColor = "gray";
     tbx.style.minHeight = "24px";
+    tbx.style.fontSize = ".8em"
     tbx.style.display = "block";
     tbx.style.padding = "4px";
 
@@ -251,6 +252,68 @@ templates.addToolbar = function (block) {
     block.addToToolbar = function (el) {
         tbx.appendChild(el)
     }
+}
+
+templates.twoPanels = function(block){
+    //let mode = "preview";
+    let pp = document.createElement("div");
+    pp.classList.add("block_preview_panel");
+    pp.classList.add("one_of_two_panels");
+    pp.style.position="relative";
+    pp.style.width = "100%";
+
+    let ep = document.createElement("div");
+    ep.classList.add("block_edit_panel");
+    ep.classList.add("one_of_two_panels");
+    ep.style.display = "none";
+    //
+    ebtn = document.createElement("div");
+    ebtn.classList.add("edit_button");
+    ebtn.innerHTML = "EDIT";
+    ebtn.style.position = "absolute";
+    ebtn.style.backgroundColor = "silver";
+    ebtn.style.padding = "2px 4px";
+    ebtn.style.color = "white"
+    ebtn.style.zIndex = 5;
+    ebtn.style.right = "8px";
+    ebtn.style.bottom = "8px";
+
+    ebtn.addEventListener("click" , function(){
+        let editmode = ep.style.display != "none";
+        if(editmode){
+            ep.style.display = "none";
+            ebtn.innerHTML = "EDIT";
+        }else{
+            ep.style.display = "block";
+            ebtn.innerHTML = "PREVIEW";
+        }
+    })
+    //
+    pp.appendChild(ebtn);
+    //
+    block.element.appendChild(pp);
+    block.element.appendChild(ep);
+    //
+    block.addToPreview = function(e){
+        pp.appendChild(e);
+    }
+    block.addToEditor = function(e){
+        ep.appendChild(e);
+    }
+    block.goEditMode = function(e){
+        ep.style.display = "block";
+        ebtn.innerHTML = "PREVIEW";
+
+    }
+    block.goPreviewMode = function(e){
+        ep.style.display = "none";
+        ebtn.innerHTML = "EDIT";
+
+    }
+    block.isInEditMode = function(){
+        return (ep.style.display != "none");
+    }
+
 }
 
 constructors.paragraph = function (data, el, id, editor) {
@@ -403,11 +466,11 @@ constructors.code = function(data, el, id, editor){
     }
     templates.addToolbar(blc);
     //
-   
+   /*
     opts.addEventListener("change" , function(){
         console.log(opts[opts.selectedIndex].value);
     })
-
+    */
     blc.addToToolbar(opts);
     return blc;
 
