@@ -1,5 +1,41 @@
 
+export function tooltips(){
+    let tt = document.createElement("div");
+    tt.style.position = "absolute";
+    tt.style.display = "none";
+    tt.style.zIndex = 20;
+    tt.style.pointerEvents = "none";
+    
 
+    let ttin = document.createElement("div");
+    tt.appendChild(ttin);
+    ttin.style.backgroundColor = "rgba(85.1%, 83%, 59.6%, 0.75)";
+    ttin.style.pointerEvents = "none";
+    ttin.style.padding = "4px 8px";
+    ttin.style.position = "relative";
+    ttin.style.borderRadius = "4px";
+    ttin.style.right = "50%";
+    ttin.style.bottom = "24px";
+
+    document.body.appendChild(tt);
+
+    window.addEventListener("mousemove" , function(e){
+        tt.style.top = e.clientY + "px";
+        tt.style.left = e.clientX + "px";
+
+    })
+        window.addEventListener("mouseover" , function(e){
+        if(e.target&&e.target.dataset.hint){
+        ttin.innerHTML = e.target.dataset.hint;
+       // tt.style.top = e.clientY + "px";
+          //  tt.style.left = e.clientX + "px";
+        tt.style.display = "block";
+        }else{
+            
+            tt.style.display = "none";
+        }
+    })
+}
 export function addPlusButton(block, menu) {
     block.style.position = "relative";
     let menuhidden = true;
@@ -33,12 +69,13 @@ export function addPlusButton(block, menu) {
     dd.style.border = "1px solid gray"
     menu.forEach(element => {
         let mi = document.createElement("div");
-        mi.innerHTML = element.label;
-        mi.style.backgroundColor = "white";
+        mi.innerHTML = element.icon;
+        //mi.style.backgroundColor = "white";
         mi.style.padding = "2px"
         mi.style.borderRadius = "5px";
         mi.style.margin = "2px";
         mi.style.cursor = "pointer";
+        mi.dataset.hint = element.label;
         mi.addEventListener("click", e => {
             element.handler(block.dataset.block_id);
             dd.style.display = "none";
@@ -66,6 +103,7 @@ export function addPlusButton(block, menu) {
     button.style.display = "block"
     button.style.borderRadius = "12px";
     button.style.transition = "opacity .5s";
+    button.dataset.hint = "Add new block";
     button.innerHTML = "+";
 
 
@@ -142,7 +180,7 @@ export function addBlockControls(block, items , ed) {
     ctrls.style.top = "0px";
     ctrls.style.right = "0px";
     ctrls.style.width = "32px";
-    ctrls.style.backgroundColor = "rgb(36.1%, 82.3%, 93.3%)";
+    ctrls.style.backgroundColor = "silver";
     ctrls.style.textAlign = "center";
     ctrls.style.display = "none";
     ctrls.addEventListener("mouseover", () => {ctrls.style.zIndex=6 ; ctrls.style.display = "block"} );
@@ -159,7 +197,8 @@ export function addBlockControls(block, items , ed) {
         mi.style.cursor = "pointer";
         mi.addEventListener("click", function () {
             e.handler(block.dataset.block_id);
-        })
+        });
+        mi.dataset.hint = e.label;
         ctrls.appendChild(mi);
     });
 

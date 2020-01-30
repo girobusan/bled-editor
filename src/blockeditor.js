@@ -62,6 +62,7 @@ export function BlockEditor({
         if (blocks) {
             blocks.forEach(e => this.addNewBlockFromSource(e));
         }
+        UI.tooltips();
     }
 
     this.blockByID = function (id) {
@@ -245,15 +246,7 @@ templates.addToolbar = function (block) {
     tbx.style.minHeight = "24px";
     tbx.style.display = "block";
     tbx.style.padding = "4px";
-    /*
-    block.element.parentNode.addEventListener("mouseover" , function(){
-        tbx.style.display = "block"
-    });
-    block.element.parentNode.addEventListener("mouseout" , function(){
-        tbx.style.display = "none"
-    })
 
-*/
     block.element.parentNode.appendChild(tbx); //add to editor_item, !not! block content container
     block.addToToolbar = function (el) {
         tbx.appendChild(el)
@@ -319,18 +312,6 @@ constructors.divider = function (data, el, id, editor) {
     }
 }
 
-/*
-    {
-        "type": "header",
-        "data": 
-        {
-          "text": "Заголовок",
-          "level": 3
-        }
-    }
-
-
-*/
 
 constructors.header = function (data, el, id, editor) {
     //mytag.
@@ -391,23 +372,73 @@ constructors.header = function (data, el, id, editor) {
     return blc;
 }
 
+constructors.code = function(data, el, id, editor){
+    let pre = document.createElement("pre");
+    let cd = document.createElement("code");
+    pre.appendChild(cd);
+    cd.setAttribute("contenteditable" , true);
+    el.appendChild(pre);
+    let langs = ["Auto" , "Arduino" , 'JavaScript' ,"Processing" , "Python" ,  "C++" , "Bash" , "Basic" , "Brainfuck"];
+    //
+    let opts = document.createElement("select");
+    langs.forEach(function(e){
+        let mi = document.createElement("option");
+        mi.value = e;
+        mi.label = e;
+        if(data&&data.language&&e==data.language){
+            mi.selected = true;
+        }
+        opts.appendChild(mi);
+    });
+    //
+
+   let blc =  {
+       element: el,
+        render: function(){
+            cd.innerHTML = data && data.text ? data.text: "#  type\n#  here";
+        },
+        save: function(){
+            return {text:cd.innerHTML, language: opts[opts.selectedIndex].value}
+        }
+    }
+    templates.addToolbar(blc);
+    //
+   
+    opts.addEventListener("change" , function(){
+        console.log(opts[opts.selectedIndex].value);
+    })
+
+    blc.addToToolbar(opts);
+    return blc;
+
+}
+
 export function makeTypicalEditor(el) {
     let editor = new BlockEditor({ selector: el });
 
     editor.registerEditor({
         type: "paragraph",
+        icon: "¶",
         make: constructors.paragraph,
-        label: "p"
+        label: "Paragraph"
     });
     editor.registerEditor({
         type: "divider",
         make: constructors.divider,
-        label: '--'
+        icon: "—",
+        label: 'Divider'
     });
     editor.registerEditor({
         type: "header",
+        icon: "H",
         make: constructors.header,
-        label: 'H'
+        label: 'Header'
+    });
+    editor.registerEditor({
+        type: "code",
+        icon: "{}",
+        make: constructors.code,
+        label: 'Code snippet'
     });
 
     return editor;
