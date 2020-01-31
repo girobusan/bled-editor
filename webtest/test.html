@@ -10,10 +10,17 @@
 body{
     font-family: 'PT Sans', Helvetica, sans-serif
 }
+*[contenteditable=true]{
+    border: 1px solid rgba(202, 239, 237, 50%);
+    min-width: 25%;
+}
+*[contenteditable=true]:empty{
+    display: block;
+    border: 1px solid gray;
+}
 .block_editor_outer_container{
     width: 100%;    
     border: 1px solid silver;
-
 }
 .block_editor_unit{
     width:100%;
@@ -21,6 +28,7 @@ body{
     padding: 0 32px;
     border: 1px dashed cyan;
 }
+
 #container{
     width:100%;
 }
