@@ -9,11 +9,14 @@ export function tooltips(){
 
     let ttin = document.createElement("div");
     tt.appendChild(ttin);
-    ttin.style.backgroundColor = "rgba(85.1%, 83%, 59.6%, 0.75)";
+    ttin.style.backgroundColor = "rgba(100%, 100%, 100%, 0.8)";
+    ttin.style.color = "#888888";
     ttin.style.pointerEvents = "none";
+    ttin.style.fontSize="12px";
     ttin.style.padding = "4px 8px";
     ttin.style.position = "relative";
     ttin.style.borderRadius = "4px";
+    ttin.style.boxShadow = "2px 2px 2px 1px gray";
     ttin.style.right = "50%";
     ttin.style.bottom = "8px";
 
@@ -94,9 +97,11 @@ export function addPlusButton(block, menu) {
     dd.style.top = "100%";
     dd.style.left = 0;
     dd.style.padding = "5px";
-    dd.style.backgroundColor = "silver";
-    dd.style.borderRadius = "5px"
-    dd.style.border = "1px solid gray"
+    dd.style.backgroundColor = "white";
+    dd.style.borderRadius = "5px";
+    dd.style.maxWidth = "100px";
+    dd.style.boxShadow = "2px 2px 6px rgba(0%, 0%, 0%, 0.304)"
+    //dd.style.border = "1px solid gray"
     menu.forEach(element => {
         let mi = document.createElement("div");
         mi.innerHTML = element.icon;
@@ -105,6 +110,7 @@ export function addPlusButton(block, menu) {
         mi.style.borderRadius = "5px";
         mi.style.margin = "2px";
         mi.style.cursor = "pointer";
+        mi.style.display = "inline-block";
         mi.dataset.hint = element.label;
         mi.addEventListener("click", e => {
             element.handler(block.dataset.block_id);
@@ -122,16 +128,16 @@ export function addPlusButton(block, menu) {
     button.style.width = "24px";
     button.style.height = "24px";
     button.style.left = "0px";
-    button.style.fontSize = "19px";
+    button.style.fontSize = "24px";
     button.style.cursor = "pointer";
     button.style.bottom = "0px";
     button.style.position = "absolute";
-    button.style.backgroundColor = "silver";
+    button.style.backgroundColor = "rgba(100%, 100%, 100%, 0.011)";
     button.style.textAlign = "center";
-    button.style.color = "white";
+    button.style.color = mycyan;
     button.style.opacity = "0";
     button.style.display = "block"
-    button.style.borderRadius = "12px";
+    //button.style.borderRadius = "12px";
     button.style.transition = "opacity .5s";
     button.dataset.hint = "Add new block";
     button.innerHTML = "+";
@@ -210,7 +216,8 @@ export function addBlockControls(block, items , ed) {
     ctrls.style.top = "0px";
     ctrls.style.right = "0px";
     ctrls.style.width = "32px";
-    ctrls.style.backgroundColor = "silver";
+    ctrls.style.backgroundColor = mycyan;
+    ctrls.style.color = "white";
     ctrls.style.textAlign = "center";
     ctrls.style.display = "none";
     ctrls.addEventListener("mouseover", () => {ctrls.style.zIndex=6 ; ctrls.style.display = "block"} );

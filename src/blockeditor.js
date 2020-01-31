@@ -489,7 +489,7 @@ constructors.raw = function (data, el, id, editor) {
     edi.style.width = "100%";
     edi.style.minHeight = "64px";
     edi.style.boxSizing = "border-box";
-    edi.style.border = "2px solid cyan";
+    edi.style.border = "2px solid " + UI.mycyan;
     edi.style.padding = "8px";
     if (data && data.html) {
         edi.value = data.html;
