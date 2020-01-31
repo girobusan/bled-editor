@@ -1,11 +1,11 @@
+export var mycyan = "#3ED9E3";
 
 export function tooltips(){
     let tt = document.createElement("div");
     tt.style.position = "absolute";
     tt.style.display = "none";
     tt.style.zIndex = 20;
-    tt.style.pointerEvents = "none";
-    
+    tt.style.pointerEvents = "none";    
 
     let ttin = document.createElement("div");
     tt.appendChild(ttin);
@@ -15,12 +15,13 @@ export function tooltips(){
     ttin.style.position = "relative";
     ttin.style.borderRadius = "4px";
     ttin.style.right = "50%";
-    ttin.style.bottom = "32px";
+    ttin.style.bottom = "8px";
 
     document.body.appendChild(tt);
 
     window.addEventListener("mousemove" , function(e){
-        tt.style.top = e.clientY + "px";
+        let ttb = tt.getBoundingClientRect().height;
+        tt.style.top = (e.clientY - ttb + window.scrollY) + "px";
         tt.style.left = e.clientX + "px";
 
     })
@@ -30,11 +31,40 @@ export function tooltips(){
        // tt.style.top = e.clientY + "px";
           //  tt.style.left = e.clientX + "px";
         tt.style.display = "block";
-        }else{
-            
+        }else{            
             tt.style.display = "none";
         }
     })
+}
+
+export function textTools(){
+    let ttools = document.createElement("div");
+    ttools.style.minWidth = "100px";
+    ttools.classList.add("text_toolbox");
+    ttools.style.height = "24px";
+    ttools.style.backgroundColor = mycyan;
+    ttools.style.position = "absolute";
+    ttools.style.display = "none";
+
+    document.body.appendChild(ttools);
+
+    document.body.addEventListener("click" , function(e){
+        //console.log(e.target.getAttribute("contenteditable"));
+    if(e.target.getAttribute("contenteditable") && !e.target.dataset.no_text_toolbox){
+        //console.log("click" , ttools);
+        let tgt = e.target.getBoundingClientRect();
+        ttools.style.left = tgt.left + "px";
+        ttools.style.top = (tgt.top-24 + window.scrollY) + "px";
+        ttools.style.display = "block";
+    }else if(e.target.classList.contains("text_toolbox")){
+        ttools.style.display = "block";
+    }else{
+        ttools.style.display = "none";
+    }
+    });
+     
+ 
+    
 }
 export function addPlusButton(block, menu) {
     block.style.position = "relative";

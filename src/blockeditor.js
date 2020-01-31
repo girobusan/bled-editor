@@ -18,7 +18,7 @@ export function BlockEditor({
         //"zero":{
         //
         //}
-    };// null; //params.editors; //  available blocks editors
+    }; // null; //params.editors; //  available blocks editors
     this.blocks = null; // blocks array
     this.addMenu = [];
 
@@ -55,8 +55,8 @@ export function BlockEditor({
         zero.style.wifth = "100%";
         zero.style.marginLeft = "-32px";
         zero.dataset.block_id = "start";
-        
-        UI.addPlusButton(zero , this.addMenu);
+
+        UI.addPlusButton(zero, this.addMenu);
         mine.appendChild(zero);
         //
         if (blocks) {
@@ -152,11 +152,10 @@ export function BlockEditor({
     this.addNewBlock = function (type, data, refid) { //ref=instert after that block
         //if there is ref id, we have to insert after
         //find next element
-        if (refid=="start"){
-          // var start = true;
-           var refel = this.blockElementByIndex(0);
-        }
-        else if (refid) {
+        if (refid == "start") {
+            // var start = true;
+            var refel = this.blockElementByIndex(0);
+        } else if (refid) {
             let nextidx = this.ID2Index(refid) + 1;
             var refel = this.blockElementByIndex(nextidx);
         }
@@ -179,6 +178,7 @@ export function BlockEditor({
             this.blocks[bID] = block;
             UI.addPlusButton(domblock, this.addMenu);
             UI.addBlockControls(domblock, null, this);
+            UI.textTools();
         } else {
             console.log("no editor for", type);
             return null;
@@ -212,7 +212,7 @@ export function BlockEditor({
         //remove dom element
         this.element.querySelectorAll(".block_editor_unit").item(elidx).remove();
         //del block from registry
-        delete (this.blocks[id]);
+        delete(this.blocks[id]);
     } //remove block
 
     this.save = function () {
@@ -224,8 +224,7 @@ export function BlockEditor({
                     "type": e.dataset.block_type,
                     "data": my.blocks[e.dataset.block_id].save()
                 })
-            }
-            );
+            });
         let mydata = {
             "blocks": dt
         };
@@ -254,20 +253,23 @@ templates.addToolbar = function (block) {
     }
 }
 
-templates.twoPanels = function(block){
+templates.twoPanels = function (block) {
     //let mode = "preview";
     let pp = document.createElement("div");
     pp.classList.add("block_preview_panel");
     pp.classList.add("one_of_two_panels");
-    pp.style.position="relative";
+    pp.style.position = "relative";
+    pp.style.minHeight = "64px";
     pp.style.width = "100%";
 
     let ep = document.createElement("div");
     ep.classList.add("block_edit_panel");
     ep.classList.add("one_of_two_panels");
+    ep.style.minHeight = "64px";
+    ep.style.backgroundColor = "silver";
     ep.style.display = "none";
     //
-    ebtn = document.createElement("div");
+    let ebtn = document.createElement("div");
     ebtn.classList.add("edit_button");
     ebtn.innerHTML = "EDIT";
     ebtn.style.position = "absolute";
@@ -277,13 +279,14 @@ templates.twoPanels = function(block){
     ebtn.style.zIndex = 5;
     ebtn.style.right = "8px";
     ebtn.style.bottom = "8px";
+    ebtn.style.cursor = "pointer";
 
-    ebtn.addEventListener("click" , function(){
+    ebtn.addEventListener("click", function () {
         let editmode = ep.style.display != "none";
-        if(editmode){
+        if (editmode) {
             ep.style.display = "none";
             ebtn.innerHTML = "EDIT";
-        }else{
+        } else {
             ep.style.display = "block";
             ebtn.innerHTML = "PREVIEW";
         }
@@ -291,26 +294,27 @@ templates.twoPanels = function(block){
     //
     pp.appendChild(ebtn);
     //
+    console.log(block)
     block.element.appendChild(pp);
     block.element.appendChild(ep);
     //
-    block.addToPreview = function(e){
+    block.addToPreview = function (e) {
         pp.appendChild(e);
     }
-    block.addToEditor = function(e){
+    block.addToEditor = function (e) {
         ep.appendChild(e);
     }
-    block.goEditMode = function(e){
+    block.goEditMode = function (e) {
         ep.style.display = "block";
         ebtn.innerHTML = "PREVIEW";
 
     }
-    block.goPreviewMode = function(e){
+    block.goPreviewMode = function (e) {
         ep.style.display = "none";
         ebtn.innerHTML = "EDIT";
 
     }
-    block.isInEditMode = function(){
+    block.isInEditMode = function () {
         return (ep.style.display != "none");
     }
 
@@ -352,7 +356,9 @@ constructors.paragraph = function (data, el, id, editor) {
             if (e.shiftKey) {
                 //
             } else {
-                let np = blc.editor.addNewBlock("paragraph", { "text": "" }, blc.id);
+                let np = blc.editor.addNewBlock("paragraph", {
+                    "text": ""
+                }, blc.id);
                 //np = newly inserted block id
                 blc.editor.blocks[np]._p.focus();
                 e.preventDefault();
@@ -407,7 +413,10 @@ constructors.header = function (data, el, id, editor) {
         },
         save: function () {
             let txt = this.element.querySelector(".header_preview").innerHTML;
-            return { "text": txt, "level": this.level }
+            return {
+                "text": txt,
+                "level": this.level
+            }
 
         }
 
@@ -435,49 +444,134 @@ constructors.header = function (data, el, id, editor) {
     return blc;
 }
 
-constructors.code = function(data, el, id, editor){
+constructors.code = function (data, el, id, editor) {
     let pre = document.createElement("pre");
     let cd = document.createElement("code");
     pre.appendChild(cd);
-    cd.setAttribute("contenteditable" , true);
+    cd.setAttribute("contenteditable", true);
+    cd.dataset.no_text_toolbox = true;
     el.appendChild(pre);
-    let langs = ["Auto" , "Arduino" , 'JavaScript' ,"Processing" , "Python" ,  "C++" , "Bash" , "Basic" , "Brainfuck"];
+    let langs = ["Auto", "Arduino", 'JavaScript', "Processing", "Python", "C++", "Bash", "Basic", "Brainfuck"];
     //
     let opts = document.createElement("select");
-    langs.forEach(function(e){
+    langs.forEach(function (e) {
         let mi = document.createElement("option");
         mi.value = e;
         mi.label = e;
-        if(data&&data.language&&e==data.language){
+        if (data && data.language && e == data.language) {
             mi.selected = true;
         }
         opts.appendChild(mi);
     });
     //
 
-   let blc =  {
-       element: el,
-        render: function(){
-            cd.innerHTML = data && data.text ? data.text: "#  type\n#  here";
+    let blc = {
+        element: el,
+        render: function () {
+            cd.innerHTML = data && data.text ? data.text : "#  type\n#  here";
         },
-        save: function(){
-            return {text:cd.innerHTML, language: opts[opts.selectedIndex].value}
+        save: function () {
+            return {
+                text: cd.innerHTML,
+                language: opts[opts.selectedIndex].value
+            }
         }
     }
     templates.addToolbar(blc);
-    //
-   /*
-    opts.addEventListener("change" , function(){
-        console.log(opts[opts.selectedIndex].value);
-    })
-    */
     blc.addToToolbar(opts);
     return blc;
 
 }
 
+constructors.raw = function (data, el, id, editor) {
+
+    let edi = document.createElement("textarea");
+    edi.style.width = "100%";
+    edi.style.minHeight = "64px";
+    edi.style.boxSizing = "border-box";
+    edi.style.border = "2px solid cyan";
+    edi.style.padding = "8px";
+    if (data && data.html) {
+        edi.value = data.html;
+    }
+
+
+    let blc = {
+        render: function () {
+            el.appendChild(edi);
+        },
+        save: function () {
+            return {
+                html: edi.value
+            };
+        }
+    }
+    return blc;
+
+}
+
+constructors.blockquote = function (data, el, id, editor) {
+    let blctag = document.createElement("blockquote");
+    blctag.style.minHeight = "64px";
+    let blcin = document.createElement("span");
+
+    blcin.setAttribute("contenteditable", true);
+    let blfoot = document.createElement("footer");
+    let blcite = document.createElement("cite");
+    blfoot.appendChild(blcite);
+    blcite.setAttribute("contenteditable", true);
+
+    blctag.appendChild(blcin);
+    blctag.appendChild(blfoot);
+    blcin.innerHTML = data && data.text ? data.text : "Цитата";
+    blcite.innerHTML = data && data.caption ? data.caption : "Подпись"
+    let block = {
+        render: function () {
+            el.appendChild(blctag);
+        },
+        save: function () {
+            return {
+                text: blcin.innerHTML,
+                caption: blcite.innerHTML
+            }
+        }
+    }
+    return block;
+
+}
+
+constructors.image = function (data, el, id, editor) {
+    let figtag = document.createElement("figure");
+    let pimg = document.createElement("img");
+    let fc = document.createElement("figcaption");
+    fc.setAttribute("contenteditable", true);
+    fc.innerHTML = data && data.caption ? data.caption : "Подпис"
+    figtag.appendChild(pimg);
+    figtag.appendChild(fc);
+    pimg.src = data && data.file ? data.file.url : "kitty.jpg";
+
+    let blc = {
+        element: el,
+        render: function () {
+            console.log("render image")
+        },
+        save: function () {
+            return {
+                caption: fc.innerHTML
+            }
+        }
+    }
+    templates.twoPanels(blc);
+    blc.addToPreview(figtag);
+    return blc;
+
+}
+
+
 export function makeTypicalEditor(el) {
-    let editor = new BlockEditor({ selector: el });
+    let editor = new BlockEditor({
+        selector: el
+    });
 
     editor.registerEditor({
         type: "paragraph",
@@ -502,6 +596,24 @@ export function makeTypicalEditor(el) {
         icon: "{}",
         make: constructors.code,
         label: 'Code snippet'
+    });
+    editor.registerEditor({
+        type: "raw",
+        icon: "<>",
+        make: constructors.raw,
+        label: 'Raw HTML'
+    });
+    editor.registerEditor({
+        type: "quote",
+        icon: "«»",
+        make: constructors.blockquote,
+        label: 'Blockquote'
+    });
+    editor.registerEditor({
+        type: "image",
+        icon: "pic",
+        make: constructors.image,
+        label: 'Image'
     });
 
     return editor;
