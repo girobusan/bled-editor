@@ -28,6 +28,10 @@ module.exports =  (env, argv) =>( {
  
     module: {
         rules: [
+            {
+                test: /\.svg$/,
+                loader: 'svg-inline-loader'
+            },
 
             {
                 test: /\.(less|css)$/,

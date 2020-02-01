@@ -29,6 +29,17 @@ export function BlockEditor({
         return _current_id;
     }
 
+    this.upload = function (f) {
+        return new Promise(function (resolve, reject) {
+            resolve({ url: "kitty.jpeg" });
+        })
+    }
+
+    this.setUploadFunction = function (func) {
+        this.upload = func;
+        return this;
+    }
+
     this.start = function (blocks) {
         //add sero block
 
@@ -57,12 +68,14 @@ export function BlockEditor({
         zero.dataset.block_id = "start";
 
         UI.addPlusButton(zero, this.addMenu);
+        
         mine.appendChild(zero);
         //
         if (blocks) {
             blocks.forEach(e => this.addNewBlockFromSource(e));
         }
         UI.tooltips();
+        UI.textTools();
     }
 
     this.blockByID = function (id) {
@@ -178,7 +191,7 @@ export function BlockEditor({
             this.blocks[bID] = block;
             UI.addPlusButton(domblock, this.addMenu);
             UI.addBlockControls(domblock, null, this);
-            UI.textTools();
+            
         } else {
             console.log("no editor for", type);
             return null;
@@ -212,7 +225,7 @@ export function BlockEditor({
         //remove dom element
         this.element.querySelectorAll(".block_editor_unit").item(elidx).remove();
         //del block from registry
-        delete(this.blocks[id]);
+        delete (this.blocks[id]);
     } //remove block
 
     this.save = function () {
@@ -237,6 +250,22 @@ export function BlockEditor({
 var constructors = {};
 var templates = {}
 
+templates.formRow = function (elements_array) {
+    let row = document.createElement("div");
+    row.style.display = "flex";
+    row.style.marginBottom = "8px";
+    elements_array.forEach(function (e, i) {
+        if (i > 0) {
+            console.log(e);
+            e.style.marginLeft = "8px";
+        }
+        if (e.nodeName == "Z") {
+            e.style.flexGrow = 1;
+        }
+        row.appendChild(e);
+    });
+    return row;
+}
 
 templates.addToolbar = function (block) {
     let tbx = document.createElement("div");
@@ -266,8 +295,10 @@ templates.twoPanels = function (block) {
     ep.classList.add("block_edit_panel");
     ep.classList.add("one_of_two_panels");
     ep.style.minHeight = "64px";
-    ep.style.backgroundColor = "silver";
+    //ep.style.backgroundColor = "silver";
+    ep.style.borderTop = "2px solid " + UI.mycyan;
     ep.style.display = "none";
+    ep.style.padding = "8px";
     //
     let ebtn = document.createElement("div");
     ebtn.classList.add("edit_button");
@@ -543,28 +574,123 @@ constructors.blockquote = function (data, el, id, editor) {
 constructors.image = function (data, el, id, editor) {
     let figtag = document.createElement("figure");
     let pimg = document.createElement("img");
+    pimg.style.maxWidth = "100%";
     let fc = document.createElement("figcaption");
     fc.setAttribute("contenteditable", true);
     fc.innerHTML = data && data.caption ? data.caption : "Подпис"
     figtag.appendChild(pimg);
     figtag.appendChild(fc);
-    pimg.src = data && data.file ? data.file.url : "kitty.jpg";
+    pimg.src = data && data.file ? data.file.url : "";
 
     let blc = {
         element: el,
         render: function () {
             console.log("render image")
         },
-        save: function () {
-            return {
-                caption: fc.innerHTML
-            }
-        }
     }
     templates.twoPanels(blc);
     blc.addToPreview(figtag);
-    return blc;
+    //edit
+    ////upload
+    let upld = document.createElement("input");
+    upld.type = "file";
+    upld.style.flexGrow = 1;
+    let upldbtn = document.createElement("input");
+    upldbtn.value = "upload";
+    upldbtn.type = "button"
+    upldbtn.addEventListener("click", function (e) {
+        editor.upload(upld.files[0])
+            .then(function (r) {
+                pimg.src = r.url;
+                srcinput.value = r.url;
+            })
+    });
 
+    blc.addToEditor(templates.formRow([upld, upldbtn]));
+    ////edit src
+    let srclabel = document.createElement("label");
+    srclabel.innerHTML = "Source URL";
+    let srcinput = document.createElement("input");
+    srcinput.style.flexGrow = 2;
+    srcinput.type = "text";
+    srcinput.value = data && data.file.url ? data.file.url : "";
+    srcinput.addEventListener("keyup", function (e) { pimg.src = this.value; })
+    blc.addToEditor(templates.formRow([srclabel, srcinput]));
+    ////classes
+    //////stretched
+    let stretchlabel = document.createElement("label");
+    stretchlabel.innerHTML = "stretched"
+    let stretched = document.createElement("input");
+    stretched.type = "checkbox";
+    stretched.onclick = function () {
+        if (this.checked) {
+            right.checked = false;
+            left.checked = false;
+            noresize.checked = false;
+        } else {
+            figtag.classList.remove("stretched");
+        }
+    }
+    stretched.checked = data && data.stretched;
+    //////noresize
+    let nrlabel = document.createElement("label");
+    nrlabel.innerHTML = "no resize"
+    let noresize = document.createElement("input");
+    noresize.type = "checkbox";
+    noresize.onclick = function () { if (this.checked) { stretched.checked = false } };
+    noresize.checked = data && (data.noresize || data.withbackground);
+    /////left
+    let llabel = document.createElement("label");
+    llabel.innerHTML = "left"
+    let left = document.createElement("input");
+    left.type = "checkbox";
+    left.onclick = function () { if (this.checked) { right.checked = false; stretched.checked = false } };
+    left.checked = data && data.left;
+    ////right
+    let rlabel = document.createElement("label");
+    rlabel.innerHTML = "right"
+    let right = document.createElement("input");
+    right.type = "checkbox";
+    right.onclick = function () { if (this.checked) { left.checked = false; stretched.checked = false } }
+    right.checked = data && data.right;
+
+     ////border
+     let blabel = document.createElement("label");
+     blabel.innerHTML = "border"
+     let border = document.createElement("input");
+     border.type = "checkbox";
+     border.onclick = function () { if(this.checked){pimg.classList.add("bordered")}else{pimg.classList.remove("bordered")} }
+     border.checked = data && data.border;
+
+    blc.addToEditor(templates.formRow([stretchlabel, stretched,
+        nrlabel, noresize,
+        llabel, left,
+        rlabel, right,
+    blabel,border]));
+
+    //
+    blc.save = function () {
+        return {
+            stretched: stretched.checked,
+            right: right.checked,
+            left: left.checked,
+            noresize: noresize.checked,
+            withBackground: noresize.checked,
+            border: border.checked,
+            withBorder: border.checked,
+            caption: fc.innerHTML,
+            file: {
+                url: srcinput.value
+            }
+        }
+    }
+    if (data && data.file && data.file.url) {
+        blc.goPreviewMode();
+    } else {
+        blc.goEditMode();
+    }
+    //
+    return blc;
 }
 
 

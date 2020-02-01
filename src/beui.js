@@ -1,3 +1,14 @@
+export var icons = {};
+
+icons.bold = require("./svg/text_bold.svg");
+icons.italic = require("./svg/text_italic.svg");
+icons.underline = require("./svg/text_underline.svg");
+icons.strike = require("./svg/text_strike.svg");
+icons.sup = require("./svg/text_sup.svg");
+icons.sub = require("./svg/text_sub.svg");
+icons.link = require("./svg/text_link.svg");
+
+
 export var mycyan = "#3ED9E3";
 
 export function tooltips(){
@@ -44,12 +55,77 @@ export function textTools(){
     let ttools = document.createElement("div");
     ttools.style.minWidth = "100px";
     ttools.classList.add("text_toolbox");
-    ttools.style.height = "24px";
+    //ttools.style.minHeight = "24px";
     ttools.style.backgroundColor = mycyan;
     ttools.style.position = "absolute";
     ttools.style.display = "none";
-
+    ttools.style.padding="0px 4px";
+    console.log("append text tools")
     document.body.appendChild(ttools);
+    //buttons
+    function addButton(lbl,func , hint){
+        let b = document.createElement("div");
+        b.style.display = "inline-block";
+        b.innerHTML = lbl;
+        b.style.width = "18px";
+        b.style.height="18px";
+        b.style.overflow = "hidden";
+        b.addEventListener("mousedown" , func);
+        b.classList.add("text_toolbox");
+        b.style.cursor = "pointer";
+        b.style.padding = "4px";
+        let sv = b.querySelector("svg");
+        sv.style.pointerEvents ="none";//.style.pointerEvents("none");
+        if(hint){b.dataset.hint = hint};
+        ttools.appendChild(b);
+    }
+
+    addButton(icons.bold , function(e){
+        console.log("bold" , document.getSelection())
+        document.execCommand("bold");
+        e.preventDefault();
+    } , "Bold")
+    addButton(icons.italic , function(e){
+        console.log("italic" , document.getSelection())
+        document.execCommand("italic");
+        e.preventDefault();
+    } , "Italic")
+    addButton(icons.underline , function(e){
+        //console.log("italic" , document.getSelection())
+        document.execCommand("underline");
+        e.preventDefault();
+    } , "Underline")
+    addButton(icons.strike , function(e){
+        //console.log("italic" , document.getSelection())
+        document.execCommand("strikeThrough");
+        e.preventDefault();
+    } , "Strike")
+    /*
+    addButton("small" , function(e){
+        console.log("small" , document.getSelection())
+        document.execCommand("decreaseFontSize");
+        e.preventDefault();
+    })
+    */
+    addButton(icons.sup , function(e){
+       // console.log("italic" , document.getSelection())
+        document.execCommand("superscript");
+        e.preventDefault();
+    } , "Superscript")
+    addButton(icons.sub , function(e){
+        // console.log("italic" , document.getSelection())
+         document.execCommand("subscript");
+         e.preventDefault();
+     } , "Subscript")
+    addButton(icons.link , function(e){
+        let ur = prompt("enter URL");
+        if(!ur){ return }
+        //console.log("link" , document.getSelection())
+        document.execCommand("createLink" , false ,  unescape(ur));
+        e.preventDefault();
+    } , "Make link")
+
+    //
 
     document.body.addEventListener("click" , function(e){
         //console.log(e.target.getAttribute("contenteditable"));
@@ -57,10 +133,12 @@ export function textTools(){
         //console.log("click" , ttools);
         let tgt = e.target.getBoundingClientRect();
         ttools.style.left = tgt.left + "px";
-        ttools.style.top = (tgt.top-24 + window.scrollY) + "px";
-        ttools.style.display = "block";
+        ttools.style.display = "flex";
+        let tthe = ttools.getBoundingClientRect().height;
+        ttools.style.top = (tgt.top-tthe + window.scrollY) + "px";
+        
     }else if(e.target.classList.contains("text_toolbox")){
-        ttools.style.display = "block";
+        //ttools.style.display = "block";
     }else{
         ttools.style.display = "none";
     }
