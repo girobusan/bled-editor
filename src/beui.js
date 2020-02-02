@@ -324,6 +324,7 @@ export function addBlockControls(block, items, ed) {
         mi.style.cursor = "pointer";
         mi.style.height="24px";
         mi.style.fill = mycyan;
+        mi.style.overflow = "hidden";
         mi.addEventListener("click", function () {
             e.handler(block.dataset.block_id);
         });
