@@ -256,7 +256,7 @@ templates.formRow = function (elements_array) {
     row.style.marginBottom = "8px";
     elements_array.forEach(function (e, i) {
         if (i > 0) {
-            console.log(e);
+            //console.log(e);
             e.style.marginLeft = "8px";
         }
         if (e.nodeName == "Z") {
@@ -387,9 +387,15 @@ constructors.paragraph = function (data, el, id, editor) {
             if (e.shiftKey) {
                 //
             } else {
+                //console.log(.anchorOffset);
+                let sel = document.getSelection();
+                let enterat =sel.anchorOffset;                
+                let tonext = sel.anchorNode.nodeValue.substring(enterat);
                 let np = blc.editor.addNewBlock("paragraph", {
-                    "text": ""
+                    "text": tonext
                 }, blc.id);
+                blc._p.innerHTML = blc._p.innerHTML.substring(0 , enterat)
+                //sel.anchorNode.innerHTML = leavehere;
                 //np = newly inserted block id
                 blc.editor.blocks[np]._p.focus();
                 e.preventDefault();

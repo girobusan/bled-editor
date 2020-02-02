@@ -7,6 +7,9 @@ icons.strike = require("./svg/text_strike.svg");
 icons.sup = require("./svg/text_sup.svg");
 icons.sub = require("./svg/text_sub.svg");
 icons.link = require("./svg/text_link.svg");
+icons.up = require("./svg/arrow_upward-24px.svg");
+icons.down = require("./svg/arrow_downward-24px.svg");
+icons.del = require("./svg/clear-24px.svg");
 
 
 export var mycyan = "#3ED9E3";
@@ -76,11 +79,14 @@ export function textTools() {
         b.innerHTML = lbl;
         b.style.width = "18px";
         b.style.height = "18px";
+        b.style.fill = "white";
         b.style.overflow = "hidden";
         b.addEventListener("mousedown", func);
         b.classList.add("text_toolbox");
         b.style.cursor = "pointer";
-        b.style.padding = "4px";
+        b.style.padding = "8px";
+        b.onmouseover = ()=> b.style.fill = "black";
+        b.onmouseout = ()=> b.style.fill = "white";
         let sv = b.querySelector("svg");
         sv.style.pointerEvents = "none";//.style.pointerEvents("none");
         if (hint) { b.dataset.hint = hint };
@@ -143,7 +149,7 @@ export function textTools() {
             let tthe = ttools.getBoundingClientRect().height;
             ttools.style.top = (tgt.top - tthe + window.scrollY) + "px";
 
-        } else if (e.target.classList.contains("text_toolbox")) {
+        //} else if (e.target.classList.contains("text_toolbox")) {
             //ttools.style.display = "block";
         } else {
             ttools.style.display = "none";
@@ -273,17 +279,17 @@ export function addBlockControls(block, items, ed) {
         items = [
             {
                 label: "move block up",
-                icon: "🡡",
+                icon: icons.up,
                 handler: function () { ed.moveUp(block.dataset.block_id) }
             },
             {
                 label: "move block down",
-                icon: "🡣",
+                icon: icons.down,
                 handler: function () { ed.moveDown(block.dataset.block_id) }
             },
             {
                 label: "delete block",
-                icon: "✕",
+                icon: icons.del,
                 handler: function () { ed.removeBlock(block.dataset.block_id) }
             }
         ]
@@ -300,7 +306,7 @@ export function addBlockControls(block, items, ed) {
     ctrls.style.top = "0px";
     ctrls.style.right = "0px";
     ctrls.style.width = "32px";
-    ctrls.style.backgroundColor = mycyan;
+    ctrls.style.backgroundColor = "#ffffffee";
     ctrls.style.color = "white";
     ctrls.style.textAlign = "center";
     ctrls.style.display = "none";
@@ -316,6 +322,8 @@ export function addBlockControls(block, items, ed) {
         let mi = document.createElement("div");
         mi.innerHTML = e.icon;
         mi.style.cursor = "pointer";
+        mi.style.height="24px";
+        mi.style.fill = mycyan;
         mi.addEventListener("click", function () {
             e.handler(block.dataset.block_id);
         });
