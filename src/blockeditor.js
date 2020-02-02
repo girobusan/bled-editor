@@ -39,15 +39,23 @@ export function BlockEditor({
         this.upload = func;
         return this;
     }
+    this.reset = function (blocks){
+        this.blocks={};
+        this.element.querySelectorAll(".block_editor_unit").remocve();
+        if (blocks) {
+            blocks.forEach(e => this.addNewBlockFromSource(e));
+        }
+    }
 
     this.start = function (blocks) {
         //add sero block
 
         //this.element.innerHTML = "";
-        this.blocks = [];
+        this.blocks = {};
         //console.log(this.editors)
         //add menu
         Object.keys(this.editors).forEach(function (e) {
+            
             console.log("added handler for", e);
             let val = my.editors[e];
             my.addMenu.push({
