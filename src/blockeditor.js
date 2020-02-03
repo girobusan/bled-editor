@@ -30,6 +30,7 @@ export function BlockEditor({
     }
 
     this.upload = function (f) {
+        console.log("Testing upload" , f);
         return new Promise(function (resolve, reject) {
             resolve({ url: "kitty.jpeg" });
         })
@@ -39,9 +40,10 @@ export function BlockEditor({
         this.upload = func;
         return this;
     }
-    this.reset = function (blocks){
+    this.setBlocks = function (blocks){
         this.blocks={};
-        this.element.querySelectorAll(".block_editor_unit").remocve();
+        mine.querySelectorAll(".block_editor_unit").forEach( e=> e.remove());
+        this._current_id = 1;
         if (blocks) {
             blocks.forEach(e => this.addNewBlockFromSource(e));
         }
@@ -53,7 +55,7 @@ export function BlockEditor({
         //this.element.innerHTML = "";
         this.blocks = {};
         //console.log(this.editors)
-        //add menu
+        //"add" menu
         Object.keys(this.editors).forEach(function (e) {
             
             console.log("added handler for", e);
@@ -66,22 +68,19 @@ export function BlockEditor({
                 }
             })
         })
-        //
+        //Zero block
 
         let zero = document.createElement("div");
         zero.classList.add("starting_block");
         zero.style.height = "8px";
         zero.style.wifth = "100%";
         zero.style.marginLeft = "-32px";
-        zero.dataset.block_id = "start";
-
-        UI.addPlusButton(zero, this.addMenu);
-        
+        zero.dataset.block_id = "start";        
+        UI.addPlusButton(zero, this.addMenu);        
         mine.appendChild(zero);
         //
-        if (blocks) {
-            blocks.forEach(e => this.addNewBlockFromSource(e));
-        }
+        this.setBlocks(blocks);       
+        //start UI
         UI.tooltips();
         UI.textTools();
     }
@@ -204,16 +203,7 @@ export function BlockEditor({
             console.log("no editor for", type);
             return null;
         }
-
-        //create DOM element for editor
-
-        // domblock.appendChild(block.element);
-
-
-        //add corresponding dom el. to container
-        //if(start){
-
-        //}
+    
         if (refid && refel) {
             this.element.insertBefore(domblock, refel);
         } else {
@@ -339,9 +329,11 @@ templates.twoPanels = function (block) {
     //
     block.addToPreview = function (e) {
         pp.appendChild(e);
+        return e;
     }
     block.addToEditor = function (e) {
         ep.appendChild(e);
+        return e;
     }
     block.goEditMode = function (e) {
         ep.style.display = "block";
@@ -390,17 +382,18 @@ constructors.paragraph = function (data, el, id, editor) {
     }
 
     blc._p.addEventListener("keydown", function (e) {
+        const magic = "#!#"
         if (e.keyCode == 13) {
             console.log("enter pressed", e.shiftKey == true);
             if (e.shiftKey) {
                 //
             } else {
-                document.execCommand("insertText" , false , "#!#");
-                let clickat  = blc._p.innerHTML.indexOf('#!#')
+                document.execCommand("insertText" , false , magic);
+                let clickat  = blc._p.innerHTML.indexOf(magic)
                 let textleft = blc._p.innerHTML.substring(0 , clickat);
-                let textnext = blc._p.innerHTML.substring(clickat+3);
+                let textnext = blc._p.innerHTML.substring(clickat+magic.length);
                 //console.log(textleft, "|" , textnext);
-                blc._p.innerHTML = blc._p.innerHTML.substring(0 , clickat);
+                blc._p.innerHTML = textleft; //blc._p.innerHTML.substring(0 , clickat);
                 let np = editor.addNewBlock("paragraph" ,{text:textnext}, blc.id);
                 //sel.anchorNode.innerHTML = leavehere;
                 //np = newly inserted block id
@@ -504,6 +497,7 @@ constructors.code = function (data, el, id, editor) {
         let mi = document.createElement("option");
         mi.value = e;
         mi.label = e;
+        mi.innerHTML = e;
         if (data && data.language && e == data.language) {
             mi.selected = true;
         }
@@ -708,6 +702,91 @@ constructors.image = function (data, el, id, editor) {
     return blc;
 }
 
+constructors.video = function(data, el, id, editor){
+    console.log(data);
+    let blc = {
+        element: el,
+        id: id,
+        data: data ? data : {},
+        render: function(){},
+    }
+    templates.twoPanels(blc);
+    //preview
+    let vtag = blc.addToPreview(document.createElement("video"));
+    let srctag = document.createElement("source");
+    vtag.appendChild(srctag);
+    srctag.src = data && data.file.url ? data.file.url : "";
+    //editor
+    ////upload     
+     let upld = document.createElement("input");
+     upld.type = "file";
+     upld.style.flexGrow = 1;
+     let upldbtn = document.createElement("input");
+     upldbtn.value = "upload";
+     upldbtn.type = "button"
+     upldbtn.addEventListener("click", function (e) {
+         editor.upload(upld.files[0])
+             .then(function (r) {
+                 srctag.src = r.url;
+                 srcinput.value = r.url;
+             })
+     });
+ 
+     blc.addToEditor(templates.formRow([upld, upldbtn]));
+    ////edit src
+    let srclabel = document.createElement("label");
+    srclabel.innerHTML = "Source URL";
+    let srcinput = document.createElement("input");
+    srcinput.style.flexGrow = 2;
+    srcinput.type = "text";
+    srcinput.value = data && data.file.url ? data.file.url : "";
+    srcinput.addEventListener("keyup", function (e) { pimg.src = this.value; })
+    blc.addToEditor(templates.formRow([srclabel, srcinput]));
+    ////params
+    let params = [
+        { 
+            name: "autoplay",
+            checked: data && data.autoplay,
+            label: "autoplay"
+        },
+        { 
+            name: "controls",
+            checked: data && data.controls,            
+        },
+        { 
+            name: "loop",
+            checked: data && data.loop,            
+        },
+        { 
+            name: "muted",
+            checked: data && data.muted,            
+        },
+      
+    ]
+    let pels = [];
+    params.forEach(function(e){
+        if(!blc.data[e.name]) {
+            blc.data[e.name] = false;
+        } 
+        let plabel = document.createElement("label");
+        plabel.innerHTML = e.name;
+        let pcheck = document.createElement("input");
+        pcheck.type = "checkbox";
+        pcheck.checked = data && data[e.name];
+        pcheck.onclick = function(ev){ console.log(e , blc.data , e.name ) ; blc.data[e.name] = this.checked };
+        pels.push(plabel);
+        pels.push(pcheck);
+
+    });
+    blc.addToEditor(templates.formRow(pels));
+
+    blc.save = function(){
+        return blc.data;
+    }
+
+    return blc;
+}
+
 
 export function makeTypicalEditor(el) {
     let editor = new BlockEditor({
@@ -755,6 +834,12 @@ export function makeTypicalEditor(el) {
         icon: "pic",
         make: constructors.image,
         label: 'Image'
+    });
+    editor.registerEditor({
+        type: "video",
+        icon: "video",
+        make: constructors.video,
+        label: 'Video'
     });
 
     return editor;

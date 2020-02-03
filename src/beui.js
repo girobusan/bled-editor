@@ -155,7 +155,7 @@ export function textTools() {
     document.body.addEventListener("click", function (e) {
         //console.log(e.target.getAttribute("contenteditable"));
         let eic = testEditableContainer(e.target);
-        if (eic&& !e.target.dataset.no_text_toolbox) {
+        if (eic && !e.target.dataset.no_text_toolbox) {
             //console.log("click" , ttools);
             let tgt = eic.getBoundingClientRect();
             ttools.style.left = tgt.left + "px";
