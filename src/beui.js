@@ -10,9 +10,19 @@ icons.link = require("./svg/text_link.svg");
 icons.up = require("./svg/arrow_upward-24px.svg");
 icons.down = require("./svg/arrow_downward-24px.svg");
 icons.del = require("./svg/clear-24px.svg");
+icons.add = require("./svg/add-24px.svg");
 
 
 export var mycyan = "#3ED9E3";
+
+
+export function injectStyle(ststr){
+    let s = document.createElement("style");
+    s.innerHTML = ststr;
+    document.head.appendChild(s);
+}
+
+//injectStyle(`body{color: #444;}`);
 
 export function Ask(pr) {
     return new Promise(function (resolve, reject) {
@@ -238,13 +248,14 @@ export function addPlusButton(block, menu) {
     button.style.position = "absolute";
     button.style.backgroundColor = "rgba(100%, 100%, 100%, 0.011)";
     button.style.textAlign = "center";
-    button.style.color = mycyan;
+    button.style.fill = mycyan;
     button.style.opacity = "0";
     button.style.display = "block"
     //button.style.borderRadius = "12px";
     button.style.transition = "opacity .5s";
     button.dataset.hint = "Add new block";
-    button.innerHTML = "+";
+    button.innerHTML = icons.add;
+    button.querySelector("svg").style.pointerEvents = "none";
 
 
     button.addEventListener("mouseover", function (e) {
@@ -336,6 +347,7 @@ export function addBlockControls(block, items, ed) {
     items.forEach(function (e) {
         let mi = document.createElement("div");
         mi.innerHTML = e.icon;
+        mi.querySelector("svg").style.pointerEvents = "none";
         mi.style.cursor = "pointer";
         mi.style.height="24px";
         mi.style.fill = mycyan;

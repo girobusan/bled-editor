@@ -48,6 +48,16 @@ export function BlockEditor({
             blocks.forEach(e => this.addNewBlockFromSource(e));
         }
     }
+    
+    this.hide = function(){
+        this.element.remove();
+    }
+
+    this.show = function(){
+        let they = document.querySelector(selector);
+        they.appendChild(this.element);
+
+    }
 
     this.start = function (blocks) {
         //add sero block
@@ -257,7 +267,7 @@ templates.formRow = function (elements_array) {
             //console.log(e);
             e.style.marginLeft = "8px";
         }
-        if (e.nodeName == "Z") {
+        if (e.nodeName == "LABEL" && i!=0) {
             e.style.flexGrow = 1;
         }
         row.appendChild(e);
@@ -671,11 +681,11 @@ constructors.image = function (data, el, id, editor) {
      border.onclick = function () { if(this.checked){pimg.classList.add("bordered")}else{pimg.classList.remove("bordered")} }
      border.checked = data && data.border;
 
-    blc.addToEditor(templates.formRow([stretchlabel, stretched,
-        nrlabel, noresize,
-        llabel, left,
-        rlabel, right,
-    blabel,border]));
+    blc.addToEditor(templates.formRow([ stretched,stretchlabel,
+         noresize,nrlabel,
+         left,llabel,
+         right,rlabel,
+        border,blabel] ));
 
     //
     blc.save = function () {
@@ -773,6 +783,7 @@ constructors.video = function(data, el, id, editor){
             blc.data[e.name] = false;
         } 
         let plabel = document.createElement("label");
+        plabel.style.flexGrow = 1;
         plabel.innerHTML = e.name;
         let pcheck = document.createElement("input");
         pcheck.type = "checkbox";
@@ -782,8 +793,9 @@ constructors.video = function(data, el, id, editor){
             blc.data[e.name] = this.checked;
             vtag.setAttribute(e.name, this.checked);
         };
-        pels.push(plabel);
         pels.push(pcheck);
+        pels.push(plabel);
+        
 
     });
     blc.addToEditor(templates.formRow(pels));
