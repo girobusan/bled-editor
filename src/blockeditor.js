@@ -29,10 +29,10 @@ export function BlockEditor({
         return _current_id;
     }
 
-    this.upload = function (f) {
+    this.upload = function (f , testurl) {
         console.log("Testing upload" , f);
         return new Promise(function (resolve, reject) {
-            resolve({ url: "kitty.jpeg" });
+            resolve({ url:  testurl ? testurl : "kitty.jpeg" });
         })
     }
 
@@ -710,12 +710,16 @@ constructors.video = function(data, el, id, editor){
         data: data ? data : {},
         render: function(){},
     }
+    if(!blc.data.file){
+        blc.data.file = {};
+    }
     templates.twoPanels(blc);
     //preview
     let vtag = blc.addToPreview(document.createElement("video"));
-    let srctag = document.createElement("source");
-    vtag.appendChild(srctag);
-    srctag.src = data && data.file.url ? data.file.url : "";
+    vtag.style.maxWidth= "100%";
+    //let srctag = document.createElement("source");
+    //vtag.appendChild(srctag);
+    vtag.src = data && data.file.url ? data.file.url : "";
     //editor
     ////upload     
      let upld = document.createElement("input");
@@ -727,7 +731,7 @@ constructors.video = function(data, el, id, editor){
      upldbtn.addEventListener("click", function (e) {
          editor.upload(upld.files[0])
              .then(function (r) {
-                 srctag.src = r.url;
+                 vtag.src = r.url;
                  srcinput.value = r.url;
              })
      });
@@ -740,7 +744,7 @@ constructors.video = function(data, el, id, editor){
     srcinput.style.flexGrow = 2;
     srcinput.type = "text";
     srcinput.value = data && data.file.url ? data.file.url : "";
-    srcinput.addEventListener("keyup", function (e) { pimg.src = this.value; })
+    srcinput.addEventListener("keyup", function (e) { vtag.src = this.value; blc.data.file.url = this.value;  })
     blc.addToEditor(templates.formRow([srclabel, srcinput]));
     ////params
     let params = [
@@ -773,7 +777,11 @@ constructors.video = function(data, el, id, editor){
         let pcheck = document.createElement("input");
         pcheck.type = "checkbox";
         pcheck.checked = data && data[e.name];
-        pcheck.onclick = function(ev){ console.log(e , blc.data , e.name ) ; blc.data[e.name] = this.checked };
+        pcheck.onclick = function(ev){ 
+            console.log(e , blc.data , e.name ) ; 
+            blc.data[e.name] = this.checked;
+            vtag.setAttribute(e.name, this.checked);
+        };
         pels.push(plabel);
         pels.push(pcheck);
 
