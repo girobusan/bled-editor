@@ -138,12 +138,26 @@ export function textTools() {
     }, "Make link")
 
     //
+    function testEditableContainer(el){
+        //console.log("test");
+        let ce = el;
+        while(!ce.getAttribute("contenteditable") && ce.nodeName!="BODY"){            
+            ce = ce.parentNode;
+            //console.log("upto" , ce);
+        }
+        if (ce.getAttribute("contenteditable")){
+            return ce;
+        }else{
+            return null;
+        }
+    }
 
     document.body.addEventListener("click", function (e) {
         //console.log(e.target.getAttribute("contenteditable"));
-        if (e.target.getAttribute("contenteditable") && !e.target.dataset.no_text_toolbox) {
+        let eic = testEditableContainer(e.target);
+        if (eic&& !e.target.dataset.no_text_toolbox) {
             //console.log("click" , ttools);
-            let tgt = e.target.getBoundingClientRect();
+            let tgt = eic.getBoundingClientRect();
             ttools.style.left = tgt.left + "px";
             ttools.style.display = "flex";
             let tthe = ttools.getBoundingClientRect().height;
@@ -307,6 +321,7 @@ export function addBlockControls(block, items, ed) {
     ctrls.style.right = "0px";
     ctrls.style.width = "32px";
     ctrls.style.backgroundColor = "#ffffffee";
+    ctrls.style.borderLeft = "3px solid " + mycyan;
     ctrls.style.color = "white";
     ctrls.style.textAlign = "center";
     ctrls.style.display = "none";

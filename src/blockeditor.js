@@ -395,18 +395,18 @@ constructors.paragraph = function (data, el, id, editor) {
             if (e.shiftKey) {
                 //
             } else {
-                //console.log(.anchorOffset);
-                let sel = document.getSelection();
-                let enterat =sel.anchorOffset;                
-                let tonext = sel.anchorNode.nodeValue.substring(enterat);
-                let np = blc.editor.addNewBlock("paragraph", {
-                    "text": tonext
-                }, blc.id);
-                blc._p.innerHTML = blc._p.innerHTML.substring(0 , enterat)
+                document.execCommand("insertText" , false , "#!#");
+                let clickat  = blc._p.innerHTML.indexOf('#!#')
+                let textleft = blc._p.innerHTML.substring(0 , clickat);
+                let textnext = blc._p.innerHTML.substring(clickat+3);
+                //console.log(textleft, "|" , textnext);
+                blc._p.innerHTML = blc._p.innerHTML.substring(0 , clickat);
+                let np = editor.addNewBlock("paragraph" ,{text:textnext}, blc.id);
                 //sel.anchorNode.innerHTML = leavehere;
                 //np = newly inserted block id
                 blc.editor.blocks[np]._p.focus();
                 e.preventDefault();
+                return;
             };
         }
     })
@@ -474,6 +474,7 @@ constructors.header = function (data, el, id, editor) {
 
         opt.value = i;
         opt.label = "level " + i;
+        opt.innerHTML = "level " + i;
         if (i == blc.level) {
             opt.setAttribute("selected", true)
         }
