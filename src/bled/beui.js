@@ -355,6 +355,7 @@ export function addBlockControls(block, items, ed) {
     ctrls.style.top = "0px";
     ctrls.style.right = "0px";
     ctrls.style.width = "32px";
+    ctrls.style.boxSizing = "border-box";
     ctrls.style.backgroundColor = "#ffffffee";
     ctrls.style.borderLeft = "3px solid " + mycyan;
     ctrls.style.color = "white";
