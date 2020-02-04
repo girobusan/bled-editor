@@ -974,7 +974,7 @@ export function makeTypicalEditor(el) {
     editor.registerEditor({
         type: "divider",
         make: constructors.divider,
-        icon: "—",
+        icon: UI.icons.divider,
         label: 'Divider'
     });
     editor.registerEditor({

@@ -12,6 +12,7 @@ icons.up = require("./svg/arrow_upward-24px.svg");
 icons.down = require("./svg/arrow_downward-24px.svg");
 icons.del = require("./svg/clear-24px.svg");
 icons.add = require("./svg/add-24px.svg");
+icons.divider = require("./svg/divider-24px.svg");
 
 icons.material = {};
 
