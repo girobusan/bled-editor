@@ -861,12 +861,11 @@ constructors.list = function (data, el, id, editor) {
         element: el,
         list_element: null,
         type: data && data.style && data.style == "ordered" ? "ol" : "ul",
-        items: data && data.items ? data.items : [],
         render: function () {},
         save: function () {
             return {
-                "type": this.type == "ol" ? "ordered" : "unordered",
-                "items": this.items
+                "style": this.type == "ol" ? "ordered" : "unordered",
+                "items": Array.from(this.list_element.querySelectorAll("li")).map(e => e.innerHTML)
             }
         }
 
@@ -885,33 +884,44 @@ constructors.list = function (data, el, id, editor) {
             blc.list_element.appendChild(l);
         })
     }
-    /////make LI deletable
-    function addSmartRemove(el){
-        el.addEventListener("keyup" , function(e){
+    /////make LI deletable 
+    function addSmartRemove(el) {
+        el.addEventListener("keydown", function (e) {
             //console.log(e.keyCode , this.innerHTML.length);
-            if(e.keyCode==8 && this.innerHTML.length==0 ){
+            if (e.keyCode == 8 && this.innerHTML.length == 0) {
                 this.remove();
+            }
+            if (e.keyCode == 13 && this.innerHTML.length > 0) {
+                e.preventDefault();
+                let ni = document.createElement("li");
+                ni.setAttribute("contenteditable", true);
+                //where?
+                let mynext = this.nextSibling;
+                if (mynext) {
+                    blc.list_element.insertBefore(ni, mynext);
+                } else {
+                    blc.list_element.appendChild(ni); //at...?
+                }
+                addSmartRemove(ni);
+                ni.focus();
+                return;
             }
         })
     }
     /////changle list type to
     function setType(tn) {
-        //console.log("set type", tn)
-        let old = blc.list_element;
+
         let ne = document.createElement(tn);
-        let liss = Array.from(old.childNodes);
+        let liss = Array.from(blc.list_element.childNodes);
         liss.forEach(e => {
-            //console.log(e);
             ne.appendChild(e)
         });
-        old.remove();
+        blc.list_element.remove();
         blc.list_element = ne;
         el.appendChild(ne);
     }
-    ////li's
+    ////
     templates.addToolbar(blc);
-
-
     //radiobuttons
     //
     let rbtns = [{
