@@ -967,7 +967,7 @@ export function makeTypicalEditor(el) {
 
     editor.registerEditor({
         type: "paragraph",
-        icon: "¶",
+        icon: UI.icons.material.paragraph,
         make: constructors.paragraph,
         label: "Paragraph"
     });

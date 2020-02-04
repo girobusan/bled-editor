@@ -21,6 +21,7 @@ icons.material.list = require("./svg/format_list_bulleted-24px.svg");
 icons.material.video = require("./svg/play_circle_filled-24px.svg");
 icons.material.quote = require("./svg/format_quote-24px.svg");
 icons.material.image = require("./svg/add_photo_alternate-24px.svg");
+icons.material.paragraph = require("./svg/paragraph-remix-24px.svg");
 
 
 
@@ -233,14 +234,18 @@ export function addPlusButton(block, menu) {
         let mi = document.createElement("div");
         mi.innerHTML = element.icon;
         //mi.style.backgroundColor = "white";
-        mi.style.padding = "2px"
+        mi.style.boxSizing = "borfer-box";
+        mi.style.padding = "4px"
         mi.style.borderRadius = "5px";
-        mi.style.margin = "2px";
+        mi.style.margin = "0px";
         mi.style.cursor = "pointer";
         mi.style.display = "inline-block";
         mi.style.overflow = "hidden";
+        mi.style.textAlign = "center";
         mi.style.fill = mycyan;
         mi.style.color = mycyan;
+        mi.style.width = "24px";
+        mi.style.height = "24px"
         let misvg = mi.querySelector("svg");
         if(misvg){
             misvg.style.pointerEvents = "none";
