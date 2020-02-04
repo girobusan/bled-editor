@@ -29,10 +29,12 @@ export function BlockEditor({
         return _current_id;
     }
 
-    this.upload = function (f , testurl) {
-        console.log("Testing upload" , f);
+    this.upload = function (f, testurl) {
+        console.log("Testing upload", f);
         return new Promise(function (resolve, reject) {
-            resolve({ url:  testurl ? testurl : "kitty.jpeg" });
+            resolve({
+                url: testurl ? testurl : "kitty.jpeg"
+            });
         })
     }
 
@@ -40,20 +42,20 @@ export function BlockEditor({
         this.upload = func;
         return this;
     }
-    this.setBlocks = function (blocks){
-        this.blocks={};
-        mine.querySelectorAll(".block_editor_unit").forEach( e=> e.remove());
+    this.setBlocks = function (blocks) {
+        this.blocks = {};
+        mine.querySelectorAll(".block_editor_unit").forEach(e => e.remove());
         this._current_id = 1;
         if (blocks) {
             blocks.forEach(e => this.addNewBlockFromSource(e));
         }
     }
-    
-    this.hide = function(){
+
+    this.hide = function () {
         this.element.remove();
     }
 
-    this.show = function(){
+    this.show = function () {
         let they = document.querySelector(selector);
         they.innerHTML = "";
         they.appendChild(this.element);
@@ -68,7 +70,7 @@ export function BlockEditor({
         //console.log(this.editors)
         //"add" menu
         Object.keys(this.editors).forEach(function (e) {
-            
+
             console.log("added handler for", e);
             let val = my.editors[e];
             my.addMenu.push({
@@ -86,11 +88,11 @@ export function BlockEditor({
         zero.style.height = "8px";
         zero.style.wifth = "100%";
         zero.style.marginLeft = "-32px";
-        zero.dataset.block_id = "start";        
-        UI.addPlusButton(zero, this.addMenu);        
+        zero.dataset.block_id = "start";
+        UI.addPlusButton(zero, this.addMenu);
         mine.appendChild(zero);
         //
-        this.setBlocks(blocks);       
+        this.setBlocks(blocks);
         //start UI
         UI.tooltips();
         UI.textTools();
@@ -209,12 +211,12 @@ export function BlockEditor({
             this.blocks[bID] = block;
             UI.addPlusButton(domblock, this.addMenu);
             UI.addBlockControls(domblock, null, this);
-            
+
         } else {
             console.log("no editor for", type);
             return null;
         }
-    
+
         if (refid && refel) {
             this.element.insertBefore(domblock, refel);
         } else {
@@ -234,7 +236,7 @@ export function BlockEditor({
         //remove dom element
         this.element.querySelectorAll(".block_editor_unit").item(elidx).remove();
         //del block from registry
-        delete (this.blocks[id]);
+        delete(this.blocks[id]);
     } //remove block
 
     this.save = function (clb) {
@@ -251,7 +253,9 @@ export function BlockEditor({
             "blocks": dt
         };
         console.log("Editor saving", mydata);
-        if(clb){clb(mydata)};
+        if (clb) {
+            clb(mydata)
+        };
         return mydata;
     }
 
@@ -269,7 +273,7 @@ templates.formRow = function (elements_array) {
             //console.log(e);
             e.style.marginLeft = "8px";
         }
-        if (e.nodeName == "LABEL" && i!=0) {
+        if (e.nodeName == "LABEL" && i != 0) {
             e.style.flexGrow = 1;
         }
         row.appendChild(e);
@@ -283,11 +287,14 @@ templates.addToolbar = function (block) {
     tbx.style.backgroundColor = "gray";
     tbx.style.minHeight = "24px";
     tbx.style.fontSize = ".8em"
-    tbx.style.display = "block";
+    tbx.style.display = "flex";
     tbx.style.padding = "4px";
 
     block.element.parentNode.appendChild(tbx); //add to editor_item, !not! block content container
     block.addToToolbar = function (el) {
+        if (el.tagName == "LABEL") {
+            el.style.flexGrow = 1;
+        }
         tbx.appendChild(el)
     }
 }
@@ -400,13 +407,15 @@ constructors.paragraph = function (data, el, id, editor) {
             if (e.shiftKey) {
                 //
             } else {
-                document.execCommand("insertText" , false , magic);
-                let clickat  = blc._p.innerHTML.indexOf(magic)
-                let textleft = blc._p.innerHTML.substring(0 , clickat);
-                let textnext = blc._p.innerHTML.substring(clickat+magic.length);
+                document.execCommand("insertText", false, magic);
+                let clickat = blc._p.innerHTML.indexOf(magic)
+                let textleft = blc._p.innerHTML.substring(0, clickat);
+                let textnext = blc._p.innerHTML.substring(clickat + magic.length);
                 //console.log(textleft, "|" , textnext);
                 blc._p.innerHTML = textleft; //blc._p.innerHTML.substring(0 , clickat);
-                let np = editor.addNewBlock("paragraph" ,{text:textnext}, blc.id);
+                let np = editor.addNewBlock("paragraph", {
+                    text: textnext
+                }, blc.id);
                 //sel.anchorNode.innerHTML = leavehere;
                 //np = newly inserted block id
                 blc.editor.blocks[np]._p.focus();
@@ -635,7 +644,9 @@ constructors.image = function (data, el, id, editor) {
     srcinput.style.flexGrow = 2;
     srcinput.type = "text";
     srcinput.value = data && data.file.url ? data.file.url : "";
-    srcinput.addEventListener("keyup", function (e) { pimg.src = this.value; })
+    srcinput.addEventListener("keyup", function (e) {
+        pimg.src = this.value;
+    })
     blc.addToEditor(templates.formRow([srclabel, srcinput]));
     ////classes
     //////stretched
@@ -658,36 +669,57 @@ constructors.image = function (data, el, id, editor) {
     nrlabel.innerHTML = "no resize"
     let noresize = document.createElement("input");
     noresize.type = "checkbox";
-    noresize.onclick = function () { if (this.checked) { stretched.checked = false } };
+    noresize.onclick = function () {
+        if (this.checked) {
+            stretched.checked = false
+        }
+    };
     noresize.checked = data && (data.noresize || data.withbackground);
     /////left
     let llabel = document.createElement("label");
     llabel.innerHTML = "left"
     let left = document.createElement("input");
     left.type = "checkbox";
-    left.onclick = function () { if (this.checked) { right.checked = false; stretched.checked = false } };
+    left.onclick = function () {
+        if (this.checked) {
+            right.checked = false;
+            stretched.checked = false
+        }
+    };
     left.checked = data && data.left;
     ////right
     let rlabel = document.createElement("label");
     rlabel.innerHTML = "right"
     let right = document.createElement("input");
     right.type = "checkbox";
-    right.onclick = function () { if (this.checked) { left.checked = false; stretched.checked = false } }
+    right.onclick = function () {
+        if (this.checked) {
+            left.checked = false;
+            stretched.checked = false
+        }
+    }
     right.checked = data && data.right;
 
-     ////border
-     let blabel = document.createElement("label");
-     blabel.innerHTML = "border"
-     let border = document.createElement("input");
-     border.type = "checkbox";
-     border.onclick = function () { if(this.checked){pimg.classList.add("bordered")}else{pimg.classList.remove("bordered")} }
-     border.checked = data && data.border;
+    ////border
+    let blabel = document.createElement("label");
+    blabel.innerHTML = "border"
+    let border = document.createElement("input");
+    border.type = "checkbox";
+    border.onclick = function () {
+        if (this.checked) {
+            pimg.classList.add("bordered")
+        } else {
+            pimg.classList.remove("bordered")
+        }
+    }
+    border.checked = data && data.border;
 
-    blc.addToEditor(templates.formRow([ stretched,stretchlabel,
-         noresize,nrlabel,
-         left,llabel,
-         right,rlabel,
-        border,blabel] ));
+    blc.addToEditor(templates.formRow([stretched, stretchlabel,
+        noresize, nrlabel,
+        left, llabel,
+        right, rlabel,
+        border, blabel
+    ]));
 
     //
     blc.save = function () {
@@ -714,41 +746,41 @@ constructors.image = function (data, el, id, editor) {
     return blc;
 }
 
-constructors.video = function(data, el, id, editor){
+constructors.video = function (data, el, id, editor) {
     console.log(data);
     let blc = {
         element: el,
         id: id,
         data: data ? data : {},
-        render: function(){},
+        render: function () {},
     }
-    if(!blc.data.file){
+    if (!blc.data.file) {
         blc.data.file = {};
     }
     templates.twoPanels(blc);
     //preview
     let vtag = blc.addToPreview(document.createElement("video"));
-    vtag.style.maxWidth= "100%";
+    vtag.style.maxWidth = "100%";
     //let srctag = document.createElement("source");
     //vtag.appendChild(srctag);
     vtag.src = data && data.file.url ? data.file.url : "";
     //editor
     ////upload     
-     let upld = document.createElement("input");
-     upld.type = "file";
-     upld.style.flexGrow = 1;
-     let upldbtn = document.createElement("input");
-     upldbtn.value = "upload";
-     upldbtn.type = "button"
-     upldbtn.addEventListener("click", function (e) {
-         editor.upload(upld.files[0])
-             .then(function (r) {
-                 vtag.src = r.url;
-                 srcinput.value = r.url;
-             })
-     });
- 
-     blc.addToEditor(templates.formRow([upld, upldbtn]));
+    let upld = document.createElement("input");
+    upld.type = "file";
+    upld.style.flexGrow = 1;
+    let upldbtn = document.createElement("input");
+    upldbtn.value = "upload";
+    upldbtn.type = "button"
+    upldbtn.addEventListener("click", function (e) {
+        editor.upload(upld.files[0])
+            .then(function (r) {
+                vtag.src = r.url;
+                srcinput.value = r.url;
+            })
+    });
+
+    blc.addToEditor(templates.formRow([upld, upldbtn]));
     ////edit src
     let srclabel = document.createElement("label");
     srclabel.innerHTML = "Source URL";
@@ -756,58 +788,171 @@ constructors.video = function(data, el, id, editor){
     srcinput.style.flexGrow = 2;
     srcinput.type = "text";
     srcinput.value = data && data.file.url ? data.file.url : "";
-    srcinput.addEventListener("keyup", function (e) { vtag.src = this.value; blc.data.file.url = this.value;  })
+    srcinput.addEventListener("keyup", function (e) {
+        vtag.src = this.value;
+        blc.data.file.url = this.value;
+    })
     blc.addToEditor(templates.formRow([srclabel, srcinput]));
     ////params
-    let params = [
-        { 
+    let params = [{
             name: "autoplay",
             checked: data && data.autoplay,
             label: "autoplay"
         },
-        { 
+        {
             name: "controls",
-            checked: data && data.controls,            
+            checked: data && data.controls,
         },
-        { 
+        {
             name: "loop",
-            checked: data && data.loop,            
+            checked: data && data.loop,
         },
-        { 
+        {
             name: "muted",
-            checked: data && data.muted,            
+            checked: data && data.muted,
         },
-      
+
     ]
     let pels = [];
-    params.forEach(function(e){
-        if(!blc.data[e.name]) {
+    params.forEach(function (e) {
+        if (!blc.data[e.name]) {
             blc.data[e.name] = false;
-        } 
+        }
         let plabel = document.createElement("label");
         plabel.style.flexGrow = 1;
         plabel.innerHTML = e.name;
         let pcheck = document.createElement("input");
         pcheck.type = "checkbox";
         pcheck.checked = data && data[e.name];
-        pcheck.onclick = function(ev){ 
-            console.log(e , blc.data , e.name ) ; 
+        pcheck.onclick = function (ev) {
+            console.log(e, blc.data, e.name);
             blc.data[e.name] = this.checked;
             vtag.setAttribute(e.name, this.checked);
         };
         pels.push(pcheck);
         pels.push(plabel);
-        
+
 
     });
     blc.addToEditor(templates.formRow(pels));
 
-    blc.save = function(){
+    blc.save = function () {
         return blc.data;
     }
 
     return blc;
 }
+/**
+ * {
+    "type" : "list",
+    "data" : {
+        "style" : "unordered",
+        "items" : [
+            "This is a block-styled editor",
+            "Clean output data",
+            "Simple and powerful API"
+        ]
+    }
+},
+ */
+
+constructors.list = function (data, el, id, editor) {
+    let blc = {
+        element: el,
+        list_element: null,
+        type: data && data.style && data.style == "ordered" ? "ol" : "ul",
+        items: data && data.items ? data.items : [],
+        render: function () {},
+        save: function () {
+            return {
+                "type": this.type == "ol" ? "ordered" : "unordered",
+                "items": this.items
+            }
+        }
+
+    }
+    //editor
+    ////outer list
+    blc.list_element = document.createElement(blc.type);
+    el.appendChild(blc.list_element);
+    ////do we have data
+    if (data && data.items) {
+        data.items.forEach(function (e) {
+            let l = document.createElement("li");
+            l.innerHTML = e;
+            l.setAttribute("contenteditable", true);
+            addSmartRemove(l)
+            blc.list_element.appendChild(l);
+        })
+    }
+    /////make LI deletable
+    function addSmartRemove(el){
+        el.addEventListener("keyup" , function(e){
+            //console.log(e.keyCode , this.innerHTML.length);
+            if(e.keyCode==8 && this.innerHTML.length==0 ){
+                this.remove();
+            }
+        })
+    }
+    /////changle list type to
+    function setType(tn) {
+        //console.log("set type", tn)
+        let old = blc.list_element;
+        let ne = document.createElement(tn);
+        let liss = Array.from(old.childNodes);
+        liss.forEach(e => {
+            //console.log(e);
+            ne.appendChild(e)
+        });
+        old.remove();
+        blc.list_element = ne;
+        el.appendChild(ne);
+    }
+    ////li's
+    templates.addToolbar(blc);
+
+
+    //radiobuttons
+    //
+    let rbtns = [{
+            value: "ul",
+            label: "Unordered"
+
+        },
+        {
+            value: "ol",
+            label: "Ordered"
+        }
+    ];
+    rbtns.forEach(function (e) {
+        let radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "list_buttons_" + id;
+        radio.value = e.value;
+        radio.checked = (blc.type == e.value);
+        radio.onchange = ev => setType(e.value);
+        let lbl = document.createElement("label");
+        lbl.innerHTML = e.label;
+        blc.addToToolbar(radio);
+        blc.addToToolbar(lbl);
+    });
+    //// add button
+    let add_b = document.createElement("input");
+    add_b.type = "button";
+    add_b.value = "+item";
+    add_b.addEventListener("click", function () {
+        let newli = document.createElement("li");
+        newli.setAttribute("contenteditable", true);
+        addSmartRemove(newli);
+        blc.list_element.appendChild(newli);
+    })
+    blc.addToToolbar(add_b);
+
+
+    return blc;
+}
+
+
 
 
 export function makeTypicalEditor(el) {
@@ -863,13 +1008,19 @@ export function makeTypicalEditor(el) {
         make: constructors.video,
         label: 'Video'
     });
+    editor.registerEditor({
+        type: "list",
+        icon: "lst",
+        make: constructors.list,
+        label: 'ViListdeo'
+    });
 
     return editor;
 }
 //  my.current_editor = new editor_fn(l4, editor_element, my.current_view.file.content);
 
-export function makeLatidEditor(l4, editor_element_selector,file_content){
-    let ed = makeTypicalEditor(editor_element_selector); 
+export function makeLatidEditor(l4, editor_element_selector, file_content) {
+    let ed = makeTypicalEditor(editor_element_selector);
     ed.setBlocks(file_content);
     return ed;
 }
