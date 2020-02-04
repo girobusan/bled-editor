@@ -162,8 +162,10 @@ export function textTools() {
     function testEditableContainer(el){
         //console.log("test");
         let ce = el;
+        //if(!ce){return null};
         while(!ce.getAttribute("contenteditable") && ce.nodeName!="BODY"){            
             ce = ce.parentNode;
+            if(!ce){return null};
             //console.log("upto" , ce);
         }
         if (ce.getAttribute("contenteditable")){
