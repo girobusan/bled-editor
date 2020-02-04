@@ -957,13 +957,8 @@ constructors.list = function (data, el, id, editor) {
         blc.list_element.appendChild(newli);
     })
     blc.addToToolbar(add_b);
-
-
     return blc;
 }
-
-
-
 
 export function makeTypicalEditor(el) {
     let editor = new BlockEditor({
@@ -1002,28 +997,29 @@ export function makeTypicalEditor(el) {
     });
     editor.registerEditor({
         type: "quote",
-        icon: "«»",
+        icon: UI.icons.flat.quote,
         make: constructors.blockquote,
         label: 'Blockquote'
     });
     editor.registerEditor({
         type: "image",
-        icon: "pic",
+        icon: UI.icons.flat.image,
         make: constructors.image,
         label: 'Image'
     });
     editor.registerEditor({
         type: "video",
-        icon: "video",
+        icon: UI.icons.flat.video,
         make: constructors.video,
         label: 'Video'
     });
     editor.registerEditor({
         type: "list",
-        icon: "lst",
+        icon: UI.icons.flat.list,
         make: constructors.list,
-        label: 'ViListdeo'
+        label: "List",
     });
+    console.log(UI.icons.flat.list);
 
     return editor;
 }

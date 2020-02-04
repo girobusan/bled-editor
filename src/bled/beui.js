@@ -7,10 +7,21 @@ icons.strike = require("./svg/text_strike.svg");
 icons.sup = require("./svg/text_sup.svg");
 icons.sub = require("./svg/text_sub.svg");
 icons.link = require("./svg/text_link.svg");
+
 icons.up = require("./svg/arrow_upward-24px.svg");
 icons.down = require("./svg/arrow_downward-24px.svg");
 icons.del = require("./svg/clear-24px.svg");
 icons.add = require("./svg/add-24px.svg");
+
+icons.flat = {};
+
+icons.flat.link = require("./svg/link-24px.svg");
+icons.flat.quote = require("./svg/format_quote-24px.svg");
+icons.flat.list = require("./svg/format_list_bulleted-24px.svg");
+icons.flat.video = require("./svg/play_circle_filled-24px.svg");
+icons.flat.quote = require("./svg/format_quote-24px.svg");
+icons.flat.image = require("./svg/add_photo_alternate-24px.svg");
+
 
 
 export var mycyan = "#3ED9E3";
@@ -225,6 +236,19 @@ export function addPlusButton(block, menu) {
         mi.style.margin = "2px";
         mi.style.cursor = "pointer";
         mi.style.display = "inline-block";
+        mi.style.overflow = "hidden";
+        mi.style.fill = mycyan;
+        mi.style.color = mycyan;
+        let misvg = mi.querySelector("svg");
+        if(misvg){
+            misvg.style.pointerEvents = "none";
+            misvg.style.width="24px";
+            misvg.style.height="24px";
+        }
+        mi.onmouseover = ()=> {mi.style.fill="black" ; mi.style.color="black"};
+        mi.onmouseout = ()=> {mi.style.fill=mycyan ; mi.style.color=mycyan};
+
+        
         mi.dataset.hint = element.label;
         mi.addEventListener("click", e => {
             element.handler(block.dataset.block_id);
