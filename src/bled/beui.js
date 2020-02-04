@@ -13,14 +13,14 @@ icons.down = require("./svg/arrow_downward-24px.svg");
 icons.del = require("./svg/clear-24px.svg");
 icons.add = require("./svg/add-24px.svg");
 
-icons.flat = {};
+icons.material = {};
 
-icons.flat.link = require("./svg/link-24px.svg");
-icons.flat.quote = require("./svg/format_quote-24px.svg");
-icons.flat.list = require("./svg/format_list_bulleted-24px.svg");
-icons.flat.video = require("./svg/play_circle_filled-24px.svg");
-icons.flat.quote = require("./svg/format_quote-24px.svg");
-icons.flat.image = require("./svg/add_photo_alternate-24px.svg");
+icons.material.link = require("./svg/link-24px.svg");
+icons.material.quote = require("./svg/format_quote-24px.svg");
+icons.material.list = require("./svg/format_list_bulleted-24px.svg");
+icons.material.video = require("./svg/play_circle_filled-24px.svg");
+icons.material.quote = require("./svg/format_quote-24px.svg");
+icons.material.image = require("./svg/add_photo_alternate-24px.svg");
 
 
 

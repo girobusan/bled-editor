@@ -997,29 +997,29 @@ export function makeTypicalEditor(el) {
     });
     editor.registerEditor({
         type: "quote",
-        icon: UI.icons.flat.quote,
+        icon: UI.icons.material.quote,
         make: constructors.blockquote,
         label: 'Blockquote'
     });
     editor.registerEditor({
         type: "image",
-        icon: UI.icons.flat.image,
+        icon: UI.icons.material.image,
         make: constructors.image,
         label: 'Image'
     });
     editor.registerEditor({
         type: "video",
-        icon: UI.icons.flat.video,
+        icon: UI.icons.material.video,
         make: constructors.video,
         label: 'Video'
     });
     editor.registerEditor({
         type: "list",
-        icon: UI.icons.flat.list,
+        icon: UI.icons.material.list,
         make: constructors.list,
         label: "List",
     });
-    console.log(UI.icons.flat.list);
+    console.log(UI.icons.material.list);
 
     return editor;
 }
