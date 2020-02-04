@@ -55,6 +55,7 @@ export function BlockEditor({
 
     this.show = function(){
         let they = document.querySelector(selector);
+        they.innerHTML = "";
         they.appendChild(this.element);
 
     }
@@ -236,7 +237,7 @@ export function BlockEditor({
         delete (this.blocks[id]);
     } //remove block
 
-    this.save = function () {
+    this.save = function (clb) {
         let dt = [];
         this.element.querySelectorAll(".block_editor_unit")
             .forEach(function (e) {
@@ -250,6 +251,7 @@ export function BlockEditor({
             "blocks": dt
         };
         console.log("Editor saving", mydata);
+        if(clb){clb(mydata)};
         return mydata;
     }
 
@@ -863,4 +865,11 @@ export function makeTypicalEditor(el) {
     });
 
     return editor;
+}
+//  my.current_editor = new editor_fn(l4, editor_element, my.current_view.file.content);
+
+export function makeLatidEditor(l4, editor_element_selector,file_content){
+    let ed = makeTypicalEditor(editor_element_selector); 
+    ed.setBlocks(file_content);
+    return ed;
 }
