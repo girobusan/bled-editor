@@ -22,9 +22,9 @@ icons.material = {};
 icons.material.link = require("./svg/link-24px.svg");
 icons.material.quote = require("./svg/format_quote-24px.svg");
 icons.material.list = require("./svg/format_list_bulleted-24px.svg");
-icons.material.video = require("./svg/play_circle_filled-24px.svg");
+icons.material.video = require("./svg/videocam-24px.svg");
 icons.material.quote = require("./svg/format_quote-24px.svg");
-icons.material.image = require("./svg/add_photo_alternate-24px.svg");
+icons.material.image = require("./svg/insert_photo-outlined-24px.svg");
 icons.material.paragraph = require("./svg/paragraph-remix-24px.svg");
 
 
