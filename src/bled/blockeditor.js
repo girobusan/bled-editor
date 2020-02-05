@@ -71,7 +71,7 @@ export function BlockEditor({
         //"add" menu
         Object.keys(this.editors).forEach(function (e) {
 
-            console.log("added handler for", e);
+            //console.log("added handler for", e);
             let val = my.editors[e];
             my.addMenu.push({
                 "label": val.label,
