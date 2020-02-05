@@ -8,6 +8,7 @@ export function BlockEditor({
     let mine = document.createElement("div");
     mine.classList.add("block_editor_outer_container");
     mine.style.minHeight = "64px";
+    mine.style.width="100%";
     let they = document.querySelector(selector);
     they.innerHTML = "";
     they.appendChild(mine);

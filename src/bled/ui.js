@@ -335,6 +335,13 @@ export function addPlusButton(block, menu) {
 }
 
 export function addBlockControls(block, items, ed) {
+    /**
+     * 
+     * block_editor_unit
+     */
+    block.style.padding="0 32px";
+    block.style.width = "100%";
+    block.style.margin = "0 -32px"
     if (!items && ed) {
         items = [
             {
