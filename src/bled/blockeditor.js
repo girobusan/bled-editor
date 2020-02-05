@@ -979,19 +979,19 @@ export function makeTypicalEditor(el) {
     });
     editor.registerEditor({
         type: "header",
-        icon: "H",
+        icon: UI.icons.header,
         make: constructors.header,
         label: 'Header'
     });
     editor.registerEditor({
         type: "code",
-        icon: "{}",
+        icon: UI.icons.code,
         make: constructors.code,
         label: 'Code snippet'
     });
     editor.registerEditor({
         type: "raw",
-        icon: "<>",
+        icon: UI.icons.raw,
         make: constructors.raw,
         label: 'Raw HTML'
     });

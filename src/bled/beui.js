@@ -7,6 +7,9 @@ icons.strike = require("./svg/text_strike.svg");
 icons.sup = require("./svg/text_sup.svg");
 icons.sub = require("./svg/text_sub.svg");
 icons.link = require("./svg/text_link.svg");
+icons.header = require("./svg/header-24px.svg");
+icons.code = require("./svg/code-my-24px.svg");
+icons.raw = require("./svg/code-24px.svg");
 
 icons.up = require("./svg/arrow_upward-24px.svg");
 icons.down = require("./svg/arrow_downward-24px.svg");
