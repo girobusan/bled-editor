@@ -15,6 +15,13 @@ var testdata = [
         }
     },
     {
+        "type" : "list",
+        "data" :{
+            "style" : "ordered",
+            "items" :  ["First item" , "Second Item" , "Third Item"]
+        }
+    },
+    {
         "type" : "paragraph",
         "data" : {
             "text" : "Первое полустишие изящно иллюстрирует лирический парафраз."
@@ -35,7 +42,7 @@ var testdata = [
 
 ]
 
-var myeditor = Editor.makeTypicalEditor("#edited_content");
+var myeditor = Editor.makeBasicEditor("#edited_content");
 myeditor.start(testdata);
 
 //save test

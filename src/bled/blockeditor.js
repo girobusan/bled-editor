@@ -1,4 +1,4 @@
-import * as UI from "./beui";
+import * as UI from "./ui";
 
 export function BlockEditor({
     selector
@@ -86,7 +86,7 @@ export function BlockEditor({
         let zero = document.createElement("div");
         zero.classList.add("starting_block");
         zero.style.height = "8px";
-        zero.style.wifth = "100%";
+        zero.style.width = "100%";
         zero.style.marginLeft = "-32px";
         zero.dataset.block_id = "start";
         UI.addPlusButton(zero, this.addMenu);
@@ -250,9 +250,13 @@ export function BlockEditor({
                 })
             });
         let mydata = {
+            "editor" : "",
             "blocks": dt
         };
-        console.log("Editor saving", mydata);
+        console.groupCollapsed("%cEditor saving", ("color: " + UI.mycyan));        
+        console.log(mydata);
+        console.groupEnd();
+
         if (clb) {
             clb(mydata)
         };
@@ -960,7 +964,7 @@ constructors.list = function (data, el, id, editor) {
     return blc;
 }
 
-export function makeTypicalEditor(el) {
+export function makeBasicEditor(el) {
     let editor = new BlockEditor({
         selector: el
     });
@@ -1019,7 +1023,7 @@ export function makeTypicalEditor(el) {
         make: constructors.list,
         label: "List",
     });
-    console.log(UI.icons.material.list);
+    //console.log(UI.icons.material.list);
 
     return editor;
 }
