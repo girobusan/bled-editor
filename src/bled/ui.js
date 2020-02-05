@@ -65,7 +65,7 @@ export function tooltips() {
     ttin.style.borderRadius = "4px";
     ttin.style.boxShadow = "2px 2px 2px 1px gray";
     ttin.style.right = "50%";
-    ttin.style.bottom = "8px";
+    ttin.style.bottom = "16px";
 
     document.body.appendChild(tt);
 
