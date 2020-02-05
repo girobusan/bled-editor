@@ -22,6 +22,13 @@ var testdata = [
         }
     },
     {
+        "type" : "fcuk",
+        "data" :{
+            "style" : "ordered",
+            "items" :  ["First item" , "Second Item" , "Third Item"]
+        }
+    },
+    {
         "type" : "paragraph",
         "data" : {
             "text" : "Первое полустишие изящно иллюстрирует лирический парафраз."

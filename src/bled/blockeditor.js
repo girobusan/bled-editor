@@ -8,7 +8,7 @@ export function BlockEditor({
     let mine = document.createElement("div");
     mine.classList.add("block_editor_outer_container");
     mine.style.minHeight = "64px";
-    mine.style.width="100%";
+    mine.style.width = "100%";
     let they = document.querySelector(selector);
     they.innerHTML = "";
     they.appendChild(mine);
@@ -195,28 +195,33 @@ export function BlockEditor({
         }
 
         //create block of type 
+        var domblock = document.createElement("div");
+        var bID = this._makeID();
+        let bcontent = document.createElement("div");
+        domblock.appendChild(bcontent);
+        domblock.classList.add("block_editor_unit");
+        domblock.dataset.block_id = bID;
+        domblock.dataset.block_type = type;
+
+
+        bcontent.classList.add("block_content_container");
         if (type in this.editors) {
-
-
-            var domblock = document.createElement("div");
-            var bID = this._makeID();
-            let bcontent = document.createElement("div");
-            domblock.appendChild(bcontent);
-            domblock.classList.add("block_editor_unit");
-            domblock.dataset.block_id = bID;
-            domblock.dataset.block_type = type;
-
-
-            bcontent.classList.add("block_content_container");
             var block = this.editors[type].make(data, bcontent, bID, this); //block made
-            this.blocks[bID] = block;
-            UI.addPlusButton(domblock, this.addMenu);
-            UI.addBlockControls(domblock, null, this);
-
         } else {
+            var block = {save: ()=> data , render: ()=> null}
+            //this.blocks[bID] = block;
             console.log("no editor for", type);
-            return null;
+            //return null;
+            bcontent.innerHTML = "Unknown block: <strong>"+type + "</strong>";
+            bcontent.style.backgroundColor =  "silver";
+            bcontent.style.color = "white";
+            bcontent.style.fontSize = "2em";
+            bcontent.style.textAlign = 'center';
+            bcontent.style.padding = "2em 0em";
         }
+        this.blocks[bID] = block;
+        UI.addPlusButton(domblock, this.addMenu);
+        UI.addBlockControls(domblock, null, this);
 
         if (refid && refel) {
             this.element.insertBefore(domblock, refel);
@@ -237,7 +242,7 @@ export function BlockEditor({
         //remove dom element
         this.element.querySelectorAll(".block_editor_unit").item(elidx).remove();
         //del block from registry
-        delete(this.blocks[id]);
+        delete (this.blocks[id]);
     } //remove block
 
     this.save = function (clb) {
@@ -251,10 +256,10 @@ export function BlockEditor({
                 })
             });
         let mydata = {
-            "editor" : "",
+            "editor": "",
             "blocks": dt
         };
-        console.groupCollapsed("%cEditor saving", ("color: " + UI.mycyan));        
+        console.groupCollapsed("%cEditor saving", ("color: " + UI.mycyan));
         console.log(mydata);
         console.groupEnd();
 
@@ -757,7 +762,7 @@ constructors.video = function (data, el, id, editor) {
         element: el,
         id: id,
         data: data ? data : {},
-        render: function () {},
+        render: function () { },
     }
     if (!blc.data.file) {
         blc.data.file = {};
@@ -800,22 +805,22 @@ constructors.video = function (data, el, id, editor) {
     blc.addToEditor(templates.formRow([srclabel, srcinput]));
     ////params
     let params = [{
-            name: "autoplay",
-            checked: data && data.autoplay,
-            label: "autoplay"
-        },
-        {
-            name: "controls",
-            checked: data && data.controls,
-        },
-        {
-            name: "loop",
-            checked: data && data.loop,
-        },
-        {
-            name: "muted",
-            checked: data && data.muted,
-        },
+        name: "autoplay",
+        checked: data && data.autoplay,
+        label: "autoplay"
+    },
+    {
+        name: "controls",
+        checked: data && data.controls,
+    },
+    {
+        name: "loop",
+        checked: data && data.loop,
+    },
+    {
+        name: "muted",
+        checked: data && data.muted,
+    },
 
     ]
     let pels = [];
@@ -866,7 +871,7 @@ constructors.list = function (data, el, id, editor) {
         element: el,
         list_element: null,
         type: data && data.style && data.style == "ordered" ? "ol" : "ul",
-        render: function () {},
+        render: function () { },
         save: function () {
             return {
                 "style": this.type == "ol" ? "ordered" : "unordered",
@@ -930,14 +935,14 @@ constructors.list = function (data, el, id, editor) {
     //radiobuttons
     //
     let rbtns = [{
-            value: "ul",
-            label: "Unordered"
+        value: "ul",
+        label: "Unordered"
 
-        },
-        {
-            value: "ol",
-            label: "Ordered"
-        }
+    },
+    {
+        value: "ol",
+        label: "Ordered"
+    }
     ];
     rbtns.forEach(function (e) {
         let radio = document.createElement("input");
