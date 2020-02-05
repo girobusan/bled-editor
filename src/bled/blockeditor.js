@@ -534,11 +534,11 @@ constructors.code = function (data, el, id, editor) {
     let blc = {
         element: el,
         render: function () {
-            cd.innerHTML = data && data.text ? data.text : "#  type\n#  here";
+            cd.innerHTML = data && data.code ? data.code : "#  type\n#  here";
         },
         save: function () {
             return {
-                text: cd.innerHTML,
+                code: cd.innerHTML,
                 language: opts[opts.selectedIndex].value
             }
         }
@@ -1031,7 +1031,7 @@ export function makeBasicEditor(el) {
 //  my.current_editor = new editor_fn(l4, editor_element, my.current_view.file.content);
 
 export function makeLatidEditor(l4, editor_element_selector, file_content) {
-    let ed = makeTypicalEditor(editor_element_selector);
+    let ed = makeBasicEditor(editor_element_selector);
     ed.setBlocks(file_content);
     return ed;
 }
