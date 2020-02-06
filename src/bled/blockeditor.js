@@ -34,7 +34,11 @@ export function BlockEditor({
         console.log("Testing upload", f);
         return new Promise(function (resolve, reject) {
             resolve({
-                url: testurl ? testurl : "kitty.jpeg"
+                success: "1" ,
+                file: {
+                     url: testurl ? testurl : "kitty.jpeg"
+                }
+               
             });
         })
     }
@@ -641,8 +645,8 @@ constructors.image = function (data, el, id, editor) {
     upldbtn.addEventListener("click", function (e) {
         editor.upload(upld.files[0])
             .then(function (r) {
-                pimg.src = r.url;
-                srcinput.value = r.url;
+                pimg.src = r.file.url;
+                srcinput.value = r.file.url;
             })
     });
 
@@ -785,8 +789,8 @@ constructors.video = function (data, el, id, editor) {
     upldbtn.addEventListener("click", function (e) {
         editor.upload(upld.files[0])
             .then(function (r) {
-                vtag.src = r.url;
-                srcinput.value = r.url;
+                vtag.src = r.file.url;
+                srcinput.value = r.file.url;
             })
     });
 
