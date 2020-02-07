@@ -64,7 +64,8 @@ export function BlockEditor({
         let they = document.querySelector(selector);
         they.innerHTML = "";
         they.appendChild(this.element);
-
+        UI.tooltips();
+        UI.textTools();
     }
 
     this.start = function (blocks) {
@@ -878,7 +879,7 @@ constructors.list = function (data, el, id, editor) {
         render: function () { },
         save: function () {
             return {
-                "style": this.type == "ol" ? "ordered" : "unordered",
+                "style": blc.type == "ol" ? "ordered" : "unordered",
                 "items": Array.from(this.list_element.querySelectorAll("li")).map(e => e.innerHTML)
             }
         }
@@ -932,6 +933,7 @@ constructors.list = function (data, el, id, editor) {
         });
         blc.list_element.remove();
         blc.list_element = ne;
+        blc.type = tn;
         el.appendChild(ne);
     }
     ////
