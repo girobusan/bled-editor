@@ -414,6 +414,15 @@ constructors.paragraph = function (data, el, id, editor) {
             }
         }
     }
+    blc._p.addEventListener("paste" , function(e){
+        //we need to strip formatting here
+        let paste = (event.clipboardData || window.clipboardData).getData('text');          
+        const selection = window.getSelection();
+        if (!selection.rangeCount) return false;
+        selection.deleteFromDocument();
+        selection.getRangeAt(0).insertNode(document.createTextNode(paste));    
+        event.preventDefault();
+    });
 
     blc._p.addEventListener("keydown", function (e) {
         const magic = "#!#"
@@ -525,8 +534,17 @@ constructors.code = function (data, el, id, editor) {
     pre.appendChild(cd);
     cd.setAttribute("contenteditable", true);
     cd.dataset.no_text_toolbox = true;
+    cd.addEventListener("paste" , function(e){
+        //we need to strip formatting here
+        let paste = (event.clipboardData || window.clipboardData).getData('text');          
+        const selection = window.getSelection();
+        if (!selection.rangeCount) return false;
+        selection.deleteFromDocument();
+        selection.getRangeAt(0).insertNode(document.createTextNode(paste));    
+        event.preventDefault();
+    })
     el.appendChild(pre);
-    let langs = ["Auto", "Arduino", 'JavaScript', "Processing", "Python", "C++", "Bash", "Basic", "Brainfuck"];
+    let langs = ["None" , "Auto", "Arduino", 'JavaScript', "Processing", "Python", "C++", "Bash", "Basic", "Brainfuck"];
     //
     let opts = document.createElement("select");
     langs.forEach(function (e) {
