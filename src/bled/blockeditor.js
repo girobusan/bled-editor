@@ -618,7 +618,7 @@ constructors.blockquote = function (data, el, id, editor) {
     blctag.appendChild(blcin);
     blctag.appendChild(blfoot);
     blcin.innerHTML = data && data.text ? data.text : "Цитата";
-    blcite.innerHTML = data && data.caption ? data.caption : "Подпись"
+    blcite.innerHTML = data && data.caption ? data.caption : ""
     let block = {
         render: function () {
             el.appendChild(blctag);
