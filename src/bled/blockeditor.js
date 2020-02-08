@@ -622,7 +622,7 @@ constructors.image = function (data, el, id, editor) {
     pimg.style.maxWidth = "100%";
     let fc = document.createElement("figcaption");
     fc.setAttribute("contenteditable", true);
-    fc.innerHTML = data && data.caption ? data.caption : "Подпис"
+    fc.innerHTML = data && data.caption ? data.caption : "";
     figtag.appendChild(pimg);
     figtag.appendChild(fc);
     pimg.src = data && data.file ? data.file.url : "";
@@ -766,7 +766,7 @@ constructors.video = function (data, el, id, editor) {
     let blc = {
         element: el,
         id: id,
-        data: data ? data : {},
+        data: data ? data : {file: {url: null}},
         render: function () { },
     }
     if (!blc.data.file) {
@@ -792,6 +792,7 @@ constructors.video = function (data, el, id, editor) {
             .then(function (r) {
                 vtag.src = r.file.url;
                 srcinput.value = r.file.url;
+                blc.data.file.url = r.file.url;
             })
     });
 
@@ -853,6 +854,9 @@ constructors.video = function (data, el, id, editor) {
 
     blc.save = function () {
         return blc.data;
+    }
+    if(!(data&& data.file && data.file.url)){
+        blc.goEditMode();
     }
 
     return blc;
