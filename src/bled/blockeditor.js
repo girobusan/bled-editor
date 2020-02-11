@@ -91,10 +91,23 @@ export function BlockEditor({
 
         let zero = document.createElement("div");
         zero.classList.add("starting_block");
-        zero.style.height = "8px";
+        //zero.style.height = "8px";
         zero.style.width = "100%";
         zero.style.marginLeft = "-32px";
+        zero.style.marginRight = "-32px";
+        zero.style.padding = "0px 32px"
         zero.dataset.block_id = "start";
+        //
+        let rect = document.createElement("div");
+        rect.style.backgroundColor = UI.Colours.light;
+        rect.style.color = "white";
+        rect.innerHTML = "EDIT MODE"
+        rect.style.letterSpacing = ".5em";
+        rect.style.fontSize = "0.7em";
+        rect.style.fontWeight = "bold";
+        rect.style.height = "100%";
+        rect.style.textAlign = "center";
+        zero.appendChild(rect);
         UI.addPlusButton(zero, this.addMenu);
         mine.appendChild(zero);
         //
@@ -303,8 +316,8 @@ templates.addToolbar = function (block) {
     tbx.style.minHeight = "24px";
     tbx.style.fontSize = ".8em"
     tbx.style.display = "flex";
-    tbx.style.paddingTop = "4px";
-    tbx.style.background = "linear-gradient(0deg, rgba(0,0,0,0) 50%, rgba(62,217,227,0.5) 100%)"  ; 
+    tbx.style.padding = "4px";
+    //tbx.style.background = "linear-gradient(0deg, rgba(0,0,0,0) 50%, rgba(62,217,227,0.5) 100%)"  ; 
 
     block.element.parentNode.appendChild(tbx); //add to editor_item, !not! block content container
     block.addToToolbar = function (el) {
@@ -989,6 +1002,7 @@ constructors.list = function (data, el, id, editor) {
     let add_b = document.createElement("input");
     add_b.type = "button";
     add_b.value = "+item";
+    add_b.dataset.hint = "Add new list item";
     add_b.addEventListener("click", function () {
         let newli = document.createElement("li");
         newli.setAttribute("contenteditable", true);

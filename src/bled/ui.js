@@ -78,14 +78,14 @@ export function tooltips() {
 
     let ttin = document.createElement("div");
     tt.appendChild(ttin);
-    ttin.style.backgroundColor = "rgba(100%, 100%, 100%, 0.9)";
-    ttin.style.color = "#888888";
+    ttin.style.backgroundColor = Colours.dark;
+    ttin.style.color = "white";
     ttin.style.pointerEvents = "none";
     ttin.style.fontSize = "12px";
     ttin.style.padding = "4px 8px";
     ttin.style.position = "relative";
     ttin.style.borderRadius = "2px";
-    ttin.style.boxShadow = "2px 2px 2px 2px #00000022";
+    ttin.style.boxShadow = "1px 1px 3px 2px #00000022";
     ttin.style.right = "50%";
     ttin.style.bottom = "16px";
 
@@ -114,7 +114,7 @@ export function textTools() {
     ttools.style.minWidth = "100px";
     ttools.classList.add("text_toolbox");
     //ttools.style.minHeight = "24px";
-    ttools.style.backgroundColor = Colours.light;
+    ttools.style.backgroundColor = Colours.dark;
     ttools.style.position = "absolute";
     ttools.style.display = "none";
     ttools.style.padding = "0px 8px";
@@ -389,21 +389,21 @@ export function addBlockControls(block, items, ed) {
     block.style.margin = "0 -32px"
     if (!items && ed) {
         items = [{
-                label: "move block up",
+                label: "Move block up",
                 icon: icons.up,
                 handler: function () {
                     ed.moveUp(block.dataset.block_id)
                 }
             },
             {
-                label: "move block down",
+                label: "Move block down",
                 icon: icons.down,
                 handler: function () {
                     ed.moveDown(block.dataset.block_id)
                 }
             },
             {
-                label: "delete block",
+                label: "Delete block",
                 icon: icons.del,
                 handler: function () {
                     ed.removeBlock(block.dataset.block_id)
