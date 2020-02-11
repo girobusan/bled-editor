@@ -7,6 +7,7 @@ icons.strike = require("./svg/text_strike.svg");
 icons.sup = require("./svg/text_sup.svg");
 icons.sub = require("./svg/text_sub.svg");
 icons.link = require("./svg/text_link.svg");
+
 icons.header = require("./svg/header-24px.svg");
 icons.code = require("./svg/code-my-24px.svg");
 icons.raw = require("./svg/code-24px.svg");
@@ -36,21 +37,35 @@ icons.material.paragraph = require("./svg/paragraph-remix-24px.svg");
 
 
 
-export var mycyan = "#3ED9E3";
-
-
-export function injectStyle(ststr){
-    let s = document.createElement("style");
-    s.innerHTML = ststr;
-    document.head.appendChild(s);
+export var mycyan = "#3ED9E3"; //remove
+export var Colours = {
+    "light": "#3ED9E3",
+    "dark": "#00A1AB"
 }
 
-//injectStyle(`body{color: #444;}`);
+
+export function injectStyle(ststr) {
+    let e = document.querySelector("style#bled_injected_style");
+    if (!e) {
+        console.log("attaching stylesheet for style injection");
+        e = document.createElement("style");
+        e.id = "bled_injected_style";
+        document.head.appendChild(e);    
+    }
+    e.innerHTML += ststr;
+}
+
+injectStyle(`body{color: #444;}`);
+injectStyle(`*[contenteditable=true]:empty{display: block; border-bottom: 1px solid ${Colours.light};}`);
 
 export function Ask(pr) {
     return new Promise(function (resolve, reject) {
         let r = prompt(pr);
-        if (r) { resolve(r) } else { reject("No input") };
+        if (r) {
+            resolve(r)
+        } else {
+            reject("No input")
+        };
     })
 }
 
@@ -99,7 +114,7 @@ export function textTools() {
     ttools.style.minWidth = "100px";
     ttools.classList.add("text_toolbox");
     //ttools.style.minHeight = "24px";
-    ttools.style.backgroundColor = mycyan;
+    ttools.style.backgroundColor = Colours.light;
     ttools.style.position = "absolute";
     ttools.style.display = "none";
     ttools.style.padding = "0px 8px";
@@ -118,11 +133,13 @@ export function textTools() {
         b.classList.add("text_toolbox");
         b.style.cursor = "pointer";
         b.style.padding = "8px";
-        b.onmouseover = ()=> b.style.fill = "black";
-        b.onmouseout = ()=> b.style.fill = "white";
+        b.onmouseover = () => b.style.fill = "black";
+        b.onmouseout = () => b.style.fill = "white";
         let sv = b.querySelector("svg");
-        sv.style.pointerEvents = "none";//.style.pointerEvents("none");
-        if (hint) { b.dataset.hint = hint };
+        sv.style.pointerEvents = "none"; //.style.pointerEvents("none");
+        if (hint) {
+            b.dataset.hint = hint
+        };
         ttools.appendChild(b);
     }
 
@@ -166,7 +183,7 @@ export function textTools() {
     addButton(icons.material.link, function (e) {
         Ask("Enter URL")
             .then(r => document.execCommand("createLink", false, unescape(r)))
-            .catch(r=>console.log(r));
+            .catch(r => console.log(r));
         e.preventDefault();
     }, "Make link")
     addButton(icons.material.linkoff, function (e) {
@@ -179,18 +196,20 @@ export function textTools() {
     }, "Remove formatting")
 
     //
-    function testEditableContainer(el){
+    function testEditableContainer(el) {
         //console.log("test");
         let ce = el;
         //if(!ce){return null};
-        while(!ce.getAttribute("contenteditable") && ce.nodeName!="BODY"){            
+        while (!ce.getAttribute("contenteditable") && ce.nodeName != "BODY") {
             ce = ce.parentNode;
-            if(!ce){return null};
+            if (!ce) {
+                return null
+            };
             //console.log("upto" , ce);
         }
-        if (ce.getAttribute("contenteditable")){
+        if (ce.getAttribute("contenteditable")) {
             return ce;
-        }else{
+        } else {
             return null;
         }
     }
@@ -206,7 +225,7 @@ export function textTools() {
             let tthe = ttools.getBoundingClientRect().height;
             ttools.style.top = (tgt.top - tthe + window.scrollY) + "px";
 
-        //} else if (e.target.classList.contains("text_toolbox")) {
+            //} else if (e.target.classList.contains("text_toolbox")) {
             //ttools.style.display = "block";
         } else {
             ttools.style.display = "none";
@@ -220,18 +239,23 @@ export function addPlusButton(block, menu) {
     block.style.position = "relative";
     let menuhidden = true;
     if (!menu) {
-        menu = [
-            {
+        menu = [{
                 "label": "test",
-                "handler": function () { console.log("menu clicked") }
+                "handler": function () {
+                    console.log("menu clicked")
+                }
             },
             {
                 "label": "test2",
-                "handler": function () { console.log("menu2 clicked") }
+                "handler": function () {
+                    console.log("menu2 clicked")
+                }
             },
             {
                 "label": "test3",
-                "handler": function () { console.log("menu3 clicked") }
+                "handler": function () {
+                    console.log("menu3 clicked")
+                }
             }
         ]
     }
@@ -261,20 +285,26 @@ export function addPlusButton(block, menu) {
         mi.style.display = "inline-block";
         mi.style.overflow = "hidden";
         mi.style.textAlign = "center";
-        mi.style.fill = mycyan;
-        mi.style.color = mycyan;
+        mi.style.fill = Colours.light;
+        mi.style.color = Colours.light;
         mi.style.width = "24px";
         mi.style.height = "24px"
         let misvg = mi.querySelector("svg");
-        if(misvg){
+        if (misvg) {
             misvg.style.pointerEvents = "none";
-            misvg.style.width="24px";
-            misvg.style.height="24px";
+            misvg.style.width = "24px";
+            misvg.style.height = "24px";
         }
-        mi.onmouseover = ()=> {mi.style.fill="black" ; mi.style.color="black"};
-        mi.onmouseout = ()=> {mi.style.fill=mycyan ; mi.style.color=mycyan};
+        mi.onmouseover = () => {
+            mi.style.fill = "black";
+            mi.style.color = "black"
+        };
+        mi.onmouseout = () => {
+            mi.style.fill = Colours.light;
+            mi.style.color = Colours.light
+        };
 
-        
+
         mi.dataset.hint = element.label;
         mi.addEventListener("click", e => {
             element.handler(block.dataset.block_id);
@@ -298,7 +328,7 @@ export function addPlusButton(block, menu) {
     button.style.position = "absolute";
     button.style.backgroundColor = "rgba(100%, 100%, 100%, 0.011)";
     button.style.textAlign = "center";
-    button.style.fill = mycyan;
+    button.style.fill = Colours.light;
     button.style.opacity = "0";
     button.style.display = "block"
     //button.style.borderRadius = "12px";
@@ -354,25 +384,30 @@ export function addBlockControls(block, items, ed) {
      * 
      * block_editor_unit
      */
-    block.style.padding="0 32px";
+    block.style.padding = "0 32px";
     block.style.width = "100%";
     block.style.margin = "0 -32px"
     if (!items && ed) {
-        items = [
-            {
+        items = [{
                 label: "move block up",
                 icon: icons.up,
-                handler: function () { ed.moveUp(block.dataset.block_id) }
+                handler: function () {
+                    ed.moveUp(block.dataset.block_id)
+                }
             },
             {
                 label: "move block down",
                 icon: icons.down,
-                handler: function () { ed.moveDown(block.dataset.block_id) }
+                handler: function () {
+                    ed.moveDown(block.dataset.block_id)
+                }
             },
             {
                 label: "delete block",
                 icon: icons.del,
-                handler: function () { ed.removeBlock(block.dataset.block_id) }
+                handler: function () {
+                    ed.removeBlock(block.dataset.block_id)
+                }
             }
         ]
     } else {
@@ -390,15 +425,27 @@ export function addBlockControls(block, items, ed) {
     ctrls.style.width = "32px";
     ctrls.style.boxSizing = "border-box";
     ctrls.style.backgroundColor = "#ffffffee";
-    ctrls.style.borderLeft = "3px solid " + mycyan;
+    ctrls.style.borderLeft = "3px solid " + Colours.light;
     ctrls.style.color = "white";
     ctrls.style.textAlign = "center";
     ctrls.style.display = "none";
-    ctrls.addEventListener("mouseover", () => { ctrls.style.zIndex = 6; ctrls.style.display = "block" });
-    ctrls.addEventListener("mouseout", () => { ctrls.style.zIndex = "initial"; ctrls.style.display = "none" });
+    ctrls.addEventListener("mouseover", () => {
+        ctrls.style.zIndex = 6;
+        ctrls.style.display = "block"
+    });
+    ctrls.addEventListener("mouseout", () => {
+        ctrls.style.zIndex = "initial";
+        ctrls.style.display = "none"
+    });
 
-    block.addEventListener("mouseover", () => { ctrls.style.zIndex = 5; ctrls.style.display = "block" });
-    block.addEventListener("mouseout", () => { ctrls.style.zIndex = "initial"; ctrls.style.display = "none" });
+    block.addEventListener("mouseover", () => {
+        ctrls.style.zIndex = 5;
+        ctrls.style.display = "block"
+    });
+    block.addEventListener("mouseout", () => {
+        ctrls.style.zIndex = "initial";
+        ctrls.style.display = "none"
+    });
 
 
 
@@ -407,8 +454,8 @@ export function addBlockControls(block, items, ed) {
         mi.innerHTML = e.icon;
         mi.querySelector("svg").style.pointerEvents = "none";
         mi.style.cursor = "pointer";
-        mi.style.height="24px";
-        mi.style.fill = mycyan;
+        mi.style.height = "24px";
+        mi.style.fill = Colours.light;
         mi.style.overflow = "hidden";
         mi.addEventListener("click", function () {
             e.handler(block.dataset.block_id);
