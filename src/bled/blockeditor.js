@@ -277,6 +277,7 @@ export function BlockEditor({
             "editor": "",
             "blocks": dt
         };
+       
         console.groupCollapsed("%cEditor saving", ("color: " + UI.mycyan));
         console.log(mydata);
         console.groupEnd();
