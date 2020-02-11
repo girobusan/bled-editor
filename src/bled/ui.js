@@ -45,17 +45,17 @@ export var Colours = {
 
 
 export function injectStyle(ststr) {
-    let e = document.querySelector("style#bled_injected_style");
+    let e = document.querySelector("style#block_editor_injected_style");
     if (!e) {
         console.log("attaching stylesheet for style injection");
         e = document.createElement("style");
-        e.id = "bled_injected_style";
+        e.id = "block_editor_injected_style";
         document.head.appendChild(e);    
     }
     e.innerHTML += ststr;
 }
 
-injectStyle(`body{color: #444;}`);
+//injectStyle(`body{color: #444;}`);
 injectStyle(`*[contenteditable=true]:empty{display: block; border-bottom: 1px solid ${Colours.light};}`);
 
 export function Ask(pr) {
