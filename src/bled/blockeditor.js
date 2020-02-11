@@ -304,6 +304,7 @@ templates.addToolbar = function (block) {
     tbx.style.fontSize = ".8em"
     tbx.style.display = "flex";
     tbx.style.paddingTop = "4px";
+    tbx.style.background = "linear-gradient(0deg, rgba(0,0,0,0) 50%, rgba(62,217,227,0.5) 100%)"  ; 
 
     block.element.parentNode.appendChild(tbx); //add to editor_item, !not! block content container
     block.addToToolbar = function (el) {
