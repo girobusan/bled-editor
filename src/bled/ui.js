@@ -10,6 +10,7 @@ icons.link = require("./svg/text_link.svg");
 icons.header = require("./svg/header-24px.svg");
 icons.code = require("./svg/code-my-24px.svg");
 icons.raw = require("./svg/code-24px.svg");
+icons.noformat = require("./svg/remove-format.svg");
 
 icons.up = require("./svg/arrow_upward-24px.svg");
 icons.down = require("./svg/arrow_downward-24px.svg");
@@ -19,7 +20,13 @@ icons.divider = require("./svg/divider-24px.svg");
 
 icons.material = {};
 
+icons.material.bold = require("./svg/format_bold-24px.svg");
+icons.material.italic = require("./svg/format_italic-24px.svg");
+icons.material.underline = require("./svg/format_underlined-24px.svg");
+icons.material.strike = require("./svg/format_strikethrough-24px.svg");
 icons.material.link = require("./svg/link-24px.svg");
+icons.material.linkoff = require("./svg/link_off-24px.svg");
+
 icons.material.quote = require("./svg/format_quote-24px.svg");
 icons.material.list = require("./svg/format_list_bulleted-24px.svg");
 icons.material.video = require("./svg/videocam-24px.svg");
@@ -56,14 +63,14 @@ export function tooltips() {
 
     let ttin = document.createElement("div");
     tt.appendChild(ttin);
-    ttin.style.backgroundColor = "rgba(100%, 100%, 100%, 0.8)";
+    ttin.style.backgroundColor = "rgba(100%, 100%, 100%, 0.9)";
     ttin.style.color = "#888888";
     ttin.style.pointerEvents = "none";
     ttin.style.fontSize = "12px";
     ttin.style.padding = "4px 8px";
     ttin.style.position = "relative";
-    ttin.style.borderRadius = "4px";
-    ttin.style.boxShadow = "2px 2px 2px 1px gray";
+    ttin.style.borderRadius = "2px";
+    ttin.style.boxShadow = "2px 2px 2px 2px #00000022";
     ttin.style.right = "50%";
     ttin.style.bottom = "16px";
 
@@ -95,7 +102,7 @@ export function textTools() {
     ttools.style.backgroundColor = mycyan;
     ttools.style.position = "absolute";
     ttools.style.display = "none";
-    ttools.style.padding = "0px 4px";
+    ttools.style.padding = "0px 8px";
     console.log("append text tools")
     document.body.appendChild(ttools);
     //buttons
@@ -119,22 +126,22 @@ export function textTools() {
         ttools.appendChild(b);
     }
 
-    addButton(icons.bold, function (e) {
-        console.log("bold", document.getSelection())
+    addButton(icons.material.bold, function (e) {
+        //console.log("bold", document.getSelection())
         document.execCommand("bold");
         e.preventDefault();
     }, "Bold")
-    addButton(icons.italic, function (e) {
-        console.log("italic", document.getSelection())
+    addButton(icons.material.italic, function (e) {
+        //console.log("italic", document.getSelection())
         document.execCommand("italic");
         e.preventDefault();
     }, "Italic")
-    addButton(icons.underline, function (e) {
+    addButton(icons.material.underline, function (e) {
         //console.log("italic" , document.getSelection())
         document.execCommand("underline");
         e.preventDefault();
     }, "Underline")
-    addButton(icons.strike, function (e) {
+    addButton(icons.material.strike, function (e) {
         //console.log("italic" , document.getSelection())
         document.execCommand("strikeThrough");
         e.preventDefault();
@@ -156,12 +163,20 @@ export function textTools() {
         document.execCommand("subscript");
         e.preventDefault();
     }, "Subscript")
-    addButton(icons.link, function (e) {
+    addButton(icons.material.link, function (e) {
         Ask("Enter URL")
             .then(r => document.execCommand("createLink", false, unescape(r)))
             .catch(r=>console.log(r));
         e.preventDefault();
     }, "Make link")
+    addButton(icons.material.linkoff, function (e) {
+        document.execCommand("unlink");
+        e.preventDefault();
+    }, "Remove link")
+    addButton(icons.noformat, function (e) {
+        document.execCommand("removeFormat");
+        e.preventDefault();
+    }, "Remove formatting")
 
     //
     function testEditableContainer(el){
