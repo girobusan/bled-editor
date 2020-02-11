@@ -299,11 +299,11 @@ templates.formRow = function (elements_array) {
 templates.addToolbar = function (block) {
     let tbx = document.createElement("div");
     tbx.classList.add("block_toolbar");
-    tbx.style.backgroundColor = "gray";
+    tbx.style.backgroundColor = UI.Colours.light;
     tbx.style.minHeight = "24px";
     tbx.style.fontSize = ".8em"
     tbx.style.display = "flex";
-    tbx.style.padding = "4px";
+    tbx.style.paddingTop = "4px";
 
     block.element.parentNode.appendChild(tbx); //add to editor_item, !not! block content container
     block.addToToolbar = function (el) {
