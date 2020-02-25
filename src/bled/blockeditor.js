@@ -101,7 +101,8 @@ export function BlockEditor({
         let rect = document.createElement("div");
         rect.style.backgroundColor = UI.Colours.light;
         rect.style.color = "white";
-        rect.innerHTML = "EDIT MODE"
+        rect.innerHTML = "EDIT MODE";
+        rect.style.padding = "0.5em 0px";
         rect.style.letterSpacing = ".5em";
         rect.style.fontSize = "0.7em";
         rect.style.fontWeight = "bold";
@@ -231,7 +232,7 @@ export function BlockEditor({
             console.log("no editor for", type);
             //return null;
             bcontent.innerHTML = "Unknown block: <strong>"+type + "</strong>";
-            bcontent.style.backgroundColor =  "silver";
+            bcontent.style.backgroundColor =  UI.Colours.light;
             bcontent.style.color = "white";
             bcontent.style.fontSize = "2em";
             bcontent.style.textAlign = 'center';
@@ -313,7 +314,7 @@ templates.formRow = function (elements_array) {
 templates.addToolbar = function (block) {
     let tbx = document.createElement("div");
     tbx.classList.add("block_toolbar");
-    tbx.style.backgroundColor = UI.Colours.light;
+    tbx.style.backgroundColor = UI.Colours.pale;
     tbx.style.minHeight = "24px";
     tbx.style.fontSize = ".8em"
     tbx.style.display = "flex";
@@ -729,7 +730,7 @@ constructors.image = function (data, el, id, editor) {
     let left = document.createElement("input");
     left.type = "checkbox";
     left.onclick = function () {
-        if (this.checked) {
+        if (this.checked) {            
             right.checked = false;
             stretched.checked = false
         }
@@ -894,19 +895,7 @@ constructors.video = function (data, el, id, editor) {
 
     return blc;
 }
-/**
- * {
-    "type" : "list",
-    "data" : {
-        "style" : "unordered",
-        "items" : [
-            "This is a block-styled editor",
-            "Clean output data",
-            "Simple and powerful API"
-        ]
-    }
-},
- */
+
 
 constructors.list = function (data, el, id, editor) {
     let blc = {

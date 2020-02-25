@@ -26,6 +26,7 @@
     "webpack-cli": "^3.3.10"
   },
   "devDependencies": {
+    "emotion": "^10.0.27",
     "svg-inline-loader": "^0.8.0"
   }
 }

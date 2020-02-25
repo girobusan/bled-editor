@@ -1,3 +1,5 @@
+import { css, cx } from 'emotion';
+
 export var icons = {};
 
 icons.bold = require("./svg/text_bold.svg");
@@ -40,7 +42,9 @@ icons.material.paragraph = require("./svg/paragraph-remix-24px.svg");
 export var mycyan = "#3ED9E3"; //remove
 export var Colours = {
     "light": "#3ED9E3",
-    "dark": "#00A1AB"
+    "dark": "#00A1AB",
+    "pale": "#C4F7FA",
+
 }
 
 
@@ -55,8 +59,7 @@ export function injectStyle(ststr) {
     e.innerHTML += ststr;
 }
 
-//injectStyle(`body{color: #444;}`);
-injectStyle(`*[contenteditable=true]:empty{display: block; border-bottom: 1px solid ${Colours.light};}`);
+
 
 export function Ask(pr) {
     return new Promise(function (resolve, reject) {
@@ -70,6 +73,10 @@ export function Ask(pr) {
 }
 
 export function tooltips() {
+    let tts = css({
+        backgroundColor: Colours.dark,
+        color: "white"
+    })
     let tt = document.createElement("div");
     tt.style.position = "absolute";
     tt.style.display = "none";
@@ -77,9 +84,10 @@ export function tooltips() {
     tt.style.pointerEvents = "none";
 
     let ttin = document.createElement("div");
+    ttin.className = tts;
     tt.appendChild(ttin);
-    ttin.style.backgroundColor = Colours.dark;
-    ttin.style.color = "white";
+    //ttin.style.backgroundColor = Colours.dark;
+    //ttin.style.color = "white";
     ttin.style.pointerEvents = "none";
     ttin.style.fontSize = "12px";
     ttin.style.padding = "4px 8px";
@@ -384,6 +392,18 @@ export function addBlockControls(block, items, ed) {
      * 
      * block_editor_unit
      */
+    block.classList.add(css({
+        "border": "1px solid transparent",
+        "&:hover":{
+            borderColor: Colours.light
+        },
+        "& *[contenteditable='true']:empty" : {
+            "backgroundColor" : Colours.pale,
+            "minHeight" : "1rem",
+            "minWidth" : "1rem"
+        }
+
+    }))
     block.style.padding = "0 32px";
     block.style.width = "100%";
     block.style.margin = "0 -32px"
@@ -425,7 +445,7 @@ export function addBlockControls(block, items, ed) {
     ctrls.style.width = "32px";
     ctrls.style.boxSizing = "border-box";
     ctrls.style.backgroundColor = "#ffffffee";
-    ctrls.style.borderLeft = "3px solid " + Colours.light;
+    //ctrls.style.borderLeft = "3px solid " + Colours.light;
     ctrls.style.color = "white";
     ctrls.style.textAlign = "center";
     ctrls.style.display = "none";
