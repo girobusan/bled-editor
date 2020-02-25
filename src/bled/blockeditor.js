@@ -116,6 +116,7 @@ export function BlockEditor({
         //start UI
         UI.tooltips();
         UI.textTools();
+        UI.addCommonStyles(this.element);
     }
 
     this.blockByID = function (id) {
