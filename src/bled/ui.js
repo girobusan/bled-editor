@@ -1,4 +1,7 @@
-import { css, cx } from 'emotion';
+import {
+    css,
+    cx
+} from 'emotion';
 
 export var icons = {};
 
@@ -73,13 +76,13 @@ export function Ask(pr) {
 }
 
 export function tooltips() {
-    console.log("engaging tooltips");
+    //console.log("engaging tooltips");
     let teststyle = document.createElement("style");
-    teststyle.id="test_style";
+    teststyle.id = "test_style";
     teststyle.innerHTML = `.editortooltip{
         background-color: ${ Colours.dark};
         color: white;
-        padding: 0px 8px;
+        padding: 4px 8px;
     }`
     document.head.appendChild(teststyle);
     let tts = css({
@@ -396,16 +399,30 @@ export function addPlusButton(block, menu) {
 
 
 }
-export function addCommonStyles(editorel){
-    let stag = document.createElement("style");
-    stag.innerHTML = 
-    "*[contenteditable='true']:empty{ " + 
-    "background-color:"+ Colours.pale + ";" + 
-    "min-height: 1rem;"+
-    "min-width: 1rem;" +
-    "}"
-    editorel.appendChild(stag);
-    
+export function addCommonStyles(editorel) {
+    let styleid = "blockeditor_common_styles";
+    if (!document.getElementById(styleid)) {
+        let stag = document.createElement("style");
+        stag.id = styleid;
+        stag.innerHTML =
+            "*[contenteditable='true']:empty{ " +
+            "background-color:" + Colours.pale + ";" +
+            "min-height: 1rem;" +
+            "min-width: 1rem;" +
+            "display: block;" +
+            "}" + 
+            ".block_editor_unit{" +
+            "border: 1px solid transparent;" + 
+            "border-width: 1px 1px 1px 1px ;" +
+            "}" +
+            ".block_editor_unit:hover{" + 
+            "border-color:" +  Colours.pale + ";"+
+            "}" + 
+            "div.common_block_controls div:hover svg{fill:black;}"
+            "div.ddown:hover svg{fill:black;}"
+        editorel.appendChild(stag);
+    }
+
 }
 
 export function addBlockControls(block, items, ed) {
