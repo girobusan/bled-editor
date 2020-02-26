@@ -407,6 +407,7 @@ export function addCommonStyles(editorel) {
         stag.innerHTML =
             "*[contenteditable='true']:empty{ " +
             "background-color:" + Colours.pale + ";" +
+            "border-bottom: 1px dashed " + Colours.dark + ";" +
             "min-height: 1rem;" +
             "min-width: 1rem;" +
             "display: block;" +
