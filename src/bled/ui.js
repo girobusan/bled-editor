@@ -47,7 +47,7 @@ export var Colours = {
 
 }
 
-
+/*
 export function injectStyle(ststr) {
     let e = document.querySelector("style#block_editor_injected_style");
     if (!e) {
@@ -58,7 +58,7 @@ export function injectStyle(ststr) {
     }
     e.innerHTML += ststr;
 }
-
+*/
 
 
 export function Ask(pr) {
@@ -73,6 +73,15 @@ export function Ask(pr) {
 }
 
 export function tooltips() {
+    console.log("engaging tooltips");
+    let teststyle = document.createElement("style");
+    teststyle.id="test_style";
+    teststyle.innerHTML = `.editortooltip{
+        background-color: ${ Colours.dark};
+        color: white;
+        padding: 0px 8px;
+    }`
+    document.head.appendChild(teststyle);
     let tts = css({
         backgroundColor: Colours.dark,
         color: "white"
@@ -85,12 +94,13 @@ export function tooltips() {
 
     let ttin = document.createElement("div");
     ttin.className = tts;
+    ttin.classList.add("editortooltip")
     tt.appendChild(ttin);
     //ttin.style.backgroundColor = Colours.dark;
     //ttin.style.color = "white";
     ttin.style.pointerEvents = "none";
     ttin.style.fontSize = "12px";
-    ttin.style.padding = "4px 8px";
+    //ttin.style.padding = "4px 8px";
     ttin.style.position = "relative";
     ttin.style.borderRadius = "2px";
     ttin.style.boxShadow = "1px 1px 3px 2px #00000022";
@@ -386,24 +396,24 @@ export function addPlusButton(block, menu) {
 
 
 }
+export function addCommonStyles(editorel){
+    let stag = document.createElement("style");
+    stag.innerHTML = 
+    "*[contenteditable='true']:empty{ " + 
+    "background-color:"+ Colours.pale + ";" + 
+    "min-height: 1rem;"+
+    "min-width: 1rem;" +
+    "}"
+    editorel.appendChild(stag);
+    
+}
 
 export function addBlockControls(block, items, ed) {
     /**
      * 
      * block_editor_unit
      */
-    block.classList.add(css({
-        "border": "1px solid transparent",
-        "&:hover":{
-            borderColor: Colours.light
-        },
-        "& *[contenteditable='true']:empty" : {
-            "backgroundColor" : Colours.pale,
-            "minHeight" : "1rem",
-            "minWidth" : "1rem"
-        }
 
-    }))
     block.style.padding = "0 32px";
     block.style.width = "100%";
     block.style.margin = "0 -32px"
