@@ -443,7 +443,7 @@ constructors.paragraph = function (data, el, id, editor) {
     blc._p.addEventListener("keydown", function (e) {
         const magic = "#!#"
         if (e.keyCode == 13) {
-            console.log("enter pressed", e.shiftKey == true);
+            //console.log("enter pressed", e.shiftKey == true);
             if (e.shiftKey) {
                 //
             } else {
@@ -472,7 +472,7 @@ constructors.divider = function (data, el, id, editor) {
         element: el,
         id: id,
         render: function () {
-            el.innerHTML = "<hr />";
+            el.innerHTML = "<hr>";
         },
         save: function () {
             return {};
