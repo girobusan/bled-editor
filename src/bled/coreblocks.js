@@ -1,7 +1,7 @@
 import * as UI from "./ui";
 import {
     templates
-} from "./blockeditor";
+} from "./tools";
 
 export var constructors = {};
 
