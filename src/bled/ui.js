@@ -1,7 +1,32 @@
+/*
 import {
     css,
     cx
 } from 'emotion';
+*/
+function saveSelection() {
+    if (window.getSelection) {
+        var sel = window.getSelection();
+        if (sel.getRangeAt && sel.rangeCount) {
+            return sel.getRangeAt(0);
+        }
+    } else if (document.selection && document.selection.createRange) {
+        return document.selection.createRange();
+    }
+    return null;
+}
+
+function restoreSelection(range) {
+    if (range) {
+        if (window.getSelection) {
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        } else if (document.selection && range.select) {
+            range.select();
+        }
+    }
+}
 
 export var icons = {};
 
@@ -86,10 +111,7 @@ export function tooltips() {
         padding: 4px 8px;
     }`
     document.head.appendChild(teststyle);
-    let tts = css({
-        backgroundColor: Colours.dark,
-        color: "white"
-    })
+  
     let tt = document.createElement("div");
     tt.style.position = "absolute";
     tt.style.display = "none";
@@ -97,7 +119,7 @@ export function tooltips() {
     tt.style.pointerEvents = "none";
 
     let ttin = document.createElement("div");
-    ttin.className = tts;
+    
     ttin.classList.add("editortooltip")
     tt.appendChild(ttin);
     //ttin.style.backgroundColor = Colours.dark;
@@ -270,11 +292,11 @@ export function textTools() {
         document.execCommand("insertText", false, magic);
         let textwithanchor = current_element.innerHTML;
         current_element.innerHTML = prevtext;
-        let csel = document.getSelection();
+        let csel = saveSelection()
         console.log("EVENT" , e)
         
         getSymbol(e.clientX , e.clientY+window.scrollY)
-        .then( r=>{console.log('INPUT' ,r) ;  current_element.innerHTML = textwithanchor.replace(magic , r)})  
+        .then( r=>{console.log('INPUT' ,r) ;  current_element.innerHTML = textwithanchor.replace(magic , r)  })  
         .catch()      
         e.preventDefault();
     }, "Symbols");
