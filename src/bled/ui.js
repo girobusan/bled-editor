@@ -4,29 +4,7 @@ import {
     cx
 } from 'emotion';
 */
-function saveSelection() {
-    if (window.getSelection) {
-        var sel = window.getSelection();
-        if (sel.getRangeAt && sel.rangeCount) {
-            return sel.getRangeAt(0);
-        }
-    } else if (document.selection && document.selection.createRange) {
-        return document.selection.createRange();
-    }
-    return null;
-}
 
-function restoreSelection(range) {
-    if (range) {
-        if (window.getSelection) {
-            var sel = window.getSelection();
-            sel.removeAllRanges();
-            sel.addRange(range);
-        } else if (document.selection && range.select) {
-            range.select();
-        }
-    }
-}
 
 export var icons = {};
 
@@ -76,18 +54,6 @@ export var Colours = {
 
 }
 
-/*
-export function injectStyle(ststr) {
-    let e = document.querySelector("style#block_editor_injected_style");
-    if (!e) {
-        console.log("attaching stylesheet for style injection");
-        e = document.createElement("style");
-        e.id = "block_editor_injected_style";
-        document.head.appendChild(e);    
-    }
-    e.innerHTML += ststr;
-}
-*/
 
 
 export function Ask(pr) {
@@ -111,7 +77,7 @@ export function tooltips() {
         padding: 4px 8px;
     }`
     document.head.appendChild(teststyle);
-  
+
     let tt = document.createElement("div");
     tt.style.position = "absolute";
     tt.style.display = "none";
@@ -119,7 +85,7 @@ export function tooltips() {
     tt.style.pointerEvents = "none";
 
     let ttin = document.createElement("div");
-    
+
     ttin.classList.add("editortooltip")
     tt.appendChild(ttin);
     //ttin.style.backgroundColor = Colours.dark;
@@ -154,13 +120,13 @@ export function tooltips() {
 }
 
 function getSymbol(posX, posY) {
-    console.log("position" , posX , posY)
+    console.log("position", posX, posY)
     const symbols = "«»“”–—·¶Ѣѣ¤₽€£×≈".split("");
-    
+
     //create table
     return new Promise(function (res, rej) {
         let test = document.querySelector(".block_editor_symbols_table");
-        if (test){
+        if (test) {
             test.remove();
             rej();
         }
@@ -182,6 +148,8 @@ function getSymbol(posX, posY) {
         symbols.forEach(function (z) {
             let sb = document.createElement("div");
             sb.style.display = "inline-block";
+            sb.classList.add("symbol_table_cell_button");
+            sb.classList.add("text_toolbox")
             sb.style.width = "24px";
             sb.style.height = "24px";
             sb.style.textAlign = "center";
@@ -190,15 +158,21 @@ function getSymbol(posX, posY) {
             sb.style.borderColor = '#000000';
             sb.style.boxSizing = "border-box"
             sb.innerText = z;
+            sb.style.cursor = "pointer";
+            sb.style.fontSize = "16px";
+            sb.style.lineHeight = "23px";
             sb.addEventListener("click", (e) => {
                 //console.log(z);
-               symboltable.remove();
-               res(z);
+                symboltable.remove();
+                res(z);
             })
             symboltable.appendChild(sb);
         })
-        //
-        document.body.appendChild(symboltable);
+        //   
+        document.body.appendChild(symboltable);  
+        symboltable.style.top = (posY - symboltable.getBoundingClientRect().height - 8) + "px"   
+        
+        
     });
 }
 
@@ -292,12 +266,14 @@ export function textTools() {
         document.execCommand("insertText", false, magic);
         let textwithanchor = current_element.innerHTML;
         current_element.innerHTML = prevtext;
-        let csel = saveSelection()
-        console.log("EVENT" , e)
-        
-        getSymbol(e.clientX , e.clientY+window.scrollY)
-        .then( r=>{console.log('INPUT' ,r) ;  current_element.innerHTML = textwithanchor.replace(magic , r)  })  
-        .catch()      
+        //let csel = saveSelection()
+        console.log("EVENT", e);
+        getSymbol(e.clientX, e.clientY + window.scrollY)
+            .then(r => {
+                console.log('Entered symbol', r);
+                current_element.innerHTML = textwithanchor.replace(magic, r)
+            })
+            .catch()
         e.preventDefault();
     }, "Symbols");
 
@@ -335,6 +311,9 @@ export function textTools() {
     document.body.addEventListener("click", function (e) {
         //console.log(e.target.getAttribute("contenteditable"));
         let eic = testEditableContainer(e.target);
+        if(e.target.classList.contains("text_toolbox")){
+            return;
+        }
         if (eic && !e.target.dataset.no_text_toolbox) {
             current_element = eic;
             //console.log("click" , ttools);
