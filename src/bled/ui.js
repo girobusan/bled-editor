@@ -173,7 +173,9 @@ function getSymbol(posX, posY) {
         //   
         
         document.body.appendChild(symboltable);  
-        symboltable.style.top = (posY - symboltable.getBoundingClientRect().height - 8) + "px" ;
+        if(posY>symboltable.getBoundingClientRect().height){
+        symboltable.style.top = (posY - symboltable.getBoundingClientRect().height - 8) + "px" ;        
+        }
         document.addEventListener("mouseup" , function(e){
             if(e.target && !e.target.classList.contains("symbol_table_cell_button")){
                 symboltable.remove();
