@@ -23,6 +23,7 @@ icons.down = require("./svg/arrow_downward-24px.svg");
 icons.del = require("./svg/clear-24px.svg");
 icons.add = require("./svg/add-24px.svg");
 icons.divider = require("./svg/divider-24px.svg");
+icons.symbols = require("./svg/symbols_24px.svg");
 
 icons.material = {};
 
@@ -130,6 +131,55 @@ export function tooltips() {
     })
 }
 
+function getSymbol(posX, posY) {
+    console.log("position" , posX , posY)
+    const symbols = "«»“”–—·¶Ѣѣ¤₽€£×≈".split("");
+    
+    //create table
+    return new Promise(function (res, rej) {
+        let test = document.querySelector(".block_editor_symbols_table");
+        if (test){
+            test.remove();
+            rej();
+        }
+        let symboltable = document.createElement("div");
+        symboltable.classList.add("block_editor_symbols_table")
+        symboltable.style.display = "flex";
+        symboltable.style.flexWrap = "wrap";
+        symboltable.style.position = "absolute";
+        symboltable.style.width = "96px";
+        symboltable.style.boxSizing = "content-box"
+        symboltable.style.backgroundColor = "white";
+        symboltable.style.borderColor = "black";
+        symboltable.style.borderTop = "1px solid black";
+        symboltable.style.borderLeft = "1px solid black";
+        symboltable.style.position = "absolute";
+        symboltable.style.top = posY + "px";
+        symboltable.style.left = posX + "px";
+        //populate
+        symbols.forEach(function (z) {
+            let sb = document.createElement("div");
+            sb.style.display = "inline-block";
+            sb.style.width = "24px";
+            sb.style.height = "24px";
+            sb.style.textAlign = "center";
+            sb.style.borderBottom = "1px solid black";
+            sb.style.borderRight = "1px solid black";
+            sb.style.borderColor = '#000000';
+            sb.style.boxSizing = "border-box"
+            sb.innerText = z;
+            sb.addEventListener("click", (e) => {
+                //console.log(z);
+               symboltable.remove();
+               res(z);
+            })
+            symboltable.appendChild(sb);
+        })
+        //
+        document.body.appendChild(symboltable);
+    });
+}
+
 export function textTools() {
     let current_element = null;
     let ttools = document.createElement("div");
@@ -211,14 +261,31 @@ export function textTools() {
     addButton(icons.material.linkoff, function (e) {
         document.execCommand("unlink");
         e.preventDefault();
-    }, "Remove link")
+    }, "Remove link");
+
+    addButton(icons.symbols, function (e) {
+        //document.execCommand("unlink");
+        const magic = "|#?";
+        let prevtext = current_element.innerHTML;
+        document.execCommand("insertText", false, magic);
+        let textwithanchor = current_element.innerHTML;
+        current_element.innerHTML = prevtext;
+        let csel = document.getSelection();
+        console.log("EVENT" , e)
+        
+        getSymbol(e.clientX , e.clientY+window.scrollY)
+        .then( r=>{console.log('INPUT' ,r) ;  current_element.innerHTML = textwithanchor.replace(magic , r)})  
+        .catch()      
+        e.preventDefault();
+    }, "Symbols");
+
     addButton(icons.noformat, function (e) {
         document.execCommand("removeFormat");
         let ifcolalpsed = document.getSelection().isCollapsed
-        if(ifcolalpsed){
-            console.log("CURRENT" , current_element , current_element.contenteditable)
-            current_element.innerHTML = current_element.innerHTML.replace(/\<[^>]*\>/g , "");
-        }else{
+        if (ifcolalpsed) {
+            //console.log("CURRENT" , current_element , current_element.contenteditable)
+            current_element.innerHTML = current_element.innerHTML.replace(/\<[^>]*\>/g, "");
+        } else {
             document.execCommand("removeFormat");
         }
         e.preventDefault();
@@ -417,16 +484,16 @@ export function addCommonStyles(editorel) {
             "min-height: 1rem;" +
             "min-width: 1rem;" +
             "display: block;" +
-            "}" + 
+            "}" +
             ".block_editor_unit{" +
-            "border: 1px solid transparent;" + 
+            "border: 1px solid transparent;" +
             "border-width: 1px 1px 1px 1px ;" +
             "}" +
-            ".block_editor_unit:hover{" + 
-            "border-color:" +  Colours.pale + ";"+
-            "}" + 
+            ".block_editor_unit:hover{" +
+            "border-color:" + Colours.pale + ";" +
+            "}" +
             "div.common_block_controls div:hover svg{fill:black;}"
-            "div.ddown:hover svg{fill:black;}"
+        "div.ddown:hover svg{fill:black;}"
         editorel.appendChild(stag);
     }
 
