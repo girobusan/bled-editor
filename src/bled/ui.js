@@ -161,7 +161,9 @@ function getSymbol(posX, posY) {
             sb.style.cursor = "pointer";
             sb.style.fontSize = "16px";
             sb.style.lineHeight = "23px";
-            sb.addEventListener("click", (e) => {
+            sb.addEventListener("mouseover" , function(){this.style.backgroundColor = Colours.light})
+            sb.addEventListener("mouseout" , function(){this.style.backgroundColor = "white"})
+            sb.addEventListener("mouseup", (e) => {
                 //console.log(z);
                 symboltable.remove();
                 res(z);
@@ -169,10 +171,14 @@ function getSymbol(posX, posY) {
             symboltable.appendChild(sb);
         })
         //   
+        
         document.body.appendChild(symboltable);  
-        symboltable.style.top = (posY - symboltable.getBoundingClientRect().height - 8) + "px"   
-        
-        
+        symboltable.style.top = (posY - symboltable.getBoundingClientRect().height - 8) + "px" ;
+        document.addEventListener("mouseup" , function(e){
+            if(e.target && !e.target.classList.contains("symbol_table_cell_button")){
+                symboltable.remove();
+            }
+        })        
     });
 }
 
