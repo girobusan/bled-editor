@@ -131,6 +131,7 @@ export function tooltips() {
 }
 
 export function textTools() {
+    let current_element = null;
     let ttools = document.createElement("div");
     ttools.style.minWidth = "100px";
     ttools.classList.add("text_toolbox");
@@ -213,6 +214,13 @@ export function textTools() {
     }, "Remove link")
     addButton(icons.noformat, function (e) {
         document.execCommand("removeFormat");
+        let ifcolalpsed = document.getSelection().isCollapsed
+        if(ifcolalpsed){
+            console.log("CURRENT" , current_element , current_element.contenteditable)
+            current_element.innerHTML = current_element.innerHTML.replace(/\<[^>]*\>/g , "");
+        }else{
+            document.execCommand("removeFormat");
+        }
         e.preventDefault();
     }, "Remove formatting")
 
@@ -239,6 +247,7 @@ export function textTools() {
         //console.log(e.target.getAttribute("contenteditable"));
         let eic = testEditableContainer(e.target);
         if (eic && !e.target.dataset.no_text_toolbox) {
+            current_element = eic;
             //console.log("click" , ttools);
             let tgt = eic.getBoundingClientRect();
             ttools.style.left = tgt.left + "px";
@@ -252,9 +261,6 @@ export function textTools() {
             ttools.style.display = "none";
         }
     });
-
-
-
 }
 export function addPlusButton(block, menu) {
     block.style.position = "relative";
