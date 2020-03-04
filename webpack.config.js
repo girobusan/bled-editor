@@ -1,5 +1,6 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+const pkg = require('./package.json')
 //const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const env = process.env.NODE_ENV
@@ -59,22 +60,10 @@ module.exports =  (env, argv) =>( {
 
     },
     plugins: [
-        /*
-        new MiniCssExtractPlugin(
-            {
-                filename: '[name].css',
-                inject: false
-            }
-        ),
-        
-        
-        new HtmlWebpackPlugin({
-            
-            chunks: ["blocked"],
-            filename: '../index.html',            
-            inject: "body"
-          
-        }),*/
+        new webpack.DefinePlugin({
+            // Definitions...
+            'VERSION': JSON.stringify(pkg.version)
+        })
 
 
     ],

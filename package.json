@@ -1,6 +1,6 @@
 {
   "name": "block-editor-test",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "block editor",
   "main": "src/index.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "editor"
   ],
   "author": "me",
-  "license": "ISC",
+  "license": "MIT",
   "homepage": "https://bitbucket.org/Girobusan/experimental-block-editor#readme",
   "dependencies": {
     "html-webpack-plugin": "^3.2.0",
