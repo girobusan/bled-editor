@@ -277,7 +277,7 @@ export function BlockEditor({
                 })
             });
         let mydata = {
-            "editor": "BlEd/" + VERSION,
+            "editor": "BlEd/" + "1.0.1",
             "blocks": dt
         };
        
