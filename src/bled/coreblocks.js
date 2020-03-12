@@ -420,7 +420,9 @@ constructors.video = function (data, el, id, editor) {
                 blc.data.file.url = r.file.url;
             })
     });
-
+    let vhd = document.createElement("h5");
+    vhd.innerText = "Video";
+    blc.addToEditor(vhd);
     blc.addToEditor(templates.formRow([upld, upldbtn]));
     ////edit src
     let srclabel = document.createElement("label");
@@ -477,6 +479,40 @@ constructors.video = function (data, el, id, editor) {
     });
     blc.addToEditor(templates.formRow(pels));
 
+    let phd = document.createElement("h5")
+    phd.innerText = "Poster"
+    blc.addToEditor(phd);
+    //poster upload
+    let upldp = document.createElement("input");
+    upldp.type = "file";
+    upldp.style.flexGrow = 1;
+    let pupldbtn = document.createElement("input");
+    pupldbtn.value = "upload";
+    pupldbtn.type = "button"
+    pupldbtn.addEventListener("click", function (e) {
+        editor.upload(upld.files[0])
+            .then(function (r) {
+                vtag.poster = r.file.url;
+                //posterinput.value = r.file.url;
+                blc.data.poster = r.file.url;
+            })
+    });
+     
+    blc.addToEditor(templates.formRow([upldp,pupldbtn]))
+    //poster src input
+    ////edit src
+    let psrclabel = document.createElement("label");
+    psrclabel.innerHTML = "Source URL";
+    let psrcinput = document.createElement("input");
+    psrcinput.style.flexGrow = 2;
+    psrcinput.type = "text";
+    psrcinput.value = data && data.poster ? data.poster : "";
+    psrcinput.addEventListener("keyup", function (e) {
+        vtag.poster = this.value;
+        blc.data.poster = this.value;
+    })
+    blc.addToEditor(templates.formRow([psrclabel,psrcinput]))
+    //
     blc.save = function () {
         return blc.data;
     }
