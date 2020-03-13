@@ -1,5 +1,6 @@
 import * as UI from "./ui";
-import {constructors as Coreblocks }   from "./coreblocks";
+import { constructors as Coreblocks } from "./coreblocks";
+export const version = "1.0.2";
 
 export function BlockEditor({
     selector
@@ -35,11 +36,11 @@ export function BlockEditor({
         console.log("Testing upload", f);
         return new Promise(function (resolve, reject) {
             resolve({
-                success: "1" ,
+                success: "1",
                 file: {
-                     url: testurl ? testurl : "kitty.jpeg"
+                    url: testurl ? testurl : "kitty.jpeg"
                 }
-               
+
             });
         })
     }
@@ -229,12 +230,12 @@ export function BlockEditor({
         if (type in this.editors) {
             var block = this.editors[type].make(data, bcontent, bID, this); //block made
         } else {
-            var block = {save: ()=> data , render: ()=> null}
+            var block = { save: () => data, render: () => null }
             //this.blocks[bID] = block;
             console.log("no editor for", type);
             //return null;
-            bcontent.innerHTML = "Unknown block: <strong>"+type + "</strong>";
-            bcontent.style.backgroundColor =  UI.Colours.light;
+            bcontent.innerHTML = "Unknown block: <strong>" + type + "</strong>";
+            bcontent.style.backgroundColor = UI.Colours.light;
             bcontent.style.color = "white";
             bcontent.style.fontSize = "2em";
             bcontent.style.textAlign = 'center';
@@ -276,11 +277,14 @@ export function BlockEditor({
                     "data": my.blocks[e.dataset.block_id].save()
                 })
             });
+        let ts = new Date();
         let mydata = {
-            "editor": "BlEd/" + "1.0.1",
+            "editor": "BlEd/" + version,
+            "stime": ts.toISOString(),
+            "time": ts.getTime(), //legacy
             "blocks": dt
         };
-       
+
         console.groupCollapsed("%cEditor saving", ("color: " + UI.mycyan));
         console.log(mydata);
         console.groupEnd();

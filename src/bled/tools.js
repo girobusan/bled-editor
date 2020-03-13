@@ -23,6 +23,7 @@ templates.addToolbar = function (block) {
     let tbx = document.createElement("div");
     tbx.classList.add("block_toolbar");
     tbx.style.backgroundColor = UI.Colours.pale;
+    tbx.style.color = "black";
     tbx.style.minHeight = "24px";
     tbx.style.fontSize = ".8em"
     tbx.style.display = "flex";
@@ -52,31 +53,33 @@ templates.twoPanels = function (block) {
     ep.classList.add("one_of_two_panels");
     ep.style.minHeight = "64px";
     ep.style.backgroundColor = UI.Colours.pale;
+    ep.style.color = "#444";
     //ep.style.backgroundColor = "silver";
     ep.style.borderTop = "2px solid " + UI.mycyan;
     ep.style.display = "none";
-    ep.style.padding = "8px";
+    ep.style.padding = "8px 8px 16px 8px";
+    
     //
     let ebtn = document.createElement("div");
     ebtn.classList.add("edit_button");
-    ebtn.innerHTML = "EDIT";
+    ebtn.innerHTML = "Show editor";
     ebtn.style.position = "absolute";
     ebtn.style.backgroundColor = "silver";
     ebtn.style.padding = "2px 4px";
     ebtn.style.color = "white"
     ebtn.style.zIndex = 5;
     ebtn.style.right = "8px";
-    ebtn.style.bottom = "8px";
+    ebtn.style.bottom = "0px";
     ebtn.style.cursor = "pointer";
 
     ebtn.addEventListener("click", function () {
         let editmode = ep.style.display != "none";
         if (editmode) {
             ep.style.display = "none";
-            ebtn.innerHTML = "EDIT";
+            ebtn.innerHTML = "Show editor";
         } else {
             ep.style.display = "block";
-            ebtn.innerHTML = "PREVIEW";
+            ebtn.innerHTML = "Hide editor";
         }
     })
     //

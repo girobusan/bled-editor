@@ -490,10 +490,10 @@ constructors.video = function (data, el, id, editor) {
     pupldbtn.value = "upload";
     pupldbtn.type = "button"
     pupldbtn.addEventListener("click", function (e) {
-        editor.upload(upld.files[0])
+        editor.upload(upldp.files[0])
             .then(function (r) {
                 vtag.poster = r.file.url;
-                //posterinput.value = r.file.url;
+                psrcinput.value = r.file.url;
                 blc.data.poster = r.file.url;
             })
     });
