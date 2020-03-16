@@ -638,6 +638,7 @@ constructors.audio = function (data, el, id, editor){
         element: el,
         id: id,
         data: data ? data : {
+            controls: true,
             file: {
                 url: null
             }
@@ -652,7 +653,7 @@ constructors.audio = function (data, el, id, editor){
     audiopreview.style.width="100%";
     blc.addToPreview(audiopreview);
     //attributes
-    let ats = ["loop","muted","autoplay"];
+    let ats = ["loop","muted","autoplay" , "controls" , "preload" ];
     let atstags = [];
     ats.forEach(function(e){
         //checkbox
@@ -661,9 +662,9 @@ constructors.audio = function (data, el, id, editor){
         chb.checked = blc.data[e] || false;
         chb.addEventListener("click" , function(evt){
             blc.data[e] = this.checked;
-            if(this.checked){
+            if(this.checked && e!="controls"){
                  audiopreview.setAttribute(e,e);
-            }else{
+            }else if(e!="controls"){
                 audiopreview.removeAttribute(e);
             }
            ;
