@@ -2,6 +2,9 @@ import * as UI from "./ui";
 import {
     templates
 } from "./tools";
+import { curveBundle } from "d3";
+
+const d3 = Object.assign({}, require("d3-selection"));
 
 export var constructors = {};
 
@@ -383,7 +386,7 @@ constructors.image = function (data, el, id, editor) {
 }
 
 constructors.video = function (data, el, id, editor) {
-    console.log(data);
+    //console.log(data);
     let blc = {
         element: el,
         id: id,
@@ -628,4 +631,90 @@ constructors.list = function (data, el, id, editor) {
     })
     blc.addToToolbar(add_b);
     return blc;
+}
+
+constructors.audio = function (data, el, id, editor){
+    let blc = {
+        element: el,
+        id: id,
+        data: data ? data : {
+            file: {
+                url: null
+            }
+        },
+        render: function () {},
+        save: function(){return this.data}
+    }
+    templates.twoPanels(blc);
+    let audiopreview = document.createElement("audio");
+    audiopreview.setAttribute("src" , blc.data.file.url);
+    audiopreview.setAttribute("controls" , true);
+    audiopreview.style.width="100%";
+    blc.addToPreview(audiopreview);
+    //attributes
+    let ats = ["loop","muted","autoplay"];
+    let atstags = [];
+    ats.forEach(function(e){
+        //checkbox
+        let chb = document.createElement("input")
+        chb.type="checkbox"
+        chb.checked = blc.data[e] || false;
+        chb.addEventListener("click" , function(evt){
+            blc.data[e] = this.checked;
+            if(this.checked){
+                 audiopreview.setAttribute(e,e);
+            }else{
+                audiopreview.removeAttribute(e);
+            }
+           ;
+        })
+        //label
+        let lb = document.createElement("label")
+        lb.innerText = e;
+        atstags.push(chb);
+        atstags.push(lb)
+    });
+    //flatten
+
+    //ats.forEach()
+    //src row
+    let audiosrc = document.createElement("input");
+    audiosrc.type="text";
+    audiosrc.style.flexGrow = 2;
+    audiosrc.value = blc.data.file.url || "";
+    audiosrc.addEventListener("keyup", function(){
+        audiopreview.src = audiosrc.value;
+        blc.data.file.url = audiosrc.value;
+    });
+
+    let asrclabel = document.createElement("label");
+    asrclabel.innerHTML = "Source:"
+
+    //upload row
+    let audioupload = document.createElement("input");
+    audioupload.setAttribute("type" , "file");
+    audioupload.style.flexGrow = 2;
+    let audiouploadbutton = document.createElement("input");
+    audiouploadbutton.setAttribute("type" , "button");
+    audiouploadbutton.setAttribute("value" , "upload");
+    audiouploadbutton.addEventListener("click" , function(e){
+        editor.upload(audioupload.files[0])
+        .then(function (r) {
+            audiopreview.src = r.file.url;
+            audiosrc.value = r.file.url;
+            blc.data.file.url = r.file.url;
+        })
+    });
+    //add rows
+    blc.addToEditor(templates.formRow([audioupload,audiouploadbutton]));
+    blc.addToEditor(templates.formRow([asrclabel, audiosrc]));
+    blc.addToEditor(templates.formRow(atstags));
+    //
+    if (!(data && data.file && data.file.url)) {
+        blc.goEditMode();
+    }
+
+    return blc;
+
+
 }

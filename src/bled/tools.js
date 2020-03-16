@@ -1,4 +1,5 @@
-import * as UI from "./ui"
+import * as UI from "./ui";
+const d3 = Object.assign({}, require("d3-selection"));
 
 export var templates = {}
 
@@ -99,12 +100,12 @@ templates.twoPanels = function (block) {
     }
     block.goEditMode = function (e) {
         ep.style.display = "block";
-        ebtn.innerHTML = "PREVIEW";
+        ebtn.innerHTML = "Hide editor";
 
     }
     block.goPreviewMode = function (e) {
         ep.style.display = "none";
-        ebtn.innerHTML = "EDIT";
+        ebtn.innerHTML = "Show editor";
 
     }
     block.isInEditMode = function () {

@@ -1,6 +1,6 @@
 import * as UI from "./ui";
 import { constructors as Coreblocks } from "./coreblocks";
-export const version = "1.0.2";
+export const version = "1.0.3";
 
 export function BlockEditor({
     selector
@@ -359,6 +359,12 @@ export function makeBasicEditor(el) {
         make: Coreblocks.list,
         label: "List",
     });
+    editor.registerEditor({
+        type: "audio",
+        icon: UI.icons.material.audio,
+        make: Coreblocks.audio,
+        label: "Audio",
+    })
     //console.log(UI.icons.material.list);
 
     return editor;
