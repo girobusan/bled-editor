@@ -1,5 +1,6 @@
 import * as UI from "./ui";
 import { constructors as Coreblocks } from "./coreblocks";
+const ibs = require("./forms.css");
 export const version = "1.0.3";
 
 export function BlockEditor({
@@ -234,6 +235,7 @@ export function BlockEditor({
             //this.blocks[bID] = block;
             console.log("no editor for", type);
             //return null;
+            bcontent.classList.add("uistyle");
             bcontent.innerHTML = "Unknown block: <strong>" + type + "</strong>";
             bcontent.style.backgroundColor = UI.Colours.light;
             bcontent.style.color = "white";

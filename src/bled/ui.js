@@ -76,6 +76,7 @@ export function tooltips() {
         background-color: ${ Colours.dark};
         color: white;
         padding: 4px 8px;
+        font-family: sans-serif;
     }`
     document.head.appendChild(teststyle);
 

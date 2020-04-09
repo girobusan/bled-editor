@@ -190,7 +190,7 @@ constructors.raw = function (data, el, id, editor) {
 
     let edi = document.createElement("textarea");
     edi.style.width = "100%";
-    edi.style.minHeight = "64px";
+    edi.style.minHeight = "300px";
     edi.style.boxSizing = "border-box";
     edi.style.border = "2px solid " + UI.mycyan;
     edi.style.padding = "8px";
@@ -293,6 +293,7 @@ constructors.image = function (data, el, id, editor) {
     stretchlabel.innerHTML = "stretched"
     let stretched = document.createElement("input");
     stretched.type = "checkbox";
+   // stretched.classList.add("form-check-input");
     stretched.onclick = function () {
         if (this.checked) {
             right.checked = false;
@@ -308,6 +309,7 @@ constructors.image = function (data, el, id, editor) {
     nrlabel.innerHTML = "no resize"
     let noresize = document.createElement("input");
     noresize.type = "checkbox";
+    //noresize.classList.add("form-check-input");
     noresize.onclick = function () {
         if (this.checked) {
             stretched.checked = false
@@ -659,6 +661,7 @@ constructors.audio = function (data, el, id, editor){
         //checkbox
         let chb = document.createElement("input")
         chb.type="checkbox"
+        cnb.classList.add("form-check-input");
         chb.checked = blc.data[e] || false;
         chb.addEventListener("click" , function(evt){
             blc.data[e] = this.checked;

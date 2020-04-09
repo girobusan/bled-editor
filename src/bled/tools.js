@@ -5,16 +5,19 @@ export var templates = {}
 
 templates.formRow = function (elements_array) {
     let row = document.createElement("div");
-    row.style.display = "flex";
-    row.style.marginBottom = "8px";
+    row.classList.add("formrow");
+    //row.classList.add("bootstrap");
+    //row.style.display = "flex";
+    //row.style.marginBottom = "8px";
     elements_array.forEach(function (e, i) {
         if (i > 0) {
             //console.log(e);
             e.style.marginLeft = "8px";
         }
-        if (e.nodeName == "LABEL" && i != 0) {
-            e.style.flexGrow = 1;
-        }
+        //if (e.nodeName == "LABEL" && i != 0) {
+            //e.classList.add("form-check-label")
+        //    e.style.flexGrow = 1;
+        //}
         row.appendChild(e);
     });
     return row;
@@ -22,20 +25,24 @@ templates.formRow = function (elements_array) {
 
 templates.addToolbar = function (block) {
     let tbx = document.createElement("div");
+    //tbx.classList.add("bootstrap");
     tbx.classList.add("block_toolbar");
-    tbx.style.backgroundColor = UI.Colours.pale;
-    tbx.style.color = "black";
-    tbx.style.minHeight = "24px";
-    tbx.style.fontSize = ".8em"
-    tbx.style.display = "flex";
-    tbx.style.padding = "4px";
+    tbx.classList.add("uistyle")
+    tbx.classList.add("container")
+    tbx.classList.add("formrow")
+    //tbx.style.backgroundColor = UI.Colours.pale;
+    //tbx.style.color = "black";
+    //tbx.style.minHeight = "24px";
+    //tbx.style.fontSize = ".8em"
+   // tbx.style.display = "flex";
+    //tbx.style.padding = "4px";
     //tbx.style.background = "linear-gradient(0deg, rgba(0,0,0,0) 50%, rgba(62,217,227,0.5) 100%)"  ; 
 
     block.element.parentNode.appendChild(tbx); //add to editor_item, !not! block content container
     block.addToToolbar = function (el) {
-        if (el.tagName == "LABEL") {
-            el.style.flexGrow = 1;
-        }
+        //if (el.tagName == "LABEL") {
+        //    el.style.flexGrow = 1;
+        //}
         tbx.appendChild(el)
     }
 }
@@ -52,13 +59,15 @@ templates.twoPanels = function (block) {
     let ep = document.createElement("div");
     ep.classList.add("block_edit_panel");
     ep.classList.add("one_of_two_panels");
-    ep.style.minHeight = "64px";
+    ep.classList.add("uistyle");
+    ep.classList.add("container");
+    //ep.style.minHeight = "64px";
     ep.style.backgroundColor = UI.Colours.pale;
-    ep.style.color = "#444";
+    //ep.style.color = "#444";
     //ep.style.backgroundColor = "silver";
     ep.style.borderTop = "2px solid " + UI.mycyan;
     ep.style.display = "none";
-    ep.style.padding = "8px 8px 16px 8px";
+    //ep.style.padding = "8px 8px 16px 8px";
     
     //
     let ebtn = document.createElement("div");
