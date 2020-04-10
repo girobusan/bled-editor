@@ -18,6 +18,7 @@ module.exports =  (env, argv) =>( {
     entry: {
         "blocked": './src/bled/blockeditor.js',
         "tests" : "./src/bled/testing.js",
+        "presentation" : "./src/bled/presentation.js"
         //"styles/preview" : "./src/styles/preview.less"
          //"styles/site" : "./src/styles/site.less"
     }, //array!!!
