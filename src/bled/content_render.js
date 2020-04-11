@@ -144,10 +144,10 @@ const blockViews = {
 
 export function blockViewer() {
     this.show = function (contentjson) {
-        //console.log(contentjson);
+        //console.log("STARTING" , contentjson);
         var stringHTML = "";
         if (contentjson && "blocks" in contentjson && Array.isArray(contentjson.blocks)) {
-            //console.log("CTJSBLC" , contentjson)
+            //console.log("CTJSBLC" , contentjson);
             contentjson.blocks.forEach(function (b) {
                 if (b.type in blockViews) {
                     stringHTML += blockViews[b.type](b);
