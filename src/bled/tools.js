@@ -28,7 +28,7 @@ templates.addToolbar = function (block) {
     //tbx.classList.add("bootstrap");
     tbx.classList.add("block_toolbar");
     tbx.classList.add("uistyle")
-    tbx.classList.add("container")
+    tbx.classList.add("uicontainer")
     tbx.classList.add("formrow")
     //tbx.style.backgroundColor = UI.Colours.pale;
     //tbx.style.color = "black";
@@ -60,7 +60,7 @@ templates.twoPanels = function (block) {
     ep.classList.add("block_edit_panel");
     ep.classList.add("one_of_two_panels");
     ep.classList.add("uistyle");
-    ep.classList.add("container");
+    ep.classList.add("uicontainer");
     //ep.style.minHeight = "64px";
     ep.style.backgroundColor = UI.Colours.pale;
     //ep.style.color = "#444";
