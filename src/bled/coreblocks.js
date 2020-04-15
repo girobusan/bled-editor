@@ -661,7 +661,7 @@ constructors.audio = function (data, el, id, editor){
         //checkbox
         let chb = document.createElement("input")
         chb.type="checkbox"
-        cnb.classList.add("form-check-input");
+        //cnb.classList.add("form-check-input");
         chb.checked = blc.data[e] || false;
         chb.addEventListener("click" , function(evt){
             blc.data[e] = this.checked;
