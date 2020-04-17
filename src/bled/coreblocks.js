@@ -287,6 +287,13 @@ constructors.image = function (data, el, id, editor) {
         pimg.src = this.value;
     })
     blc.addToEditor(templates.formRow([srclabel, srcinput]));
+    //link to
+    let linklabel = document.createElement("label");
+    linklabel.innerHTML = "Link to";
+    let linkinput = document.createElement("input");
+    linkinput.type="text";
+    linkinput.value = data && data.link ? data.link : "";
+    blc.addToEditor(templates.formRow([linklabel, linkinput]))
     ////classes
     //////stretched
     let stretchlabel = document.createElement("label");
@@ -373,6 +380,7 @@ constructors.image = function (data, el, id, editor) {
             border: border.checked,
             withBorder: border.checked,
             caption: fc.innerHTML,
+            link: linkinput.value,
             file: {
                 url: srcinput.value
             }
