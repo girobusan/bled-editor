@@ -257,7 +257,7 @@ constructors.download = function (data, el, id, editor) {
     let tlabel = document.createElement("label");
     let tinput = document.createElement("input");
     tinput.type = "text";
-    tinput.value = data && data.title || "";
+    tinput.value = data && data.title ? data.title : "";
     tlabel.innerHTML = "Title:";
     epanel.appendChild(templates.formRow([tlabel, tinput]));  
     //src
@@ -265,14 +265,14 @@ constructors.download = function (data, el, id, editor) {
     srclabel.innerHTML = "URL:";
     let srcinput = document.createElement("input")
     srcinput.type = "text";
-    srcinput.value = data && data.url || "";
+    srcinput.value = data && data.href ?  data.href : "";
     epanel.appendChild(templates.formRow([srclabel, srcinput]));
      //+class
      let cllabel = document.createElement("label");
      cllabel.innerHTML = "Add class:";
      let clinput = document.createElement("input")
      clinput.type = "text";
-     srcinput.value = data && data.class || "";
+     clinput.value = data && data.class ? data.class : "";
      epanel.appendChild(templates.formRow([cllabel, clinput]));
     //file upload    
     let upld = document.createElement("input");
@@ -284,7 +284,7 @@ constructors.download = function (data, el, id, editor) {
     upldbtn.addEventListener("click", function (e) {
         editor.upload(upld.files[0])
             .then(function (r) {
-                pimg.src = r.file.url;
+                //pimg.src = r.file.url;
                 srcinput.value = r.file.url;
             })
     });
