@@ -117,7 +117,7 @@ constructors.header = function (data, el, id, editor) {
         }
     }
     let opts = document.createElement("select");
-    opts.style.display = "block";   
+    opts.style.display = "block";
     for (let i = 1; i < 7; i++) {
         let opt = document.createElement("option");
         opt.value = i;
@@ -154,17 +154,18 @@ constructors.code = function (data, el, id, editor) {
         event.preventDefault();
     })
     el.appendChild(pre);
-    let langs = [    "", "auto", "arduino", "bash", "basic" , "cpp", "html", 'javascript',  "processing", "python",   ];
-    let lbls =  ["No highlighting", "Auto", "Arduino", "Bash", "Basic" , "C++", "HTML", 'Java Script', "Processing", "Python",   ];
+    let langs = ["", "auto", "arduino", "bash", "basic", "cpp", "html", 'javascript', "processing", "python",];
+    let lbls = ["No highlighting", "Auto", "Arduino", "Bash", "Basic", "C++", "HTML", 'Java Script', "Processing", "Python",];
     //
     let opts = document.createElement("select");
-    langs.forEach(function (e ,i) {
+    langs.forEach(function (e, i) {
         let mi = document.createElement("option");
         mi.value = e;
         mi.label = lbls[i];
         mi.innerHTML = e;
         if (data && data.language && e == data.language) {
-            mi.selected = true;        }
+            mi.selected = true;
+        }
         opts.appendChild(mi);
     });
     //
@@ -240,6 +241,70 @@ constructors.blockquote = function (data, el, id, editor) {
     return block;
 }
 
+constructors.download = function (data, el, id, editor) {
+    let blc = {
+        element: el,
+        render: function () {
+            //console.log("render image")
+        },
+    }
+    //panel
+    let epanel = document.createElement("div");
+    epanel.classList.add("uistyle");
+    epanel.classList.add("uicontainer");
+    epanel.innerHTML = "<h4>File download</h4>"
+    //title
+    let tlabel = document.createElement("label");
+    let tinput = document.createElement("input");
+    tinput.type = "text";
+    tinput.value = data && data.title || "";
+    tlabel.innerHTML = "Title:";
+    epanel.appendChild(templates.formRow([tlabel, tinput]));  
+    //src
+    let srclabel = document.createElement("label");
+    srclabel.innerHTML = "URL:";
+    let srcinput = document.createElement("input")
+    srcinput.type = "text";
+    srcinput.value = data && data.url || "";
+    epanel.appendChild(templates.formRow([srclabel, srcinput]));
+     //+class
+     let cllabel = document.createElement("label");
+     cllabel.innerHTML = "Add class:";
+     let clinput = document.createElement("input")
+     clinput.type = "text";
+     srcinput.value = data && data.class || "";
+     epanel.appendChild(templates.formRow([cllabel, clinput]));
+    //file upload    
+    let upld = document.createElement("input");
+    upld.type = "file";
+    //upld.style.flexGrow = 1;
+    let upldbtn = document.createElement("input");
+    upldbtn.value = "upload";
+    upldbtn.type = "button"
+    upldbtn.addEventListener("click", function (e) {
+        editor.upload(upld.files[0])
+            .then(function (r) {
+                pimg.src = r.file.url;
+                srcinput.value = r.file.url;
+            })
+    });
+    epanel.appendChild(templates.formRow([upld, upldbtn]));
+  
+    //additional class
+    el.appendChild(epanel);
+    blc.save = function(){
+        return {
+            title: tinput.value,
+            href: srcinput.value,
+            filename: srcinput.value.split(/\/\\/g).pop() || "",
+            extension: srcinput.value.split(".").pop() || "default",
+            class: clinput.value
+        }
+    }
+    return blc;
+
+}
+
 constructors.image = function (data, el, id, editor) {
     let figtag = document.createElement("figure");
     let pimg = document.createElement("img");
@@ -254,7 +319,7 @@ constructors.image = function (data, el, id, editor) {
     let blc = {
         element: el,
         render: function () {
-            console.log("render image")
+            //console.log("render image")
         },
     }
     templates.twoPanels(blc);
@@ -291,7 +356,7 @@ constructors.image = function (data, el, id, editor) {
     let linklabel = document.createElement("label");
     linklabel.innerHTML = "Link to";
     let linkinput = document.createElement("input");
-    linkinput.type="text";
+    linkinput.type = "text";
     linkinput.value = data && data.link ? data.link : "";
     blc.addToEditor(templates.formRow([linklabel, linkinput]))
     ////classes
@@ -300,7 +365,7 @@ constructors.image = function (data, el, id, editor) {
     stretchlabel.innerHTML = "stretched"
     let stretched = document.createElement("input");
     stretched.type = "checkbox";
-   // stretched.classList.add("form-check-input");
+    // stretched.classList.add("form-check-input");
     stretched.onclick = function () {
         if (this.checked) {
             right.checked = false;
@@ -405,7 +470,7 @@ constructors.video = function (data, el, id, editor) {
                 url: null
             }
         },
-        render: function () {},
+        render: function () { },
     }
     if (!blc.data.file) {
         blc.data.file = {};
@@ -451,22 +516,22 @@ constructors.video = function (data, el, id, editor) {
     blc.addToEditor(templates.formRow([srclabel, srcinput]));
     ////params
     let params = [{
-            name: "autoplay",
-            checked: data && data.autoplay,
-            label: "autoplay"
-        },
-        {
-            name: "controls",
-            checked: data && data.controls,
-        },
-        {
-            name: "loop",
-            checked: data && data.loop,
-        },
-        {
-            name: "muted",
-            checked: data && data.muted,
-        },
+        name: "autoplay",
+        checked: data && data.autoplay,
+        label: "autoplay"
+    },
+    {
+        name: "controls",
+        checked: data && data.controls,
+    },
+    {
+        name: "loop",
+        checked: data && data.loop,
+    },
+    {
+        name: "muted",
+        checked: data && data.muted,
+    },
 
     ]
     let pels = [];
@@ -510,8 +575,8 @@ constructors.video = function (data, el, id, editor) {
                 blc.data.poster = r.file.url;
             })
     });
-     
-    blc.addToEditor(templates.formRow([upldp,pupldbtn]))
+
+    blc.addToEditor(templates.formRow([upldp, pupldbtn]))
     //poster src input
     ////edit src
     let psrclabel = document.createElement("label");
@@ -524,7 +589,7 @@ constructors.video = function (data, el, id, editor) {
         vtag.poster = this.value;
         blc.data.poster = this.value;
     })
-    blc.addToEditor(templates.formRow([psrclabel,psrcinput]))
+    blc.addToEditor(templates.formRow([psrclabel, psrcinput]))
     //
     blc.save = function () {
         return blc.data;
@@ -542,7 +607,7 @@ constructors.list = function (data, el, id, editor) {
         element: el,
         list_element: null,
         type: data && data.style && data.style == "ordered" ? "ol" : "ul",
-        render: function () {},
+        render: function () { },
         save: function () {
             return {
                 "style": blc.type == "ol" ? "ordered" : "unordered",
@@ -607,14 +672,14 @@ constructors.list = function (data, el, id, editor) {
     //radiobuttons
     //
     let rbtns = [{
-            value: "ul",
-            label: "Unordered"
+        value: "ul",
+        label: "Unordered"
 
-        },
-        {
-            value: "ol",
-            label: "Ordered"
-        }
+    },
+    {
+        value: "ol",
+        label: "Ordered"
+    }
     ];
     rbtns.forEach(function (e) {
         let radio = document.createElement("input");
@@ -643,7 +708,7 @@ constructors.list = function (data, el, id, editor) {
     return blc;
 }
 
-constructors.audio = function (data, el, id, editor){
+constructors.audio = function (data, el, id, editor) {
     let blc = {
         element: el,
         id: id,
@@ -653,32 +718,32 @@ constructors.audio = function (data, el, id, editor){
                 url: null
             }
         },
-        render: function () {},
-        save: function(){return this.data}
+        render: function () { },
+        save: function () { return this.data }
     }
     templates.twoPanels(blc);
     let audiopreview = document.createElement("audio");
-    audiopreview.setAttribute("src" , blc.data.file.url);
-    audiopreview.setAttribute("controls" , true);
-    audiopreview.style.width="100%";
+    audiopreview.setAttribute("src", blc.data.file.url);
+    audiopreview.setAttribute("controls", true);
+    audiopreview.style.width = "100%";
     blc.addToPreview(audiopreview);
     //attributes
-    let ats = ["loop","muted","autoplay" , "controls" , "preload" ];
+    let ats = ["loop", "muted", "autoplay", "controls", "preload"];
     let atstags = [];
-    ats.forEach(function(e){
+    ats.forEach(function (e) {
         //checkbox
         let chb = document.createElement("input")
-        chb.type="checkbox"
+        chb.type = "checkbox"
         //cnb.classList.add("form-check-input");
         chb.checked = blc.data[e] || false;
-        chb.addEventListener("click" , function(evt){
+        chb.addEventListener("click", function (evt) {
             blc.data[e] = this.checked;
-            if(this.checked && e!="controls"){
-                 audiopreview.setAttribute(e,e);
-            }else if(e!="controls"){
+            if (this.checked && e != "controls") {
+                audiopreview.setAttribute(e, e);
+            } else if (e != "controls") {
                 audiopreview.removeAttribute(e);
             }
-           ;
+            ;
         })
         //label
         let lb = document.createElement("label")
@@ -691,10 +756,10 @@ constructors.audio = function (data, el, id, editor){
     //ats.forEach()
     //src row
     let audiosrc = document.createElement("input");
-    audiosrc.type="text";
+    audiosrc.type = "text";
     audiosrc.style.flexGrow = 2;
     audiosrc.value = blc.data.file.url || "";
-    audiosrc.addEventListener("keyup", function(){
+    audiosrc.addEventListener("keyup", function () {
         audiopreview.src = audiosrc.value;
         blc.data.file.url = audiosrc.value;
     });
@@ -704,21 +769,21 @@ constructors.audio = function (data, el, id, editor){
 
     //upload row
     let audioupload = document.createElement("input");
-    audioupload.setAttribute("type" , "file");
+    audioupload.setAttribute("type", "file");
     audioupload.style.flexGrow = 2;
     let audiouploadbutton = document.createElement("input");
-    audiouploadbutton.setAttribute("type" , "button");
-    audiouploadbutton.setAttribute("value" , "upload");
-    audiouploadbutton.addEventListener("click" , function(e){
+    audiouploadbutton.setAttribute("type", "button");
+    audiouploadbutton.setAttribute("value", "upload");
+    audiouploadbutton.addEventListener("click", function (e) {
         editor.upload(audioupload.files[0])
-        .then(function (r) {
-            audiopreview.src = r.file.url;
-            audiosrc.value = r.file.url;
-            blc.data.file.url = r.file.url;
-        })
+            .then(function (r) {
+                audiopreview.src = r.file.url;
+                audiosrc.value = r.file.url;
+                blc.data.file.url = r.file.url;
+            })
     });
     //add rows
-    blc.addToEditor(templates.formRow([audioupload,audiouploadbutton]));
+    blc.addToEditor(templates.formRow([audioupload, audiouploadbutton]));
     blc.addToEditor(templates.formRow([asrclabel, audiosrc]));
     blc.addToEditor(templates.formRow(atstags));
     //
