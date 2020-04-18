@@ -1,7 +1,7 @@
 import * as UI from "./ui";
 import { constructors as Coreblocks } from "./coreblocks";
 import "./forms.css";
-export const version = "1.1.6";
+export const version = "1.1.7";
 
 export function BlockEditor({
     selector
@@ -372,7 +372,13 @@ export function makeBasicEditor(el) {
         icon: UI.icons.material.download,
         make: Coreblocks.download,
         label: "Download file",
-    })
+    });
+    editor.registerEditor({
+        type: "badge",
+        icon: UI.icons.material.report,
+        make: Coreblocks.badge,
+        label: "Badge",
+    });
     //console.log(UI.icons.material.list);
 
     return editor;

@@ -37,7 +37,8 @@ icons.material.strike = require("./svg/format_strikethrough-24px.svg");
 icons.material.link = require("./svg/link-24px.svg");
 icons.material.linkoff = require("./svg/link_off-24px.svg");
 icons.material.audio = require("./svg/music_note-24px.svg");
-icons.material.download = require("./svg/cloud_download-24px.svg")
+icons.material.download = require("./svg/cloud_download-24px.svg");
+icons.material.report = require("./svg/report-24px.svg");
 
 icons.material.quote = require("./svg/format_quote-24px.svg");
 icons.material.list = require("./svg/format_list_bulleted-24px.svg");

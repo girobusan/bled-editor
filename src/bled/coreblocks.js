@@ -305,6 +305,83 @@ constructors.download = function (data, el, id, editor) {
 
 }
 
+constructors.badge = function(data, el, id, editor){
+    let blc = {
+        element: el,
+        render: function () {
+            //console.log("render image")
+        },
+    }
+    templates.addToolbar(blc);
+    let tag = data && data.tag ? data.tag : "div";
+    let classes = data &&data.class ? data.class : "";
+    let text = data && data.text ? data.text : "";
+    //first render
+    let myel = document.createElement(tag);
+    myel.setAttribute("contenteditable" , true)
+    myel.setAttribute("class" , "badge " +  classes);
+    myel.innerHTML = text;
+    el.appendChild(myel);    
+    //tag dropdown
+    let taglbl = document.createElement("label");
+    taglbl.innerText = "Tag:";
+    let tagdd = document.createElement("select");
+    tagdd.addEventListener("change" , function(evt){
+        let mt = this.options[this.selectedIndex].value;
+        let int = myel.innerHTML;
+        myel.remove();
+        myel = document.createElement(mt);
+        myel.innerHTML = int;
+        myel.setAttribute("class" , "badge " + classes);
+        myel.setAttribute("contenteditable" , true);
+        el.appendChild(myel);
+    });
+    ["div" , "p"].forEach(function(e){
+        let mp = document.createElement("option");
+        mp.value = e;
+        mp.label = e;
+        tagdd.appendChild(mp)
+        });
+    
+    //class input
+    //datalist
+    if(!document.getElementById("bled_badge_block_datalist")){
+        let dl = document.createElement("datalist");
+        dl.setAttribute("id" , "bled_badge_block_datalist" );
+        ["warning" , "info" , "note"].forEach(function(e){
+            let dop = document.createElement("option");
+            dop.value = e;
+            dl.appendChild(dop);
+        });
+        document.body.appendChild(dl);
+    }
+    // input
+    let clbl = document.createElement("label");
+    clbl.innerText = "Class:";
+    clbl.style.flexGrow = 0;
+    let clinp = document.createElement("input")
+    clinp.type = "text";
+    clinp.style.flexGrow = "1";
+    clinp.setAttribute("list" , "bled_badge_block_datalist" );
+    //
+    clinp.addEventListener("change" , function(ev){
+        classes = this.value;
+        myel.setAttribute("class" , "badge " + classes);
+    })
+    //save
+    blc.save = function(){
+        return {
+            "class" : classes,
+            "tag" :  tagdd.options[tagdd.selectedIndex].value ,
+            "text" : myel.innerHTML
+        }
+    }
+    //
+    blc.addToToolbar(templates.formRow([taglbl, tagdd , clbl , clinp]));
+    return blc;
+
+}
+
 constructors.image = function (data, el, id, editor) {
     let figtag = document.createElement("figure");
     let pimg = document.createElement("img");
