@@ -3,7 +3,7 @@ const d3 = Object.assign({}, require("d3-selection"));
 
 export var templates = {}
 
-templates.formRow = function (elements_array) {
+templates.formRow = function (elements_array , hint) {
     let row = document.createElement("div");
     row.classList.add("formrow");
     //row.classList.add("bootstrap");
@@ -20,6 +20,9 @@ templates.formRow = function (elements_array) {
         //}
         row.appendChild(e);
     });
+    if(hint){
+        row.dataset.hint = hint;
+    }
     return row;
 }
 

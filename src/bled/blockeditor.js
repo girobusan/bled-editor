@@ -369,9 +369,9 @@ export function makeBasicEditor(el) {
     });
     editor.registerEditor({
         type: "download",
-        icon: UI.icons.material.download,
+        icon: UI.icons.material.file,
         make: Coreblocks.download,
-        label: "Download file",
+        label: "File vidget",
     });
     editor.registerEditor({
         type: "badge",

@@ -252,21 +252,21 @@ constructors.download = function (data, el, id, editor) {
     let epanel = document.createElement("div");
     epanel.classList.add("uistyle");
     epanel.classList.add("uicontainer");
-    epanel.innerHTML = "<h4>File download</h4>"
+    epanel.innerHTML = "<h5>File download</h5>"
     //title
     let tlabel = document.createElement("label");
     let tinput = document.createElement("input");
     tinput.type = "text";
     tinput.value = data && data.title ? data.title : "";
     tlabel.innerHTML = "Title:";
-    epanel.appendChild(templates.formRow([tlabel, tinput]));  
+    epanel.appendChild(templates.formRow([tlabel, tinput]) , "Title of the file");  
     //src
     let srclabel = document.createElement("label");
     srclabel.innerHTML = "URL:";
     let srcinput = document.createElement("input")
     srcinput.type = "text";
     srcinput.value = data && data.href ?  data.href : "";
-    epanel.appendChild(templates.formRow([srclabel, srcinput]));
+    epanel.appendChild(templates.formRow([srclabel, srcinput]) , "Link");
      //+class
      let cllabel = document.createElement("label");
      cllabel.innerHTML = "Add class:";
@@ -274,6 +274,13 @@ constructors.download = function (data, el, id, editor) {
      clinput.type = "text";
      clinput.value = data && data.class ? data.class : "";
      epanel.appendChild(templates.formRow([cllabel, clinput]));
+     //hidden
+     let hdlabel = document.createElement("label");
+     hdlabel.innerText = "Hidden:";
+     let hdcb = document.createElement("input");
+     hdcb.type = "checkbox";
+     hdcb.checked = data && data.hidden ? data.hidden : false;
+     epanel.appendChild(templates.formRow([hdlabel, hdcb]) , "Hide from view");
     //file upload    
     let upld = document.createElement("input");
     upld.type = "file";
@@ -298,7 +305,8 @@ constructors.download = function (data, el, id, editor) {
             href: srcinput.value,
             filename: srcinput.value.split(/\/\\/g).pop() || "",
             extension: srcinput.value.split(".").pop() || "default",
-            class: clinput.value
+            class: clinput.value,
+            hidden: hdcb.checked
         }
     }
     return blc;
