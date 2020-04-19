@@ -252,7 +252,7 @@ constructors.attachment = function (data, el, id, editor) {
     let epanel = document.createElement("div");
     epanel.classList.add("uistyle");
     epanel.classList.add("uicontainer");
-    epanel.innerHTML = "<h5>File download</h5>"
+    epanel.innerHTML = "<h5>File attachment</h5>"
     //title
     let tlabel = document.createElement("label");
     let tinput = document.createElement("input");
