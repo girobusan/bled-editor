@@ -368,10 +368,10 @@ export function makeBasicEditor(el) {
         label: "Audio",
     });
     editor.registerEditor({
-        type: "download",
-        icon: UI.icons.material.file,
-        make: Coreblocks.download,
-        label: "File vidget",
+        type: "attachment",
+        icon: UI.icons.material.attachment,
+        make: Coreblocks.attachment,
+        label: "Attach file",
     });
     editor.registerEditor({
         type: "badge",

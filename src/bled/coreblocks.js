@@ -241,7 +241,7 @@ constructors.blockquote = function (data, el, id, editor) {
     return block;
 }
 
-constructors.download = function (data, el, id, editor) {
+constructors.attachment = function (data, el, id, editor) {
     let blc = {
         element: el,
         render: function () {
