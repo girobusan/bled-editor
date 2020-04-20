@@ -27,6 +27,7 @@ icons.del = require("./svg/clear-24px.svg");
 icons.add = require("./svg/add-24px.svg");
 icons.divider = require("./svg/divider-24px.svg");
 icons.symbols = require("./svg/symbols_24px.svg");
+icons.question = require("./svg/question-24px.svg");
 
 icons.material = {};
 
@@ -381,7 +382,7 @@ export function addPlusButton(block, menu) {
     dd.style.padding = "5px";
     dd.style.backgroundColor = "white";
     dd.style.borderRadius = "5px";
-    dd.style.maxWidth = "100px";
+    dd.style.maxWidth = "130px";
     dd.style.boxShadow = "2px 2px 6px rgba(0%, 0%, 0%, 0.304)"
     //dd.style.border = "1px solid gray"
     menu.forEach(element => {

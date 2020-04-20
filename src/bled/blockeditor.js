@@ -1,7 +1,7 @@
 import * as UI from "./ui";
 import { constructors as Coreblocks } from "./coreblocks";
 import "./forms.css";
-export const version = "1.1.7";
+export const version = "1.2.7";
 
 export function BlockEditor({
     selector
@@ -220,11 +220,23 @@ export function BlockEditor({
         //create block of type 
         var domblock = document.createElement("div");
         var bID = this._makeID();
+        var bicon = document.createElement("div");
+        bicon.style.position = "absolute";
+        bicon.style.width  = "16px";
+        bicon.style.height = "16px";
+        bicon.style.left = "0px";
+        bicon.style.opacity = ".3";
+        bicon.style.fill = "gray";
+        bicon.innerHTML = this.editors[type] ?  this.editors[type].icon : UI.icons.question;
+        domblock.appendChild(bicon);
+        
+        
         let bcontent = document.createElement("div");
         domblock.appendChild(bcontent);
         domblock.classList.add("block_editor_unit");
         domblock.dataset.block_id = bID;
         domblock.dataset.block_type = type;
+        
 
 
         bcontent.classList.add("block_content_container");
