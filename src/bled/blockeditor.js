@@ -225,9 +225,9 @@ export function BlockEditor({
         bicon.style.position = "absolute";
         bicon.style.width  = "16px";
         bicon.style.height = "16px";
-        bicon.style.left = "0px";
-        bicon.style.opacity = ".3";
-        bicon.style.fill = "gray";
+        bicon.style.left = "8px";
+        //bicon.style.opacity = ".3";
+        bicon.style.fill = UI.Colours.light;
         bicon.innerHTML = this.editors[type] ?  this.editors[type].icon : UI.icons.question;
         domblock.appendChild(bicon);
         

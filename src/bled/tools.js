@@ -74,25 +74,38 @@ templates.twoPanels = function (block) {
     
     //
     let ebtn = document.createElement("div");
-    ebtn.classList.add("edit_button");
+    //ebtn.classList.add("edit_button");
     ebtn.innerHTML = "Show editor";
     ebtn.style.position = "absolute";
-    ebtn.style.backgroundColor = "silver";
-    ebtn.style.padding = "2px 4px";
-    ebtn.style.color = "white"
+    ebtn.style.backgroundColor = UI.Colours.dark;
+    ebtn.style.padding = "12px";
+    ebtn.style.color = "white";
+    ebtn.style.fill = "white";
+    ebtn.style.width ="32px";
+    ebtn.style.height ="32px";
+    ebtn.style.borderRadius = "32px";
     ebtn.style.zIndex = 5;
     ebtn.style.right = "8px";
     ebtn.style.bottom = "0px";
     ebtn.style.cursor = "pointer";
+    ebtn.dataset.hint = "Toggle settings";
+    ebtn.style.opacity = .6;
+    ebtn.innerHTML = UI.icons.material.tune;
+    let es = ebtn.querySelector("svg");
+    es.style.pointerEvents = "none";
+
+    ebtn.addEventListener("mouseover" , e=>ebtn.style.opacity=1);
+    ebtn.addEventListener("mouseout" , e => ebtn.style.opacity=.6);
 
     ebtn.addEventListener("click", function () {
         let editmode = ep.style.display != "none";
+        
         if (editmode) {
             ep.style.display = "none";
-            ebtn.innerHTML = "Show editor";
+            //ebtn.innerHTML = "Show editor";
         } else {
             ep.style.display = "block";
-            ebtn.innerHTML = "Hide editor";
+            
         }
     })
     //
@@ -112,7 +125,7 @@ templates.twoPanels = function (block) {
     }
     block.goEditMode = function (e) {
         ep.style.display = "block";
-        ebtn.innerHTML = "Hide editor";
+        //ebtn.innerHTML = "Hide editor";
 
     }
     block.goPreviewMode = function (e) {

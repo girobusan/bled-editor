@@ -51,6 +51,7 @@ icons.material.video = require("./svg/videocam-24px.svg");
 icons.material.quote = require("./svg/format_quote-24px.svg");
 icons.material.image = require("./svg/insert_photo-outlined-24px.svg");
 icons.material.paragraph = require("./svg/paragraph-remix-24px.svg");
+icons.material.tune = require("./svg/tune.svg");
 
 
 
@@ -433,7 +434,7 @@ export function addPlusButton(block, menu) {
     button.classList.add("ddown");
     button.style.width = "24px";
     button.style.height = "24px";
-    button.style.left = "0px";
+    button.style.left = "4px";
     button.style.fontSize = "24px";
     button.style.cursor = "pointer";
     button.style.bottom = "0px";
@@ -505,10 +506,10 @@ export function addCommonStyles(editorel) {
             "}" +
             ".block_editor_unit{" +
             "border: 1px solid transparent;" +
-            "border-width: 1px 1px 1px 1px ;" +
+            "border-width: 0px 1px;" +
             "}" +
             ".block_editor_unit:hover{" +
-            "border-color:" + Colours.pale + ";" +
+            "border-color:" + Colours.light + ";" +
             "}" +
             "div.common_block_controls div:hover svg{fill:black;}"
         "div.ddown:hover svg{fill:black;}"
@@ -594,6 +595,7 @@ export function addBlockControls(block, items, ed) {
         mi.querySelector("svg").style.pointerEvents = "none";
         mi.style.cursor = "pointer";
         mi.style.height = "24px";
+        mi.style.marginLeft="4px";
         mi.style.fill = Colours.light;
         mi.style.overflow = "hidden";
         mi.addEventListener("click", function () {
