@@ -1,7 +1,7 @@
 import * as UI from "./ui";
 import { constructors as Coreblocks } from "./coreblocks";
 import "./forms.css";
-export const version = "1.2.7";
+export const version = "1.2.8";
 
 export function BlockEditor({
     selector
@@ -103,7 +103,7 @@ export function BlockEditor({
         //
         let rect = document.createElement("div");
         //rect.style.backgroundColor = UI.Colours.light;
-        rect.style.color = UI.Colours.dark;
+        rect.style.color = UI.Colours.light;
         rect.innerHTML = "Edit mode";
         rect.style.padding = "0.5em 0.5em";
         rect.style.letterSpacing = ".1em";
