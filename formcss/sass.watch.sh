@@ -1,3 +1,3 @@
 #! /bin/bash
-sass --watch forms.scss forms.css
+sass --watch forms.scss ../src/bled/forms.css
 

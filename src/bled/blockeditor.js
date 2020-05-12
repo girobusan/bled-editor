@@ -102,15 +102,16 @@ export function BlockEditor({
         zero.dataset.block_id = "start";
         //
         let rect = document.createElement("div");
-        rect.style.backgroundColor = UI.Colours.light;
-        rect.style.color = "white";
-        rect.innerHTML = "EDIT MODE";
-        rect.style.padding = "0.5em 0px";
-        rect.style.letterSpacing = ".5em";
+        //rect.style.backgroundColor = UI.Colours.light;
+        rect.style.color = UI.Colours.dark;
+        rect.innerHTML = "Edit mode";
+        rect.style.padding = "0.5em 0.5em";
+        rect.style.letterSpacing = ".1em";
         rect.style.fontSize = "10px";
-        rect.style.fontWeight = "bold";
+        //rect.style.fontWeight = "bold";
         rect.style.height = "100%";
         rect.style.textAlign = "center";
+        //rect.style.userSelect = "none";
         zero.appendChild(rect);
         UI.addPlusButton(zero, this.addMenu);
         mine.appendChild(zero);

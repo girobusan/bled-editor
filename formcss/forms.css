@@ -56,4 +56,18 @@
   padding: 0px 10px;
 }
 
+.block_editor_container .startig_block {
+  display: flex;
+}
+.block_editor_container .startig_block:before {
+  display: block;
+  flex-grow: 1;
+  border-left: 1px solid black;
+}
+.block_editor_container .startig_block:after {
+  display: block;
+  flex-grow: 1;
+  border-right: 1px solid black;
+}
+
 /*# sourceMappingURL=forms.css.map */
