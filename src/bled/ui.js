@@ -506,7 +506,7 @@ export function addCommonStyles(editorel) {
             "}" +
             ".block_editor_unit{" +
             "border: 1px solid transparent;" +
-            "border-width: 0px 1px;" +
+            "border-width: 1px 1px;" +
             "}" +
             ".block_editor_unit:hover{" +
             "border-color:" + Colours.light + ";" +

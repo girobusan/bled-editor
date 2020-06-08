@@ -75,7 +75,7 @@ templates.twoPanels = function (block) {
     //
     let ebtn = document.createElement("div");
     //ebtn.classList.add("edit_button");
-    ebtn.innerHTML = "Show editor";
+    //ebtn.innerHTML = "Show editor";
     ebtn.style.position = "absolute";
     ebtn.style.backgroundColor = UI.Colours.dark;
     ebtn.style.padding = "12px";
@@ -130,7 +130,7 @@ templates.twoPanels = function (block) {
     }
     block.goPreviewMode = function (e) {
         ep.style.display = "none";
-        ebtn.innerHTML = "Show editor";
+        //ebtn.innerHTML = "Show editor";
 
     }
     block.isInEditMode = function () {
