@@ -133,8 +133,26 @@ constructors.header = function (data, el, id, editor) {
         blc.level = nv;
         blc.refresh();
     });
+    //class input
+    let class_label = document.createElement("label")
+    class_label.innerHTML = "Class:"
+    //
+    let class_input = document.createElement("input")
+    class_input.type = "text";
+    class_input.value = data.class || "";
+    class_input.addEventListener("change" , function(){
+        data.class = this.value;
+    })
+    //
     templates.addToolbar(blc);
-    blc.addToToolbar(opts)
+    blc.addToToolbar(opts);
+    blc.addToToolbar(document.createElement("hr"));
+
+    
+    blc.addToToolbar(class_label);
+    blc.addToToolbar(class_input);
+    
+    
     return blc;
 }
 
@@ -695,6 +713,7 @@ constructors.list = function (data, el, id, editor) {
         render: function () { },
         save: function () {
             return {
+                "class": data.class || "",
                 "style": blc.type == "ol" ? "ordered" : "unordered",
                 "items": Array.from(this.list_element.querySelectorAll("li")).map(e => e.innerHTML)
             }
@@ -719,7 +738,7 @@ constructors.list = function (data, el, id, editor) {
     function addSmartRemove(el) {
         el.addEventListener("keydown", function (e) {
             //console.log(e.keyCode , this.innerHTML.length);
-            if (e.keyCode == 8 && this.innerHTML.length == 0) {
+            if (e.keyCode == 8 && this.innerHTML.replace(/\<[^>]*>/gi , "").length == 0) {
                 this.remove();
             }
             if (e.keyCode == 13 && this.innerHTML.length > 0) {
@@ -775,21 +794,38 @@ constructors.list = function (data, el, id, editor) {
         radio.onchange = ev => setType(e.value);
         let lbl = document.createElement("label");
         lbl.innerHTML = e.label;
-        blc.addToToolbar(radio);
         blc.addToToolbar(lbl);
+        blc.addToToolbar(radio);
+        
     });
-    //// add button
-    let add_b = document.createElement("input");
-    add_b.type = "button";
-    add_b.value = "+item";
-    add_b.dataset.hint = "Add new list item";
-    add_b.addEventListener("click", function () {
-        let newli = document.createElement("li");
-        newli.setAttribute("contenteditable", true);
-        addSmartRemove(newli);
-        blc.list_element.appendChild(newli);
-    })
-    blc.addToToolbar(add_b);
+    //divider
+    blc.addToToolbar(document.createElement("hr"));
+ 
+    /// add input for class
+    ///--label
+    let class_label = document.createElement("label");
+    class_label.innerHTML = "List class:"
+    let list_class = document.createElement("input");
+    list_class.type = "text";
+    list_class.value = data.class || "";
+    list_class.addEventListener("change" , function(){
+        data.class = this.value;
+    });
+    blc.addToToolbar(class_label);
+    blc.addToToolbar(list_class);
+   //// add button ADD
+   let add_b = document.createElement("input");
+   add_b.type = "button";
+   add_b.value = "+item";
+   add_b.dataset.hint = "Add new list item";
+   add_b.addEventListener("click", function () {
+       let newli = document.createElement("li");
+       newli.setAttribute("contenteditable", true);
+       addSmartRemove(newli);
+       blc.list_element.appendChild(newli);
+   })
+   blc.addToToolbar(add_b);
+    //
     return blc;
 }
 

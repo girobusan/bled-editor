@@ -68,7 +68,7 @@ templates.twoPanels = function (block) {
     ep.style.backgroundColor = UI.Colours.pale;
     //ep.style.color = "#444";
     //ep.style.backgroundColor = "silver";
-    ep.style.borderTop = "2px solid " + UI.mycyan;
+    ep.style.paddingTop = "8px";// + UI.mycyan;
     ep.style.display = "none";
     //ep.style.padding = "8px 8px 16px 8px";
     
