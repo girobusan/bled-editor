@@ -4,6 +4,7 @@ import {
     cx
 } from 'emotion';
 */
+const smalltalk = require('smalltalk');
 
 
 export var icons = {};
@@ -55,6 +56,7 @@ icons.material.tune = require("./svg/tune.svg");
 
 
 
+
 export var mycyan = "#3ED9E3"; //remove
 export var Colours = {
     "light": "#3ED9E3",
@@ -63,17 +65,41 @@ export var Colours = {
 
 }
 
+//from https://gist.github.com/dantaex/543e721be845c18d2f92652c0ebe06aa
 
+function saveSelection() {
+    if (window.getSelection) {
+        var sel = window.getSelection();
+        if (sel.getRangeAt && sel.rangeCount) {
+            return sel.getRangeAt(0);
+        }
+    } else if (document.selection && document.selection.createRange) {
+        return document.selection.createRange();
+    }
+    return null;
+}
+
+function restoreSelection(range) {
+    if (range) {
+        if (window.getSelection) {
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        } else if (document.selection && range.select) {
+            range.select();
+        }
+    }
+}
+
+//smalltalk.prompt("Latid", question, "");
 
 export function Ask(pr) {
-    return new Promise(function (resolve, reject) {
-        let r = prompt(pr);
-        if (r) {
-            resolve(r)
-        } else {
-            reject("No input")
-        };
-    })
+    //return new Promise(function (resolve, reject) {
+     return  smalltalk.prompt("Block editor" , pr , "")
+        //.then( r=> r.length>1 ? resolve(r) : reject())
+        //.catch(reject())
+       // ;        
+    //}//)
 }
 
 export function tooltips() {
@@ -267,9 +293,10 @@ export function textTools() {
         e.preventDefault();
     }, "Subscript")
     addButton(icons.material.link, function (e) {
+        let selected = saveSelection();
         Ask("Enter URL")
-            .then(r => document.execCommand("createLink", false, unescape(r)))
-            .catch(r => console.log(r));
+            .then(r => {console.log('Result:' , r) ; restoreSelection(selected); document.execCommand("createLink", false, unescape(r))})
+            .catch(r => console.log("No result: " , r));
         e.preventDefault();
     }, "Make link")
     addButton(icons.material.linkoff, function (e) {
