@@ -139,7 +139,7 @@ constructors.header = function (data, el, id, editor) {
     //
     let class_input = document.createElement("input")
     class_input.type = "text";
-    class_input.value = data.class || "";
+    class_input.value = (data&&data.class) || "";
     class_input.addEventListener("change" , function(){
         data.class = this.value;
     })
@@ -713,7 +713,7 @@ constructors.list = function (data, el, id, editor) {
         render: function () { },
         save: function () {
             return {
-                "class": data.class || "",
+                "class": (data&&data.class) || "",
                 "style": blc.type == "ol" ? "ordered" : "unordered",
                 "items": Array.from(this.list_element.querySelectorAll("li")).map(e => e.innerHTML)
             }
@@ -807,7 +807,7 @@ constructors.list = function (data, el, id, editor) {
     class_label.innerHTML = "List class:"
     let list_class = document.createElement("input");
     list_class.type = "text";
-    list_class.value = data.class || "";
+    list_class.value = (data&&data.class) || "";
     list_class.addEventListener("change" , function(){
         data.class = this.value;
     });
