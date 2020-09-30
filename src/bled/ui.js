@@ -239,6 +239,7 @@ export function textTools() {
         b.innerHTML = lbl;
         b.style.width = "18px";
         b.style.height = "18px";
+        b.style.boxSizing = "content-box";
         b.style.fill = "white";
         b.style.overflow = "hidden";
         b.addEventListener("mousedown", func);
@@ -249,6 +250,9 @@ export function textTools() {
         b.onmouseout = () => b.style.fill = "white";
         let sv = b.querySelector("svg");
         sv.style.pointerEvents = "none"; //.style.pointerEvents("none");
+        sv.style.width="100%";
+        sv.style.height = "auto";
+        sv.style.display = "block";
         if (hint) {
             b.dataset.hint = hint
         };
