@@ -55,6 +55,7 @@ templates.twoPanels = function (block) {
     let pp = document.createElement("div");
     pp.classList.add("block_preview_panel");
     pp.classList.add("one_of_two_panels");
+    //pp.style.all = "initial";
     pp.style.position = "relative";
     pp.style.minHeight = "64px";
     pp.style.width = "100%";
@@ -76,6 +77,7 @@ templates.twoPanels = function (block) {
     let ebtn = document.createElement("div");
     //ebtn.classList.add("edit_button");
     //ebtn.innerHTML = "Show editor";
+    ebtn.style.all = "initial";
     ebtn.style.position = "absolute";
     ebtn.style.backgroundColor = UI.Colours.dark;
     ebtn.style.padding = "12px";

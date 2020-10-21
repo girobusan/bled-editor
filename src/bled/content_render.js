@@ -1,6 +1,8 @@
 /*
 No DOM version
 */
+const markdown = require( "markdown" ).markdown;
+
 
 export function dumbViewer() {
     this.show = function (c) {
@@ -12,6 +14,10 @@ export function dumbViewer() {
 
 //
 const blockViews = {
+    "markdown" : function(block){
+        return '<span class="markdown">' + markdown.toHTML(block.data.markdown) + '</span>' ;
+
+    },
     "paragraph": function (block) {
         return "<p>" + block.data.text + "</p>";
     },  

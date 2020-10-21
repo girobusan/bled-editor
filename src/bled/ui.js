@@ -29,6 +29,7 @@ icons.add = require("./svg/add-24px.svg");
 icons.divider = require("./svg/divider-24px.svg");
 icons.symbols = require("./svg/symbols_24px.svg");
 icons.question = require("./svg/question-24px.svg");
+icons.markdown = require("./svg/markdown-24px.svg");
 
 icons.material = {};
 
@@ -168,6 +169,7 @@ function getSymbol(posX, posY) {
         }
         let symboltable = document.createElement("div");
         symboltable.classList.add("block_editor_symbols_table")
+        symboltable.style.all = "initial";
         symboltable.style.display = "flex";
         symboltable.style.flexWrap = "wrap";
         symboltable.style.position = "absolute";
@@ -414,14 +416,14 @@ export function addPlusButton(block, menu) {
     dd.style.padding = "5px";
     dd.style.backgroundColor = "white";
     dd.style.borderRadius = "5px";
-    dd.style.maxWidth = "130px";
+    dd.style.maxWidth = "140px";
     dd.style.boxShadow = "2px 2px 6px rgba(0%, 0%, 0%, 0.304)"
     //dd.style.border = "1px solid gray"
     menu.forEach(element => {
         let mi = document.createElement("div");
         mi.innerHTML = element.icon;
         //mi.style.backgroundColor = "white";
-        mi.style.boxSizing = "borfer-box";
+        mi.style.boxSizing = "content-box";
         mi.style.padding = "4px"
         mi.style.borderRadius = "5px";
         mi.style.margin = "0px";
