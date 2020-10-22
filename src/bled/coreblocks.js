@@ -217,9 +217,11 @@ constructors.markdown = function (data, el, id, editor) {
     
     let blc = {
         render: function () {
+            el.innerHTML = "";
             el.appendChild(edi);
             if (data && data.markdown) {
-                edi.value = data.markdown;                
+                edi.value = data.markdown;  
+                edi.style.height = "5px";              
                 edi.style.height = edi.scrollHeight + "px";
             }else{                
                 edi.style.height = "300px";
