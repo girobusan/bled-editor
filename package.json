@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "npx webpack",
-    "build": "npx webpack --mode production"
+    "build": "npx webpack --mode production",
+    "sass_watch": "cd formcss ; ./sass.watch.sh"
   },
   "repository": {
     "type": "git",
