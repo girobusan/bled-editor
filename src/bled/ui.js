@@ -594,10 +594,12 @@ export function addBlockControls(block, items, ed) {
     ctrls.classList.add(ourclass);
     ctrls.style.position = "absolute";
     ctrls.style.top = "0px";
+    ctrls.style.marginRight = "-1px";
     ctrls.style.right = "0px";
     ctrls.style.width = "32px";
     ctrls.style.boxSizing = "border-box";
-    ctrls.style.backgroundColor = "#ffffffee";
+    ctrls.style.backgroundColor = Colours.light;
+    ctrls.style.border = "1px solid " + Colours.light ;
     //ctrls.style.borderLeft = "3px solid " + Colours.light;
     ctrls.style.color = "white";
     ctrls.style.textAlign = "center";
@@ -629,7 +631,7 @@ export function addBlockControls(block, items, ed) {
         mi.style.cursor = "pointer";
         mi.style.height = "24px";
         mi.style.marginLeft="4px";
-        mi.style.fill = Colours.light;
+        mi.style.fill = "white";
         mi.style.overflow = "hidden";
         mi.addEventListener("click", function () {
             e.handler(block.dataset.block_id);

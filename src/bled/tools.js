@@ -12,12 +12,8 @@ templates.formRow = function (elements_array , hint) {
     elements_array.forEach(function (e, i) {
         if (i > 0) {
             //console.log(e);
-            e.style.marginLeft = "8px";
+            e.style.marginLeft = "2px";
         }
-        //if (e.nodeName == "LABEL" && i != 0) {
-            //e.classList.add("form-check-label")
-        //    e.style.flexGrow = 1;
-        //}
         row.appendChild(e);
     });
     if(hint){
@@ -33,13 +29,6 @@ templates.addToolbar = function (block) {
     tbx.classList.add("uistyle")
     tbx.classList.add("uicontainer")
     tbx.classList.add("formrow")
-    //tbx.style.backgroundColor = UI.Colours.pale;
-    //tbx.style.color = "black";
-    //tbx.style.minHeight = "24px";
-    //tbx.style.fontSize = ".8em"
-   // tbx.style.display = "flex";
-    //tbx.style.padding = "4px";
-    //tbx.style.background = "linear-gradient(0deg, rgba(0,0,0,0) 50%, rgba(62,217,227,0.5) 100%)"  ; 
 
     block.element.parentNode.appendChild(tbx); //add to editor_item, !not! block content container
     block.addToToolbar = function (el) {

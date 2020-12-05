@@ -673,7 +673,7 @@
   border: none;
   color: white;
   border-radius: 2px;
-  padding: 2px 10px;
+  padding: 4px 10px 5px 10px;
 }
 
 .block_editor_outer_container .starting_block {
