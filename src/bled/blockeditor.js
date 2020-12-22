@@ -248,7 +248,7 @@ export function BlockEditor({
             //this.blocks[bID] = block;
             console.log("no editor for", type);
             //return null;
-            bcontent.classList.add("uistyle");
+            bcontent.classList.add("bleduistyle");
             bcontent.innerHTML = "Unknown block: <strong>" + type + "</strong>";
             bcontent.style.backgroundColor = UI.Colours.light;
             bcontent.style.color = "white";
