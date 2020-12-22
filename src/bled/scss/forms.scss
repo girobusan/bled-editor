@@ -1,4 +1,20 @@
 @use "cleanslate";
+@import "vars" ;
+
+.editortooltip{
+  //all: unset;
+  background-color: $color_main;
+  color: white;
+  padding: 4px 8px;
+  font-family: sans-serif;
+  pointer-events: none;
+  font-size: 12px;
+  position: relative;
+  border-radius: 2px;
+  box-shadow: 1px 1px 3px 2px #00000022;
+  right: 50%;
+  bottom: 16px;
+}
 
 .uistyle {
     @extend .cleanslate;
@@ -16,8 +32,9 @@
     padding: 4px;    
     width: initial;   
     background-color: #C4F7FA;    
-    color: #00A1AB;
-    
+    color: $color_main;
+
+
     &.uicontainer{
         padding: 4px 8px;
         margin: 0px !important;
@@ -34,7 +51,7 @@
 
 
     h5{
-        color: #00A1AB;
+        color: $color_main;
         margin: 16px 4px 16px 4px;
         font-size: 14px;
         font-weight: bold;
@@ -68,7 +85,7 @@
             flex-grow: 0;
             margin: 0 12px !important;
             border: none;
-           border-right: 2px dotted #00A1AB;
+           border-right: 2px dotted $color_main;
            &:after , &:before{
                all: unset !important;
                content: none !important;
@@ -116,7 +133,7 @@
     }
     input[type=radio], input[type=checkbox]{
         background-color: white;
-        border: 1px solid  #00A1AB;
+        border: 1px solid  $color_main;
         width: 16px;
         height: 16px;
         display: block;
@@ -128,7 +145,7 @@
                 height:8px;
                 margin:3px;
                 display: block;
-                background-color:  #00A1AB;
+                background-color:  $color_main;
             }
 
         }
@@ -144,17 +161,17 @@
         height: 24px;
     }
     input[type=text]{
-        border: 1px solid #00A1AB;
+        border: 1px solid $color_main;
         background-color: white;
         padding: 4px;
     }
     input[type=file]{
-        color: #00A1AB;
+        color: $color_main;
     }
 
     input[type=button]{
         outline: none;
-        background-color: #00A1AB;
+        background-color: $color_main;
         border: none;
         color: white;
         //height: 24px;

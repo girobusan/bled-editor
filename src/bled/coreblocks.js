@@ -220,6 +220,7 @@ constructors.markdown = function (data, el, id, editor) {
             el.innerHTML = "";
             el.appendChild(edi);
             if (data && data.markdown) {
+            //console.log("textarea size" , edi.getBoundingClientRect());
                 edi.value = data.markdown;  
                 edi.style.height = "5px";              
                 edi.style.height = edi.scrollHeight + "px";

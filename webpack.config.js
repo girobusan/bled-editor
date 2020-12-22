@@ -36,17 +36,11 @@ module.exports = (env, argv) => ({
             },
 
             {
-                test: /\.(less|css)$/,
+                test: /\.(css|scss)$/,
                 use: [
-                    // MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'style-loader',
-                        options: {
-                            //insert: '.block_editor_outer_container',
-                            //injectType: 'lazyStyleTag' 
-                        }
-                    },
+                    'style-loader',
                     'css-loader',
+                    'sass-loader',
 
                 ],
             },

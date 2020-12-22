@@ -1,10 +1,6 @@
-/*
-import {
-    css,
-    cx
-} from 'emotion';
-*/
-const smalltalk = require('smalltalk');
+
+require("./scss/forms.scss");
+//const smalltalk = require('smalltalk');
 
 
 export var icons = {};
@@ -93,6 +89,7 @@ function restoreSelection(range) {
 }
 
 //smalltalk.prompt("Latid", question, "");
+require("./scss/forms.scss");
 
 export function Ask(pr) {
     //return new Promise(function (resolve, reject) {
@@ -105,15 +102,6 @@ export function Ask(pr) {
 
 export function tooltips() {
     //console.log("engaging tooltips");
-    let teststyle = document.createElement("style");
-    teststyle.id = "test_style";
-    teststyle.innerHTML = `.editortooltip{
-        background-color: ${ Colours.dark};
-        color: white;
-        padding: 4px 8px;
-        font-family: sans-serif;
-    }`
-    document.head.appendChild(teststyle);
 
     let tt = document.createElement("div");
     tt.style.position = "absolute";
@@ -125,16 +113,6 @@ export function tooltips() {
 
     ttin.classList.add("editortooltip")
     tt.appendChild(ttin);
-    //ttin.style.backgroundColor = Colours.dark;
-    //ttin.style.color = "white";
-    ttin.style.pointerEvents = "none";
-    ttin.style.fontSize = "12px";
-    //ttin.style.padding = "4px 8px";
-    ttin.style.position = "relative";
-    ttin.style.borderRadius = "2px";
-    ttin.style.boxShadow = "1px 1px 3px 2px #00000022";
-    ttin.style.right = "50%";
-    ttin.style.bottom = "16px";
 
     document.body.appendChild(tt);
 
