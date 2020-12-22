@@ -142,24 +142,31 @@ div.ddown:hover svg{fill:black;}
     }
   }
   select{
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari and Chrome */
+    appearance:none;
+padding-left: 4px;
+line-height: 180%;
     //width: auto;
     display:inline-block;
     //all: initial;
+    height: 24px;
     background-color: transparent;
     position: relative;
     color: black;
-    width: initial;
     flex-grow: 0;
     background-color: white;
     padding-right: 24px;
     border: 1px solid rgb(0, 161, 171);
     color: rgb(0, 161, 171);
+    outline: none;
+    //all: initial;
     background-repeat: no-repeat;
     background-position: center right 4px;
-    outline: none;
     background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iOSIgdmlld0JveD0iMCAwIDE2IDkiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnPjxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSI5IiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNOCA4TDEuMDcxOCAxLjI1TDE0LjkyODIgMS4yNUw4IDhaIiBmaWxsPSIjMDBBMUFCIi8+CjwvZz4KPC9zdmc+Cg==);
     option{
       display: block;
+      padding:4px;
     }
 
   }
