@@ -21,6 +21,16 @@ templates.formRow = function (elements_array , hint) {
     }
     return row;
 }
+templates.labeledInput = function(label, inp){
+let c = document.createElement("div");
+let l = document.createElement("label")
+l.innerText = label;
+c.classList.add("label_and_input");
+c.appendChild(l);
+c.appendChild(inp);
+return c;
+
+}
 
 templates.addToolbar = function (block) {
     let tbx = document.createElement("div");

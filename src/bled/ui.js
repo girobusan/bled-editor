@@ -89,7 +89,6 @@ function restoreSelection(range) {
 }
 
 //smalltalk.prompt("Latid", question, "");
-require("./scss/forms.scss");
 
 export function Ask(pr) {
     //return new Promise(function (resolve, reject) {
@@ -500,32 +499,6 @@ export function addPlusButton(block, menu) {
     block.appendChild(button);
 
 
-
-}
-export function addCommonStyles(editorel) {
-    let styleid = "blockeditor_common_styles";
-    if (!document.getElementById(styleid)) {
-        let stag = document.createElement("style");
-        stag.id = styleid;
-        stag.innerHTML =
-            "*[contenteditable='true']:empty{ " +
-            "background-color:" + Colours.pale + ";" +
-            "border-bottom: 1px dashed " + Colours.dark + ";" +
-            "min-height: 1rem;" +
-            "min-width: 1rem;" +
-            "display: block;" +
-            "}" +
-            ".block_editor_unit{" +
-            "border: 1px solid transparent;" +
-            "border-width: 1px 1px;" +
-            "}" +
-            ".block_editor_unit:hover{" +
-            "border-color:" + Colours.light + ";" +
-            "}" +
-            "div.common_block_controls div:hover svg{fill:black;}"
-        "div.ddown:hover svg{fill:black;}"
-        editorel.appendChild(stag);
-    }
 
 }
 

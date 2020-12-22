@@ -1,6 +1,7 @@
 @use "cleanslate";
 @import "vars" ;
 
+//tooltip
 .editortooltip{
   //all: unset;
   background-color: $color_main;
@@ -15,6 +16,25 @@
   right: 50%;
   bottom: 16px;
 }
+//editables style
+*[contenteditable='true']:empty{  
+  background-color:  $color_pale;
+  border-bottom: 1px dashed $color_main;
+  min-height: 1rem;
+  min-width: 1rem;
+  display: block;
+}
+//block editor parts (move to namespace?)
+.block_editor_unit{ 
+  border: 1px solid transparent;
+  border-width: 1px 1px;
+}
+.block_editor_unit:hover{
+  border-color: $color_main;
+}
+//block controls && dropdown 
+div.common_block_controls div:hover svg{fill:black;}
+div.ddown:hover svg{fill:black;}
 
 .uistyle {
     @extend .cleanslate;
