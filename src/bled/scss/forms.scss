@@ -74,18 +74,22 @@ div.ddown:hover svg{fill:black;}
   }
   label{
     display: inline-block;
-    line-height: 24px;
+    line-height: 100%;
+    height: auto;
+    padding-left: 2px;
     color: $color_main;
   }
 
 
 
   h5{
+    text-transform:uppercase ;
     display: block;
     color: $color_main;
     margin: 0px 0px 6px 0px;
     padding: 6px 4px;
-    font-size: 14px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
     font-weight: bold;
     border-top: 1px solid  lighten($color_main , 10%);
     &:first-child{
@@ -146,6 +150,10 @@ padding-top: 0;
     input[type=text],
     select{
      border-radius: 4px;
+     color: $color_main;
+    }
+    input{
+  font-size: 13px;
     }
 
     input[type=button],
@@ -162,6 +170,13 @@ padding-top: 0;
     input[type=file]{
       border: none;
       //height: 24px;
+    }
+    input[type=text]{
+        width: auto;
+        min-width: 50px;
+    }
+    input:focus{
+     outline: none;
     }
   }
   select{
@@ -197,6 +212,7 @@ line-height: 180%;
     background-color: white;
     border: 1px solid  $color_main;
     width: 16px;
+    min-width: 16px;
     height: 16px;
     display: block;
     box-sizing: border-box;
@@ -219,7 +235,7 @@ line-height: 180%;
       border-radius: 4px;
     }
   }
-  select , button , label{
+  select , button  {
     height: 24px;
   }
   input[type=text]{
