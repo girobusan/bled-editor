@@ -40,12 +40,17 @@ div.ddown:hover svg{fill:black;}
   //@extend .cleanslate;
   *:not(svg){
 
-    all:unset;
+    all:initial;
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    box-sizing: border-box !important;
+    font-size: 13px;
   }   
   &,*{
     font-family: Arial, Helvetica, sans-serif !important;
     box-sizing: border-box !important;
     font-size: 13px;
+    color: $color_main;
   }
 
 
@@ -70,26 +75,39 @@ div.ddown:hover svg{fill:black;}
   label{
     display: inline-block;
     line-height: 24px;
+    color: $color_main;
   }
 
 
 
   h5{
+    display: block;
     color: $color_main;
-    margin: 16px 4px 16px 4px;
+    margin: 0px 0px 6px 0px;
+    padding: 6px 4px;
     font-size: 14px;
     font-weight: bold;
+    border-top: 1px solid  lighten($color_main , 10%);
+    &:first-child{
+border-top: none;
+margin-top: 0;
+padding-top: 0;
+    }
   }
 
   .formrow , &.formrow {
     //padding:6px 12px 6px 12px;
     //font-size: 14px;
     line-height: 1.2em;
+    margin-bottom: 8px;
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
     &:last-child{
       margin-bottom: 0px;
+    }
+    .formrow{
+
+    margin-bottom: 8px;
     }
 
     * {
@@ -99,6 +117,11 @@ div.ddown:hover svg{fill:black;}
     }
     *:last-child{
       margin-right: 0px;
+    }
+    .label_and_input_h{
+     display:flex;
+     flex-direction: row;
+     align-items: center;
     }
 
     hr{
@@ -112,9 +135,9 @@ div.ddown:hover svg{fill:black;}
       flex-grow: 0;
       margin: 0 12px !important;
       border: none;
-      border-right: 2px dotted $color_main;
+      border-right: 1px solid lighten($color_main, 10%);
       &:after , &:before{
-        all: unset !important;
+        all: initial !important;
         content: none !important;
       }
 
@@ -213,6 +236,8 @@ line-height: 180%;
     background-color: $color_main;
     border: none;
     color: white;
+    //hate u, safari
+    -webkit-text-fill-color: #ffffff;
     //height: 24px;
     border-radius: 2px;
     padding: 4px 10px 5px 10px;
