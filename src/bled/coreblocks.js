@@ -314,14 +314,14 @@ constructors.attachment = function (data, el, id, editor) {
     epanel.appendChild(templates.formRow([tlabel, tinput]) , "Title of the file");  
     //src
     let srclabel = document.createElement("label");
-    srclabel.innerHTML = "URL:";
+    srclabel.innerHTML = "URL";
     let srcinput = document.createElement("input")
     srcinput.type = "text";
     srcinput.value = data && data.href ?  data.href : "";
     epanel.appendChild(templates.formRow([srclabel, srcinput]) , "Link");
      //+class
      let cllabel = document.createElement("label");
-     cllabel.innerHTML = "Add class";
+     cllabel.innerHTML = "Class";
      let clinput = document.createElement("input")
      clinput.type = "text";
      clinput.value = data && data.class ? data.class : "";
@@ -843,7 +843,7 @@ constructors.list = function (data, el, id, editor) {
     /// add input for class
     ///--label
     let class_label = document.createElement("label");
-    class_label.innerHTML = "List class:"
+    class_label.innerHTML = "Class"
     let list_class = document.createElement("input");
     list_class.type = "text";
     list_class.value = (data&&data.class) || "";
