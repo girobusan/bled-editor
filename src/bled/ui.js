@@ -111,45 +111,62 @@ export function editorOverlay(blockeditor){
   overlay.style.border = "2px dashed " + Colours.light;
   overlay.style.backgroundColor = "rgba( 0 , 161 , 171 , .3 )";
   document.body.appendChild(overlay);
+  overlay.overlayedNode = null;
+
+  overlay.addEventListener("click", function(){
+  if(!overlay.overlayedNode){return};
+  console.log("Go edit")
+    blockeditor.editBlock(overlay.overlayedNode);
+    overlay.overlayedNode = null;
+    window.setTimeout(function(){overlay.style.pointerEvents='all'} , 500);
+  } )
   
   function checkTarget(element , condition){
+   console.log("check target");
     if( element.nodeName=='BODY' || element.nodeName=='HTML'  ){
       return null
     }
     if(condition(element)){
+      //console.log("Condition is" , condition(element))
+      //console.log("We're get to " , element);
       return element;
     }
     //See, mom, I'm doing recursion
     return checkTarget(element.parentNode , condition);
   }
 
+  
   window.addEventListener("mouseover", function(e){
+  console.log("mouseover...")
+    if(overlay.style.pointerEvents==="none"){
+    return;
+    }
     if(e.target.id=="block-editor-overlay"){
     return;
     }
     
     let weAt = checkTarget(e.target , function(n){
      return (n.classList.contains("block-editor-content-block") &&
-    !e.target.classList.contains("block-editor-content-editor"))
+    !n.classList.contains("block-editor-content-editor"))
      
     });
     if(!weAt){
+       overlay.overlayedNode= null;
        overlay.style.display = "none";
        return;
 
     }
+    overlay.overlayedNode = weAt;
+    console.log("RUN!");
       //it's a block
       let targetBbox = weAt.getBoundingClientRect();
+      console.log("Show overlay" , weAt.classList);
       overlay.style.display = "block";
       overlay.style.width = targetBbox.width + (pad*2) + "px";
       overlay.style.height = targetBbox.height + (pad*2) + "px";
       overlay.style.top = targetBbox.top - (pad) + "px";
       overlay.style.left = targetBbox.left -(pad) + "px";
-      overlay.addEventListener("mouseup", function(){
-       console.log( "Ready to edit" , weAt);
-       blockeditor.editBlock(weAt);
-       overlay.style.display = "none";
-      } , {once: true})
+
 
   })
 

@@ -210,7 +210,7 @@ export function BlockEditor({ selector }) {
 
     this.editBlock = function(block){
       //create editor
-      console.log("data" , block.dataset.blockData);
+      //console.log("data" , block.dataset.blockData);
       var edited = my.editors[block.dataset.blockType].edit(
         JSON.parse(block.dataset.blockData),
         function(e,d){ 
@@ -231,6 +231,8 @@ export function BlockEditor({ selector }) {
       UI.addPlusButton(edited, my.addMenu);
 
       //replace block with editor
+      //console.log("about to replace", edited , block)
+      //console.log(edited.parentNode , block.parentNode);
       my.element.insertBefore( edited , block);
       block.remove();
       return edited;

@@ -31,6 +31,7 @@ blocks.paragraph = function(){
     let editform = d3.select(myeditor).select("span").node();
     //save data on any changkke
     myeditor.addEventListener("input", ()=>saver(myeditor , {text: editform.innerHTML}));
+    saver(myeditor , {text: editform.innerHTML});
     //split on enter
     myeditor.addEventListener("keydown", function (e) {
       var magic = createMagic(myeditor.innerHTML);
