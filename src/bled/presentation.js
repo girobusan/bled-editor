@@ -4,7 +4,7 @@ require("./scss/example.scss");
 import * as Editor from "./blockeditor.js";
 import * as CRender from "./content_render";
 
-const el = "#content";
+//const el = "#content";
 var viewmode = true;
 
 var small_testdata = 
@@ -151,8 +151,7 @@ content starts at 4-columns in.`
 //to onDOM
 
 window.addEventListener("DOMContentLoaded", function () {
-    var myel = document.querySelector("#container");
-    var myeditor = Editor.makeBasicEditor("#container");
+    var myeditor = Editor.makeBasicEditor("#editor");
     myeditor.start(small_testdata);
 
 })

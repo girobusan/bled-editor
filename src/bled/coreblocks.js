@@ -26,9 +26,11 @@ export var blocks = {};
 blocks.paragraph = function(){
   function paragraph_editor( data , saver , blockeditor , bbox  ){
     //create editor    
-    let myeditor =  str2dom(`<p style="contenteditable:true">${data.text}</p>`) ; 
-    //save data on any change
-    myeditor.addEventListener("input", ()=>saver({text: myeditr.innerHTML}));
+
+    let myeditor =  str2dom(`<p><span contenteditable >${data.text}</span></p>`) ; 
+    let editform = d3.select(myeditor).select("span").node();
+    //save data on any changkke
+    myeditor.addEventListener("input", ()=>saver(myeditor , {text: editform.innerHTML}));
     //split on enter
     myeditor.addEventListener("keydown", function (e) {
       var magic = createMagic(myeditor.innerHTML);
@@ -65,6 +67,7 @@ blocks.paragraph = function(){
         };
       }
     })
+  return myeditor
   };
 
   return {
@@ -76,7 +79,7 @@ blocks.paragraph = function(){
 blocks.divider = function(){
   return{
   view: function(){return str2dom("<hr>")},
-  edit: this.view
+  edit: function(){return str2dom("<hr>")}
   }
 }
 

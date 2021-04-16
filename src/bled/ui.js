@@ -111,16 +111,16 @@ export function editorOverlay(blockeditor){
   overlay.style.border = "2px dashed " + Colours.light;
   overlay.style.backgroundColor = "rgba( 0 , 161 , 171 , .3 )";
   document.body.appendChild(overlay);
+  
   function checkTarget(element , condition){
-    
-    if(element.classList.contains("block-editor-content-container") || element.nodeName=='BODY' || element.nodeName=='HTML'  ){
-        return null
+    if( element.nodeName=='BODY' || element.nodeName=='HTML'  ){
+      return null
     }
     if(condition(element)){
-     return element;
+      return element;
     }
+    //See, mom, I'm doing recursion
     return checkTarget(element.parentNode , condition);
-
   }
 
   window.addEventListener("mouseover", function(e){
@@ -147,6 +147,7 @@ export function editorOverlay(blockeditor){
       overlay.style.left = targetBbox.left -(pad) + "px";
       overlay.addEventListener("mouseup", function(){
        console.log( "Ready to edit" , weAt);
+       blockeditor.editBlock(weAt);
        overlay.style.display = "none";
       } , {once: true})
 

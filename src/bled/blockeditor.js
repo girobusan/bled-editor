@@ -178,9 +178,10 @@ export function BlockEditor({ selector }) {
     this.unknownBlock = function(type , data , exeption){
      return str2dom(`<div class="unknown-block" data-type="unknown">Unknown block: ${type}</div>`);
     }
+    
 
     this.addNewBlock = function (type, data, refelement) { 
-        console.info("Added block" , type)
+        console.info("Added block" , type , data)
         function inserter(e){
            refelement.insertAjasentElement("afterend" , e);
         }
@@ -199,7 +200,7 @@ export function BlockEditor({ selector }) {
         console.log("Before D3" , new_block)
         d3.select(new_block)
         .attr("class" , "block-editor-content-block")
-        .attr("data-block-data" , data)
+        .attr("data-block-data" , JSON.stringify(data))
         .attr("data-block-type" , type)
         //--
         //insert
@@ -209,27 +210,44 @@ export function BlockEditor({ selector }) {
 
     this.editBlock = function(block){
       //create editor
-      let editor = my.editors[block.dataset.blockType](
-        block.dataset.blockData,
-        (d)=>block.dataset.blockData = d ,
+      console.log("data" , block.dataset.blockData);
+      var edited = my.editors[block.dataset.blockType].edit(
+        JSON.parse(block.dataset.blockData),
+        function(e,d){ 
+          e.dataset.blockData = JSON.stringify(d) 
+        },
         my,
         block.getElementBoundingBox
-      )
+      );
       //add bells and whistles
-      d3.select(editor)
+      d3.select(edited)
       .classed("block-editor-content-editor" , true)
       .classed("block-editor-content-block" , true)
+      .attr("data-block-type" , block.dataset.blockType)
       //add:
       // - move up
       // - move down
       // - delete
-        UI.addPlusButton(editor, my.addMenu);
+      UI.addPlusButton(edited, my.addMenu);
 
       //replace block with editor
-      my.element.insertBefore(editor , block);
+      my.element.insertBefore( edited , block);
       block.remove();
-      return editor;
-    }
+      return edited;
+    };
+
+    this.viewBlock = function(block){
+      //check if it's edited, if no -- it's already viewed
+      if(!block.classList.contains("block-editor-content-editor")){
+        return;
+      }
+      let viewed = my.editors[block.dataset.blockType].view(
+        JSON.parse(block.dataset.blockData)
+      );
+      my.element.insertBefore(viewed , block);
+      block.remove();
+      return viewed;
+    };
 
     this.removeBlock = function (block) {
      block.remove();
