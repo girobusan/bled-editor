@@ -127,8 +127,6 @@ export function editorOverlay(blockeditor){
       return null
     }
     if(condition(element)){
-      //console.log("Condition is" , condition(element))
-      //console.log("We're get to " , element);
       return element;
     }
     //See, mom, I'm doing recursion
