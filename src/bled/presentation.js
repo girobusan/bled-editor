@@ -1,10 +1,34 @@
 console.log("testing");
+require("./scss/example.scss");
+//require("gutenberg-web-type");
 import * as Editor from "./blockeditor.js";
 import * as CRender from "./content_render";
 
 const el = "#content";
 var viewmode = true;
 
+var small_testdata = 
+[
+    {
+       "type":"paragraph",
+       "data":{
+          "text":"Он не очень хорош в наборе текстов, хотя и содержит все основные возможности для редактирования текстов. <i>Курсив</i>, индексы<sup>2</sup>&nbsp; и многое другое, например, вставку ссылок и спѣциальных символов."
+       }
+    },
+    {
+       "type":"divider",
+       "data":{
+ 
+       }
+    },
+    {
+       "type":"paragraph",
+       "data":{
+          "text":"Но основной его смысл в том, чтобы собрать страницу из визуальных блоков. Например, список — отдельный блок со своими параметрами."
+       }
+    }
+ ]
+ 
 var testdata = 
 [
     {
@@ -127,46 +151,9 @@ content starts at 4-columns in.`
 //to onDOM
 
 window.addEventListener("DOMContentLoaded", function () {
-    var myel = document.querySelector(el);
-    var myeditor = Editor.makeBasicEditor(el);
-    const crender = new CRender.blockViewer();
-    myeditor.start(testdata);
-    goViewMode();
-
-    function goViewMode() { //CR
-        viewmode = true;
-        testdata = myeditor.save().blocks;
-        myeditor.hide();
-        //render content
-        
-        console.log(JSON.stringify(testdata , null , 2))
-        myel.innerHTML = crender.show( {blocks:testdata} );
-
-        //testdata = 
-
-    }
-
-    function goEditMode() { //Editor
-        viewmode = false;
-        myel.innerHTML = "";
-        myeditor.show();
-    }
-    //button
-    let btn = document.createElement("input");
-    btn.type = "button";
-    btn.value= viewmode ? "edit" : "view";
-    btn.setAttribute("style" , "position:fixed;top:1rem;right:1rem");
-    document.body.appendChild(btn);
-    btn.addEventListener("click" , function(e){
-        if(viewmode){
-            this.value="view";
-            goEditMode()
-        }else{
-            this.value="edit";
-            goViewMode()
-        }
-    })
-
+    var myel = document.querySelector("#container");
+    var myeditor = Editor.makeBasicEditor("#container");
+    myeditor.start(small_testdata);
 
 })
 

@@ -50,6 +50,7 @@ icons.material.quote = require("./svg/format_quote-24px.svg");
 icons.material.image = require("./svg/insert_photo-outlined-24px.svg");
 icons.material.paragraph = require("./svg/paragraph-remix-24px.svg");
 icons.material.tune = require("./svg/tune.svg");
+icons.material.edit = require("./svg/pencil-outline.svg");
 
 
 
@@ -97,6 +98,60 @@ export function Ask(pr) {
         //.catch(reject())
        // ;        
     //}//)
+}
+
+export function editorOverlay(blockeditor){
+  const pad = 10;
+  var overlay = document.createElement("div");
+  overlay.id = "block-editor-overlay";
+  overlay.style.position = "absolute";
+  overlay.style.display = "none";
+  overlay.style.zIndex = "1000";
+  overlay.style.borderRadius = (pad/2) + "px";
+  overlay.style.border = "2px dashed " + Colours.light;
+  overlay.style.backgroundColor = "rgba( 0 , 161 , 171 , .3 )";
+  document.body.appendChild(overlay);
+  function checkTarget(element , condition){
+    
+    if(element.classList.contains("block-editor-content-container") || element.nodeName=='BODY' || element.nodeName=='HTML'  ){
+        return null
+    }
+    if(condition(element)){
+     return element;
+    }
+    return checkTarget(element.parentNode , condition);
+
+  }
+
+  window.addEventListener("mouseover", function(e){
+    if(e.target.id=="block-editor-overlay"){
+    return;
+    }
+    
+    let weAt = checkTarget(e.target , function(n){
+     return (n.classList.contains("block-editor-content-block") &&
+    !e.target.classList.contains("block-editor-content-editor"))
+     
+    });
+    if(!weAt){
+       overlay.style.display = "none";
+       return;
+
+    }
+      //it's a block
+      let targetBbox = weAt.getBoundingClientRect();
+      overlay.style.display = "block";
+      overlay.style.width = targetBbox.width + (pad*2) + "px";
+      overlay.style.height = targetBbox.height + (pad*2) + "px";
+      overlay.style.top = targetBbox.top - (pad) + "px";
+      overlay.style.left = targetBbox.left -(pad) + "px";
+      overlay.addEventListener("mouseup", function(){
+       console.log( "Ready to edit" , weAt);
+       overlay.style.display = "none";
+      } , {once: true})
+
+  })
+
 }
 
 export function tooltips() {

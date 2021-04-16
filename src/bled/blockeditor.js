@@ -1,47 +1,56 @@
 import * as UI from "./ui";
-import { constructors as Coreblocks } from "./coreblocks";
+import { blocks as Coreblocks } from "./coreblocks";
 import "./scss/forms.css";
-export const version = "1.2.16";
+export const version = "1.0.06";
+const d3 = Object.assign({}, require("d3-selection"));
+//UTILITY
 
-export function BlockEditor({
-    selector
-}) {
+const str2dom = function(s){
+  const parser = new DOMParser();
+  return parser
+  .parseFromString(s, "text/xml")
+  .firstChild
+  ;
+
+};
+
+
+export function BlockEditor({ selector }) {
     const my = this;
-    //
-    let mine = document.createElement("div");
-    mine.classList.add("block_editor_outer_container");
-    mine.style.minHeight = "64px";
-    mine.style.width = "100%";
-    let they = document.querySelector(selector);
-    they.innerHTML = "";
-    they.appendChild(mine);
-    this.element = mine; //this element is mine
+    // Element for Block Editor.
+    my.element = document.querySelector(selector);
+    my.element.classList.add("block-editor-content-container");
+    //element cleared 
+    my.element.innerHTML = "";
 
 
     this.editors = {
-        //"zero":{
-        //
-        //}
-    }; // null; //params.editors; //  available blocks editors
-    this.blocks = null; // blocks array
-    this.addMenu = [];
+    }; 
+    this.blocks = [];
+    this.addMenu = [];  // units for add block menu
+    this.zeroblock = {
+     render: function(){ return str2dom(`<div class="block-editor-ui-element zeroblock"><span>Edit mode</span></div>`) },
+     edit: this.render
+    }
 
+    //Unique ID generation. 
+    //Not needed in thos version?
     var _current_id = 0;
-
     this._makeID = function () {
         _current_id++;
         return _current_id;
-    }
+    };
 
+    //File upload function
+    //Default code is for demos
     this.upload = function (f, testurl) {
         console.log("Testing upload", f);
         return new Promise(function (resolve, reject) {
             resolve({
                 success: "1",
                 file: {
-                    url: testurl ? testurl : "kitty.jpeg"
+                    url: testurl ? testurl : "http://placekitten.com/600/400"
                 }
-
             });
         })
     }
@@ -51,36 +60,35 @@ export function BlockEditor({
         return this;
     }
     this.setBlocks = function (blocks) {
-        this.blocks = {};
-        mine.querySelectorAll(".block_editor_unit").forEach(e => e.remove());
-        this._current_id = 1;
+        my.element.innerHTML = "";
         if (blocks) {
-            blocks.forEach(e => this.addNewBlockFromSource(e));
+          blocks.forEach(e => this.addNewBlock(
+            e.type, e.data
+          ));
         }
     }
 
     this.hide = function () {
-        this.element.remove();
+        this.blockdata = this.save();
+        this.element.innerHTML = "";
+        
     }
 
     this.show = function () {
-        let they = document.querySelector(selector);
-        they.innerHTML = "";
-        they.appendChild(this.element);
+        this.setBlocks(this.blockdata);
         UI.tooltips();
         UI.textTools();
     }
 
     this.start = function (blocks) {
-        //add sero block
+        //add zero block
 
         //this.element.innerHTML = "";
         this.blocks = {};
-        //console.log(this.editors)
-        //"add" menu
+        //
+        //Fill ADD menu from editors list
         Object.keys(this.editors).forEach(function (e) {
-
-            //console.log("added handler for", e);
+            //console.info("Аdded handler for", e);
             let val = my.editors[e];
             my.addMenu.push({
                 "label": val.label,
@@ -93,7 +101,6 @@ export function BlockEditor({
         //Zero block
 
         let zero = document.createElement("div");
-        zero.classList.add("starting_block");
         //zero.style.height = "8px";
         zero.style.boxSizing = "content-box";
         zero.style.width = "100%";
@@ -115,190 +122,134 @@ export function BlockEditor({
         //rect.style.userSelect = "none";
         zero.appendChild(rect);
         UI.addPlusButton(zero, this.addMenu);
-        mine.appendChild(zero);
+        my.element.appendChild(zero);
         //
         this.setBlocks(blocks);
         //start UI
         UI.tooltips();
         UI.textTools();
+        UI.editorOverlay(my);
         //UI.addCommonStyles(this.element);
+        return my;
     }
 
-    this.blockByID = function (id) {
-        return this.blocks[id];
-    }
 
-    this.ID2Index = function (id) {
-        //
-        let r = null;
-        this.element.querySelectorAll(".block_editor_unit").forEach((e, i) => {
-            if (e.dataset.block_id == id) {
-                r = i
-            }
-        });
-        return r;
-    }
 
-    this.Index2ID = function (idx) {
-        return this.element.querySelectorAll(".block_editor_unit").item(idx).dataset.block_id;
-    }
-
-    this.blockElementByID = function (id) {
-        return this.element.querySelectorAll(".block_editor_unit").item(this.ID2Index(id));
-    }
-
-    this.blockElementByIndex = function (idx) {
-        return this.element.querySelectorAll(".block_editor_unit").item(idx);
-    }
-
-    this.addNewBlockFromSource = function (d) {
-        this.addNewBlock(d.type, d.data, null);
-    }
-
-    this.moveUp = function (id) {
-        let bindex = this.ID2Index(id);
-        if (bindex == 0) {
-            return false;
+    this.moveUp = function (block) {
+        //find previous block
+        let previous = block.previousSibling;
+        //we're already at top
+        if(!previous){
+           return;
         }
-        //find prev block
-        let upper = this.blockElementByIndex(bindex - 1);
-        if (upper) {
-            let theblock = this.blockElementByID(id);
-            this.element.insertBefore(theblock, upper);
-            return true;
-        } else {
-            return false;
-        }
+        previous.insertAjasentElement("beforebegin" , block);
+        return block;
     }
 
     this.moveDown = function (id) {
-        let bindex = this.ID2Index(id);
-        //last?
-        if (bindex + 1 == Object.keys(this.blocks).length) {
-            return false;
+        //find next block
+        let next = block.nextSibling;
+        //we're already at top
+        if(!next){
+           return;
         }
-        let nextnext = this.blockElementByIndex(bindex + 2);
-        let theblock = this.blockElementByID(id);
-        if (nextnext) {
-            this.element.insertBefore(theblock, nextnext);
-        } else {
-            //we at prelast element
-            this.element.appendChild(theblock);
-        }
-        return true;
+        previous.insertAjasentElement("afterend" , block);
+        return block;
     }
 
     this.registerEditor = function ({
+      type,
+      view,
+      edit,
+      icon,
+      label,
+    }) {
+      console.info("Editor: " , type)
+      this.editors[type] = {
         type,
-        make,
+        view,
+        edit,
         icon,
         label,
-        paste
-    }) {
-        this.editors[type] = {
-            make,
-            icon,
-            label,
-            paste
+      };
+      return my;
+    }
+
+    this.unknownBlock = function(type , data , exeption){
+     return str2dom(`<div class="unknown-block" data-type="unknown">Unknown block: ${type}</div>`);
+    }
+
+    this.addNewBlock = function (type, data, refelement) { 
+        console.info("Added block" , type)
+        function inserter(e){
+           refelement.insertAjasentElement("afterend" , e);
+        }
+        if (!refelement) {
+          inserter = function(e){my.element.appendChild(e)};
+        }
+        //make block
+        try{
+          var new_block = my.editors[type].view(data);     
+        }catch (e){
+          console.error("Error adding block", e);
+          new_block = my.unknownBlock(type , data , e);
         };
+        //add bells and whistles
+        //--classes
+        console.log("Before D3" , new_block)
+        d3.select(new_block)
+        .attr("class" , "block-editor-content-block")
+        .attr("data-block-data" , data)
+        .attr("data-block-type" , type)
+        //--
+        //insert
+        inserter(new_block);
+        return new_block;
+    };//-/add new block
+
+    this.editBlock = function(block){
+      //create editor
+      let editor = my.editors[block.dataset.blockType](
+        block.dataset.blockData,
+        (d)=>block.dataset.blockData = d ,
+        my,
+        block.getElementBoundingBox
+      )
+      //add bells and whistles
+      d3.select(editor)
+      .classed("block-editor-content-editor" , true)
+      .classed("block-editor-content-block" , true)
+      //add:
+      // - move up
+      // - move down
+      // - delete
+        UI.addPlusButton(editor, my.addMenu);
+
+      //replace block with editor
+      my.element.insertBefore(editor , block);
+      block.remove();
+      return editor;
     }
 
-    this.focusOn = function (id) {
-        let bf = this.blockElementByID(id);
-        bf.focus();
-    }
-
-    this.addNewBlock = function (type, data, refid) { //ref=instert after that block
-        //if there is ref id, we have to insert after
-        //find next element
-        if (refid == "start") {
-            // var start = true;
-            var refel = this.blockElementByIndex(0);
-        } else if (refid) {
-            let nextidx = this.ID2Index(refid) + 1;
-            var refel = this.blockElementByIndex(nextidx);
-        }
-
-        //create block of type 
-        var domblock = document.createElement("div");
-        var bID = this._makeID();
-        var bicon = document.createElement("div");
-        bicon.style.position = "absolute";
-        bicon.style.width  = "16px";
-        bicon.style.height = "16px";
-        bicon.style.left = "8px";
-        //bicon.style.opacity = ".3";
-        bicon.style.fill = UI.Colours.light;
-        bicon.innerHTML = this.editors[type] ?  this.editors[type].icon : UI.icons.question;
-        domblock.appendChild(bicon);
-        
-        
-        let bcontent = document.createElement("div");
-        domblock.appendChild(bcontent);
-        domblock.classList.add("block_editor_unit");
-        domblock.dataset.block_id = bID;
-        domblock.dataset.block_type = type;
-        
-
-
-        bcontent.classList.add("block_content_container");
-        if (type in this.editors) {
-            var block = this.editors[type].make(data, bcontent, bID, this); //block made
-        } else {
-            var block = { save: () => data, render: () => null }
-            //this.blocks[bID] = block;
-            console.log("no editor for", type);
-            //return null;
-            bcontent.classList.add("bleduistyle");
-            bcontent.innerHTML = "Unknown block: <strong>" + type + "</strong>";
-            bcontent.style.backgroundColor = UI.Colours.light;
-            bcontent.style.color = "white";
-            bcontent.style.fontSize = "2em";
-            bcontent.style.textAlign = 'center';
-            bcontent.style.padding = "2em 0em";
-        }
-        this.blocks[bID] = block;
-        UI.addPlusButton(domblock, this.addMenu);
-        UI.addBlockControls(domblock, null, this);
-
-        if (refid && refel) {
-            this.element.insertBefore(domblock, refel);
-        } else {
-            this.element.appendChild(domblock);
-        }
-        block.render();
-        return bID;
-    } //add new block
-
-    this.removeBlock = function (id) {
-        //find block index
-        let elidx = this.ID2Index(id);
-        //announce deletion to block
-        if ("beforeDelete" in this.blocks[id]) {
-            this.blocks[id].beforeDelete();
-        }
-        //remove dom element
-        this.element.querySelectorAll(".block_editor_unit").item(elidx).remove();
-        //del block from registry
-        delete (this.blocks[id]);
+    this.removeBlock = function (block) {
+     block.remove();
     } //remove block
 
     this.save = function (clb) {
-        let dt = [];
-        this.element.querySelectorAll(".block_editor_unit")
-            .forEach(function (e) {
-                //console.log(e);
-                dt.push({
-                    "type": e.dataset.block_type,
-                    "data": my.blocks[e.dataset.block_id].save()
-                })
-            });
+        let datas = Array.from(
+        my.element.querySelectorAll(".block-editor-content-block"))
+        .map(function(e){
+          return {
+           type: e.dataset.blockType,
+           data: e.dataset.blockData
+          }
+        });
         let ts = new Date();
         let mydata = {
-            "editor": "BlEd/" + version,
+            "editor": "BlEd2/" + version,
             "stime": ts.toISOString(),
             "time": ts.getTime(), //legacy
-            "blocks": dt
+            "blocks": datas
         };
 
         console.groupCollapsed("%cEditor saving", ("color: " + UI.mycyan));
@@ -309,7 +260,7 @@ export function BlockEditor({
             clb(mydata)
         };
         return mydata;
-    }
+    }//-/save
 
 }
 
@@ -323,16 +274,19 @@ export function makeBasicEditor(el) {
 
     editor.registerEditor({
         type: "paragraph",
+        view: Coreblocks.paragraph().view,
+        edit: Coreblocks.paragraph().edit,
         icon: UI.icons.material.paragraph,
-        make: Coreblocks.paragraph,
         label: "Paragraph"
     });
     editor.registerEditor({
         type: "divider",
-        make: Coreblocks.divider,
+        view: Coreblocks.divider().view,
+        edit: Coreblocks.divider().edit,
         icon: UI.icons.divider,
         label: 'Divider'
     });
+    /*
     editor.registerEditor({
         type: "header",
         icon: UI.icons.header,
@@ -399,6 +353,7 @@ export function makeBasicEditor(el) {
         make: Coreblocks.markdown,
         label: "Markdown block",
     });
+    */
     //console.log(UI.icons.material.list);
 
     return editor;

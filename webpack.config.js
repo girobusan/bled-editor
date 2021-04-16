@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const pkg = require('./package.json')
+const HTMLWebpackPlugin = require('html-webpack-plugin')
 //const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const env = process.env.NODE_ENV
@@ -8,7 +9,6 @@ const econfig = {
     mode: env || 'development'
 }
 
-//var watchornot = (this.mode=="development");
 
 module.exports = (env, argv) => ({
     watch: argv.mode != 'production',
@@ -16,16 +16,13 @@ module.exports = (env, argv) => ({
 
     mode: "development",
     entry: {
-        "blocked": './src/bled/blockeditor.js',
-        "tests": "./src/bled/testing.js",
+        //"blocked": './src/bled/blockeditor.js',
         "presentation": "./src/bled/presentation.js"
-        //"styles/preview" : "./src/styles/preview.less"
-        //"styles/site" : "./src/styles/site.less"
-    }, //array!!!
+        },
     devtool: argv.mode != "production" ? 'inline-source-map' : "",
     output: {
         filename: '[name].js',
-        path: argv.mode == 'production' ? path.resolve(__dirname, 'out') : path.resolve(__dirname, 'webtest')
+        path: argv.mode == 'production' ? path.resolve(__dirname, 'out') : path.resolve(__dirname, 'test')
     },
 
     module: {
@@ -55,6 +52,12 @@ module.exports = (env, argv) => ({
         new webpack.DefinePlugin({
             // Definitions...
             'VERSION': JSON.stringify(pkg.version)
+        }),
+        new HTMLWebpackPlugin({
+          entry: "presentation",
+          filename: "presentation.html",
+
+          template: "src/index.ejs"
         })
 
 

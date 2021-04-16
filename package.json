@@ -1,13 +1,12 @@
 {
-  "name": "block-editor-test",
-  "version": "1.0.1",
+  "name": "block-editor-2",
+  "version": "0.0.1",
   "description": "block editor",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "npx webpack",
-    "build": "npx webpack --mode production",
-    "sass_watch": "cd formcss ; ./sass.watch.sh"
+    "build": "npx webpack --mode production"
   },
   "repository": {
     "type": "git",
@@ -21,17 +20,18 @@
   "license": "MIT",
   "homepage": "https://bitbucket.org/Girobusan/experimental-block-editor#readme",
   "dependencies": {
-    "html-webpack-plugin": "^3.2.0",
+    "gutenberg-web-type": "^1.2.3",
     "less": "^3.10.3",
     "markdown": "^0.5.0",
     "markdown-it": "^12.0.1",
     "markdown-it-multimd-table": "^4.0.3",
-    "sass-loader": "^10.1.0",
-    "smalltalk": "^4.0.7",
-    "url-loader": "^4.1.0",
-    "webpack": "^4.41.5"
+    "smalltalk": "^4.0.7"
   },
   "devDependencies": {
+    "sass-loader": "^10.1.0",
+    "url-loader": "^4.1.0",
+    "webpack": "^4.41.5",
+    "html-webpack-plugin": "^3.2.0",
     "css-loader": "^3.5.1",
     "d3": "^5.15.0",
     "emotion": "^10.0.27",
