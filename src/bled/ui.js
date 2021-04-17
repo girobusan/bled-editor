@@ -118,7 +118,7 @@ export function editorOverlay(blockeditor){
   console.log("Go edit")
     blockeditor.editBlock(overlay.overlayedNode);
     overlay.overlayedNode = null;
-    window.setTimeout(function(){overlay.style.pointerEvents='all'} , 500);
+    window.setTimeout(function(){overlay.style.pointerEvents='all'} , 100);
   } )
   
   function checkTarget(element , condition){

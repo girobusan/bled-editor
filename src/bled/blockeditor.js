@@ -209,6 +209,9 @@ export function BlockEditor({ selector }) {
     };//-/add new block
 
     this.editBlock = function(block){
+      // switch off edit mode on all other blocks
+      my.element.querySelectorAll(".block-editor-content-editor")
+      .forEach( b=>my.viewBlock(b) )
       //create editor
       //console.log("data" , block.dataset.blockData);
       var edited = my.editors[block.dataset.blockType].edit(
@@ -243,9 +246,20 @@ export function BlockEditor({ selector }) {
       if(!block.classList.contains("block-editor-content-editor")){
         return;
       }
+      try{
+        var vdata = JSON.parse(block.dataset.blockData);
+      }catch{
+        vdata = {};
+      }
       let viewed = my.editors[block.dataset.blockType].view(
-        JSON.parse(block.dataset.blockData)
+      vdata
       );
+      d3.select(viewed)
+      .classed("block-editor-content-block" , true)
+      .attr("data-block-data" , block.dataset.blockData)
+      .attr("data-block-type" , block.dataset.blockType)
+      ;
+
       my.element.insertBefore(viewed , block);
       block.remove();
       return viewed;
