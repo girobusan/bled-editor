@@ -604,33 +604,35 @@ export function addBlockControls(block, ed) {
     ctrls.style.padding="4px 0";
     ctrls.style.borderRadius = "2px";
     ctrls.style.top = "50%";
-    ctrls.style.marginTop = "-35px";
-    ctrls.style.right = "-24px";
+    ctrls.style.marginTop = "-45px";
+    ctrls.style.right = "-32px";
     ctrls.style.width = "24px";
     ctrls.style.boxSizing = "border-box";
-    ctrls.style.backgroundColor = Colours.light;
-    ctrls.style.border = "1px solid " + Colours.light ;
-    //ctrls.style.borderLeft = "3px solid " + Colours.light;
+    ctrls.style.backgroundColor = "transparent";
+    ctrls.style.border = "0 solid " + Colours.light ;
     ctrls.style.color = "white";
     ctrls.style.textAlign = "center";
     ctrls.style.display = "block";
 
-
-
-
     items.forEach(function (e) {
         let mi = document.createElement("div");
         mi.innerHTML = e.icon;
+        mi.style.boxSizing = "border-box"
         mi.querySelector("svg").style.pointerEvents = "none";
-        mi.querySelector("svg").style.transformOrigin = "0 0";
-        mi.querySelector("svg").style.transform = "scale(90%)";
+        mi.querySelector("svg").setAttribute("viewBox", "0 0 24 24")
+        mi.querySelector("svg").setAttribute("width", "16")
         mi.style.cursor = "pointer";
         mi.style.height = "24px";
-        mi.style.marginLeft="0";
+        mi.style.width= "24px";
+        mi.style.borderRadius = "12px";
+        mi.style.paddingTop = "4px";
+        mi.style.marginBottom = "4px";
+        mi.style.backgroundColor = Colours.light;
+        mi.style.paddingLeft="1px";
         mi.style.fill = "white";
         mi.style.overflow = "hidden";
         mi.addEventListener("click", function () {
-            e.handler(block.dataset.block_id);
+            e.handler();
         });
         mi.dataset.hint = e.label;
         ctrls.appendChild(mi);
