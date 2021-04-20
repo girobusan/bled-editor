@@ -10,9 +10,16 @@ var viewmode = true;
 var small_testdata = 
 [
     {
+       "type":"header",
+       "data":{
+          "text":"Это — блочный редактор.",
+          "level":1
+       }
+    },
+    {
        "type":"paragraph",
        "data":{
-          "text":"Он не очень хорош в наборе текстов, хотя и содержит все основные возможности для редактирования текстов. <i>Курсив</i>, индексы<sup>2</sup>&nbsp; и многое другое, например, вставку ссылок и спѣциальных символов."
+          "text":"Он не очень хорош в наборе текстов, хотя и содержит все основные возможности для редактирования. <i>Курсив</i>, индексы<sup>2</sup>&nbsp; и многое другое, например, вставку ссылок и спѣциальных символов."
        }
     },
     {
@@ -152,7 +159,16 @@ content starts at 4-columns in.`
 
 window.addEventListener("DOMContentLoaded", function () {
     var myeditor = Editor.makeBasicEditor("#editor");
+
     myeditor.start(small_testdata);
+    let saveb = document.createElement("input");
+    saveb.type = "button";
+    saveb.value = "SAVE";
+    saveb.style.position = "absolute";
+    saveb.style.top = "24px";
+    saveb.style.left = "24px";
+    saveb.addEventListener("click", ()=>myeditor.save())
+    document.body.appendChild(saveb);
 
 })
 

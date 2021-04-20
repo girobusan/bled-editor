@@ -1,0 +1,109 @@
+@import "vars";
+
+
+.block-editor-content-container{
+  min-height: 200px;
+  &:empty{
+    background-color: $color_pale;
+    &:before{
+      content: "Click to add block";
+      width: 100%;
+      height: 200px;
+      display: block;
+      text-align: center;
+      padding-top: 150px;
+      color: $color_main;
+
+    }
+  }
+}
+
+//forms
+$beclass : block-editor-ui-element;
+
+.#{$beclass}{
+  all:unset;
+  display: block;
+  box-sizing: border-box;
+  font-family: $font;
+  font-size: $ui_font_size;
+  line-height: $ui_line_height;
+  color: $color_dark;
+         *{
+           all:unset;
+         }
+}
+select.#{$beclass}{
+
+  display: block;
+  background-color: white;
+  border: 1px solid $color_main;
+  border-radius: $ui_corner_radius;
+  padding: $ui_block_padding/2;
+
+  option{
+    padding: $ui_block_padding;
+    display: block;
+  }
+}
+
+input.#{$beclass}{
+  border-radius: $ui_corner_radius;
+  }
+
+input[type=button].#{$beclass} {
+  background-color: $color_main;
+  border-radius: $ui_corner_radius;
+  border: none;
+  color: white;
+}
+
+input[type=text]{
+  border: 1px solid $color_main;
+  background-color: white;
+}
+
+label.#{$beclass}{
+  display: block;
+  flex-grow: 0;
+}
+//containers
+.group.#{$beclass}{
+  display: block;
+  padding:0;
+}
+.vgroup.#{$beclass}{
+  display: flex;
+  flex-direction: column;
+  label{
+    font-size: $ui_font_size/1.5;
+  }
+}
+.panel.#{$beclass}{
+  background-color: $color_pale;
+  padding: $ui_block_padding $ui_block_padding*2;
+  border-radius: $ui_corner_radius;
+  & &{
+    padding: 0;
+    background-color: transparent;
+    border-radius: 0;
+  }
+}
+.row.#{$beclass}{
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: stretch;
+
+  *{
+    margin-right: $ui_block_padding;
+    &:last-child{
+      margin-right: 0;
+    }
+  }
+}
+
+h5.#{$beclass}{
+  text-transform: uppercase;
+  font-weight: bold;
+}

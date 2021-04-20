@@ -1,18 +1,10 @@
 import * as UI from "./ui";
 import { blocks as Coreblocks } from "./coreblocks";
-import "./scss/forms.css";
+import { str2dom } from "./coreblocks";
 export const version = "1.0.06";
 const d3 = Object.assign({}, require("d3-selection"));
 //UTILITY
 
-const str2dom = function(s){
-  const parser = new DOMParser();
-  return parser
-  .parseFromString(s, "text/xml")
-  .firstChild
-  ;
-
-};
 
 
 export function BlockEditor({ selector }) {
@@ -22,16 +14,16 @@ export function BlockEditor({ selector }) {
     my.element.classList.add("block-editor-content-container");
     //element cleared 
     my.element.innerHTML = "";
+    //unedit on click
+    document.body.addEventListener("click", function(e){
+      console.log("Outclick" , e.target)
+    })
 
 
     this.editors = {
     }; 
     this.blocks = [];
     this.addMenu = [];  // units for add block menu
-    this.zeroblock = {
-     render: function(){ return str2dom(`<div class="block-editor-ui-element zeroblock"><span>Edit mode</span></div>`) },
-     edit: this.render
-    }
 
     //Unique ID generation. 
     //Not needed in thos version?
@@ -66,11 +58,13 @@ export function BlockEditor({ selector }) {
             e.type, e.data
           ));
         }
+        return my;
     }
 
     this.hide = function () {
         this.blockdata = this.save();
         this.element.innerHTML = "";
+        return my;
         
     }
 
@@ -78,6 +72,7 @@ export function BlockEditor({ selector }) {
         this.setBlocks(this.blockdata);
         UI.tooltips();
         UI.textTools();
+        return my;
     }
 
     this.start = function (blocks) {
@@ -91,41 +86,17 @@ export function BlockEditor({ selector }) {
             //console.info("Аdded handler for", e);
             let val = my.editors[e];
             my.addMenu.push({
+                "type" : val.type,
                 "label": val.label,
                 "icon": val.icon ? val.icon : null,
-                "handler": function (refid) {
-                    my.addNewBlock(e, null, refid);
+                "handler": function (refel) {
+                    my.addNewBlock(e.type, null, refel);
                 }
             })
         })
-        //Zero block
-
-        let zero = document.createElement("div");
-        //zero.style.height = "8px";
-        zero.style.boxSizing = "content-box";
-        zero.style.width = "100%";
-        zero.style.marginLeft = "-32px";
-        zero.style.marginRight = "-32px";
-        zero.style.padding = "0px 32px"
-        zero.dataset.block_id = "start";
-        //
-        let rect = document.createElement("div");
-        //rect.style.backgroundColor = UI.Colours.light;
-        rect.style.color = UI.Colours.light;
-        rect.innerHTML = "Edit mode";
-        rect.style.padding = "0.5em 0.5em";
-        rect.style.letterSpacing = ".1em";
-        rect.style.fontSize = "10px";
-        //rect.style.fontWeight = "bold";
-        rect.style.height = "100%";
-        rect.style.textAlign = "center";
-        //rect.style.userSelect = "none";
-        zero.appendChild(rect);
-        UI.addPlusButton(zero, this.addMenu);
-        my.element.appendChild(zero);
         //
         this.setBlocks(blocks);
-        //start UI
+        //start UI/addNew
         UI.tooltips();
         UI.textTools();
         UI.editorOverlay(my);
@@ -142,18 +113,19 @@ export function BlockEditor({ selector }) {
         if(!previous){
            return;
         }
-        previous.insertAjasentElement("beforebegin" , block);
+        my.element.insertBefore(block , previous);
         return block;
     }
 
-    this.moveDown = function (id) {
+    this.moveDown = function (block) {
         //find next block
         let next = block.nextSibling;
         //we're already at top
         if(!next){
            return;
         }
-        previous.insertAjasentElement("afterend" , block);
+
+        my.element.insertBefore(next , block);
         return block;
     }
 
@@ -181,9 +153,11 @@ export function BlockEditor({ selector }) {
     
 
     this.addNewBlock = function (type, data, refelement) { 
-        console.info("Added block" , type , data)
+        console.info("Adding block" , type , data)
         function inserter(e){
-           refelement.insertAjasentElement("afterend" , e);
+        //console.log("Default inserter" , e , refelement)
+              refelement.parentNode.insertBefore(e , refelement);
+             refelement.parentNode.insertBefore(refelement , e);
         }
         if (!refelement) {
           inserter = function(e){my.element.appendChild(e)};
@@ -208,14 +182,24 @@ export function BlockEditor({ selector }) {
         return new_block;
     };//-/add new block
 
-    this.editBlock = function(block){
-      // switch off edit mode on all other blocks
+    this.uneditBlocks = function(){
+
       my.element.querySelectorAll(".block-editor-content-editor")
       .forEach( b=>my.viewBlock(b) )
-      //create editor
-      //console.log("data" , block.dataset.blockData);
+    }
+    this.editBlock = function(block){
+      // switch off edit mode on all other blocks
+      this.uneditBlocks();
+      //create editable version of the block
+      try{
+        var bdata = JSON.parse(block.dataset.blockData);
+      }catch{
+        //no data blocks are possible
+        bdata = {};
+      }
       var edited = my.editors[block.dataset.blockType].edit(
-        JSON.parse(block.dataset.blockData),
+        bdata,
+        //SAVER function
         function(e,d){ 
           e.dataset.blockData = JSON.stringify(d) 
         },
@@ -231,11 +215,11 @@ export function BlockEditor({ selector }) {
       // - move up
       // - move down
       // - delete
-      UI.addPlusButton(edited, my.addMenu);
+      UI.addBlockControls(edited, my);
+      
+      UI.addPlusButton(edited, my.addMenu , my);
 
       //replace block with editor
-      //console.log("about to replace", edited , block)
-      //console.log(edited.parentNode , block.parentNode);
       my.element.insertBefore( edited , block);
       block.remove();
       return edited;
@@ -267,23 +251,31 @@ export function BlockEditor({ selector }) {
 
     this.removeBlock = function (block) {
      block.remove();
+     return my;
     } //remove block
 
     this.save = function (clb) {
-        let datas = Array.from(
+      let datas = Array.from(
         my.element.querySelectorAll(".block-editor-content-block"))
         .map(function(e){
+          console.info(e.dataset.blockType);
+          try{
+            var bdata = JSON.parse(e.dataset.blockData);
+          }catch{
+            bdata = {};
+          }
+          //console.log("Data" , bdata)
           return {
-           type: e.dataset.blockType,
-           data: e.dataset.blockData
+            type: e.dataset.blockType,
+            data: bdata
           }
         });
         let ts = new Date();
         let mydata = {
-            "editor": "BlEd2/" + version,
-            "stime": ts.toISOString(),
-            "time": ts.getTime(), //legacy
-            "blocks": datas
+          "editor": "BlEd2/" + version,
+          "stime": ts.toISOString(),
+          "time": ts.getTime(), //legacy
+          "blocks": datas
         };
 
         console.groupCollapsed("%cEditor saving", ("color: " + UI.mycyan));
@@ -291,7 +283,7 @@ export function BlockEditor({ selector }) {
         console.groupEnd();
 
         if (clb) {
-            clb(mydata)
+          clb(mydata)
         };
         return mydata;
     }//-/save
@@ -320,13 +312,14 @@ export function makeBasicEditor(el) {
         icon: UI.icons.divider,
         label: 'Divider'
     });
-    /*
     editor.registerEditor({
         type: "header",
         icon: UI.icons.header,
-        make: Coreblocks.header,
+        view: Coreblocks.header().view,
+        edit: Coreblocks.header().edit,
         label: 'Header'
     });
+    /*
     editor.registerEditor({
         type: "code",
         icon: UI.icons.code,

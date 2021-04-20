@@ -92,12 +92,7 @@ function restoreSelection(range) {
 //smalltalk.prompt("Latid", question, "");
 
 export function Ask(pr) {
-    //return new Promise(function (resolve, reject) {
      return  smalltalk.prompt("Block editor" , pr , "")
-        //.then( r=> r.length>1 ? resolve(r) : reject())
-        //.catch(reject())
-       // ;        
-    //}//)
 }
 
 export function editorOverlay(blockeditor){
@@ -110,19 +105,19 @@ export function editorOverlay(blockeditor){
   overlay.style.borderRadius = (pad/2) + "px";
   overlay.style.border = "2px dashed " + Colours.light;
   overlay.style.backgroundColor = "rgba( 0 , 161 , 171 , .3 )";
-  document.body.appendChild(overlay);
   overlay.overlayedNode = null;
+  document.body.appendChild(overlay);
 
-  overlay.addEventListener("click", function(){
-  if(!overlay.overlayedNode){return};
-  console.log("Go edit")
+  overlay.addEventListener("click", function(e){
+    if(!overlay.overlayedNode){return};
+    //console.log("Go edit")
+    overlay.style.display = "none";
     blockeditor.editBlock(overlay.overlayedNode);
-    overlay.overlayedNode = null;
-    window.setTimeout(function(){overlay.style.pointerEvents='all'} , 100);
+    e.preventDefault()
+
   } )
   
   function checkTarget(element , condition){
-   console.log("check target");
     if( element.nodeName=='BODY' || element.nodeName=='HTML'  ){
       return null
     }
@@ -135,39 +130,36 @@ export function editorOverlay(blockeditor){
 
   
   window.addEventListener("mouseover", function(e){
-  console.log("mouseover...")
+    //console.log("mouseover...")
     if(overlay.style.pointerEvents==="none"){
-    return;
+      return;
     }
     if(e.target.id=="block-editor-overlay"){
-    return;
+      return;
     }
-    
+
     let weAt = checkTarget(e.target , function(n){
-     return (n.classList.contains("block-editor-content-block") &&
-    !n.classList.contains("block-editor-content-editor"))
-     
+      return (n.classList.contains("block-editor-content-block") &&
+      !n.classList.contains("block-editor-content-editor"))
+
     });
     if(!weAt){
-       overlay.overlayedNode= null;
-       overlay.style.display = "none";
-       return;
+      overlay.overlayedNode= null;
+      overlay.style.display = "none";
+      return;
 
     }
     overlay.overlayedNode = weAt;
-    console.log("RUN!");
-      //it's a block
-      let targetBbox = weAt.getBoundingClientRect();
-      console.log("Show overlay" , weAt.classList);
-      overlay.style.display = "block";
-      overlay.style.width = targetBbox.width + (pad*2) + "px";
-      overlay.style.height = targetBbox.height + (pad*2) + "px";
-      overlay.style.top = targetBbox.top - (pad) + "px";
-      overlay.style.left = targetBbox.left -(pad) + "px";
-
-
+    //console.log("RUN!");
+    //it's a block
+    let targetBbox = weAt.getBoundingClientRect();
+    //console.log("Show overlay" , weAt.classList);
+    overlay.style.display = "block";
+    overlay.style.width = targetBbox.width + (pad*2) + "px";
+    overlay.style.height = targetBbox.height + (pad*2) + "px";
+    overlay.style.top = targetBbox.top - (pad) + "px";
+    overlay.style.left = targetBbox.left -(pad) + "px";
   })
-
 }
 
 export function tooltips() {
@@ -271,6 +263,7 @@ function getSymbol(posX, posY) {
 }
 
 export function textTools() {
+console.log("Init text tools");
     let current_element = null;
     let ttools = document.createElement("div");
     ttools.style.minWidth = "100px";
@@ -390,17 +383,15 @@ export function textTools() {
 
     //
     function testEditableContainer(el) {
-        //console.log("test");
         let ce = el;
         //if(!ce){return null};
-        while (!ce.getAttribute("contenteditable") && ce.nodeName != "BODY") {
+        while (!(ce.isContentEditable) && ce.nodeName != "BODY") {
             ce = ce.parentNode;
             if (!ce) {
                 return null
             };
-            //console.log("upto" , ce);
         }
-        if (ce.getAttribute("contenteditable")) {
+        if (ce.isContentEditable) {
             return ce;
         } else {
             return null;
@@ -408,11 +399,7 @@ export function textTools() {
     }
 
     document.body.addEventListener("click", function (e) {
-        //console.log(e.target.getAttribute("contenteditable"));
         let eic = testEditableContainer(e.target);
-        if(e.target.classList.contains("text_toolbox")){
-            return;
-        }
         if (eic && !e.target.dataset.no_text_toolbox) {
             current_element = eic;
             //console.log("click" , ttools);
@@ -429,7 +416,7 @@ export function textTools() {
         }
     });
 }
-export function addPlusButton(block, menu) {
+export function addPlusButton(block, menu , blockeditor) {
     block.style.position = "relative";
     let menuhidden = true;
     if (!menu) {
@@ -501,7 +488,9 @@ export function addPlusButton(block, menu) {
 
         mi.dataset.hint = element.label;
         mi.addEventListener("click", e => {
-            element.handler(block.dataset.block_id);
+          console.log("Create new" , element.type)
+            
+            blockeditor.editBlock(blockeditor.addNewBlock(element.type, {}, block));
             dd.style.display = "none";
             menuhidden = true;
         });
@@ -515,15 +504,15 @@ export function addPlusButton(block, menu) {
     button.classList.add("ddown");
     button.style.width = "24px";
     button.style.height = "24px";
-    button.style.left = "4px";
+    button.style.left = "-24px";
+    button.style.bottom - "-12px";
     button.style.fontSize = "24px";
     button.style.cursor = "pointer";
-    button.style.bottom = "0px";
     button.style.position = "absolute";
     button.style.backgroundColor = "rgba(100%, 100%, 100%, 0.011)";
     button.style.textAlign = "center";
     button.style.fill = Colours.light;
-    button.style.opacity = "0";
+    button.style.opacity = "1";
     button.style.display = "block"
     //button.style.borderRadius = "12px";
     button.style.transition = "opacity .5s";
@@ -563,87 +552,69 @@ export function addPlusButton(block, menu) {
     })
     block.addEventListener("mouseout", function (e) {
         if (dd.style.display == "none") {
-            button.style.opacity = 0;
+            button.style.opacity = 1;
             button.style.zIndex = "initial";
         }
     })
     block.appendChild(button);
-
-
-
 }
 
-export function addBlockControls(block, items, ed) {
+export function addBlockControls(block, ed) {
     /**
      * 
-     * block_editor_unit
-     */
+    */
 
-    block.style.padding = "0 32px";
-    block.style.boxSizing = "content-box";
-    block.style.width = "100%";
-    block.style.margin = "0 -32px"
-    if (!items && ed) {
-        items = [{
-                label: "Move block up",
-                icon: icons.up,
-                handler: function () {
-                    ed.moveUp(block.dataset.block_id)
-                }
-            },
-            {
-                label: "Move block down",
-                icon: icons.down,
-                handler: function () {
-                    ed.moveDown(block.dataset.block_id)
-                }
-            },
-            {
-                label: "Delete block",
-                icon: icons.del,
-                handler: function () {
-                    ed.removeBlock(block.dataset.block_id)
-                }
-            }
-        ]
-    } else {
-        items = [];
+    var items = [{
+      label: "Move block up",
+      icon: icons.up,
+      handler: function () {
+        ed.moveUp(block)
+      }
+    },
+    {
+      label: "Move block down",
+      icon: icons.down,
+      handler: function () {
+        ed.moveDown(block)
+      }
+    },
+    {
+      label: "Delete block",
+      icon: icons.del,
+      handler: function () {
+        ed.removeBlock(block)
+      }
     }
+    ];
     //
-    block.style.position = "relative";
-    let ourclass = "ctrls" + block.dataset.block_id;
+    let bs = window.getComputedStyle(block).getPropertyValue("position");
+    let bd = window.getComputedStyle(block).getPropertyValue("display");
+
+    if(bs=='static'|| !bs)
+    {
+      block.style.position = "relative";
+    }
+    if(bd=='inline' || !bd){
+      block.style.display = "block";
+    }
+
     let ctrls = document.createElement("div");
     ctrls.classList.add("common_block_controls");
-    ctrls.classList.add(ourclass);
     ctrls.style.position = "absolute";
-    ctrls.style.top = "0px";
-    ctrls.style.marginRight = "-1px";
-    ctrls.style.right = "0px";
-    ctrls.style.width = "32px";
+    ctrls.style.padding="4px 0";
+    ctrls.style.borderRadius = "2px";
+    ctrls.style.top = "50%";
+    ctrls.style.marginTop = "-35px";
+    ctrls.style.right = "-24px";
+    ctrls.style.width = "24px";
     ctrls.style.boxSizing = "border-box";
     ctrls.style.backgroundColor = Colours.light;
     ctrls.style.border = "1px solid " + Colours.light ;
     //ctrls.style.borderLeft = "3px solid " + Colours.light;
     ctrls.style.color = "white";
     ctrls.style.textAlign = "center";
-    ctrls.style.display = "none";
-    ctrls.addEventListener("mouseover", () => {
-        ctrls.style.zIndex = 6;
-        ctrls.style.display = "block"
-    });
-    ctrls.addEventListener("mouseout", () => {
-        ctrls.style.zIndex = "initial";
-        ctrls.style.display = "none"
-    });
+    ctrls.style.display = "block";
 
-    block.addEventListener("mouseover", () => {
-        ctrls.style.zIndex = 5;
-        ctrls.style.display = "block"
-    });
-    block.addEventListener("mouseout", () => {
-        ctrls.style.zIndex = "initial";
-        ctrls.style.display = "none"
-    });
 
 
 
@@ -651,9 +622,11 @@ export function addBlockControls(block, items, ed) {
         let mi = document.createElement("div");
         mi.innerHTML = e.icon;
         mi.querySelector("svg").style.pointerEvents = "none";
+        mi.querySelector("svg").style.transformOrigin = "0 0";
+        mi.querySelector("svg").style.transform = "scale(90%)";
         mi.style.cursor = "pointer";
         mi.style.height = "24px";
-        mi.style.marginLeft="4px";
+        mi.style.marginLeft="0";
         mi.style.fill = "white";
         mi.style.overflow = "hidden";
         mi.addEventListener("click", function () {
