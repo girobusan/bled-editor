@@ -23,6 +23,14 @@ var small_testdata =
        }
     },
     {
+      "type": "code",
+      "data":{
+        "code" : "console.log('lorem ipsum');\nlet Lorem = 'Ipsum';\n//that code is not real",
+        "language" : ""
+
+      }
+    },
+    {
        "type":"divider",
        "data":{
  

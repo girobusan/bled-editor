@@ -18,6 +18,23 @@
   }
 }
 
+@keyframes overlayed{
+  from {opacity: .2}
+  to{opacity: 1}
+}
+
+.block-editor-overlayed-block{
+  animation: overlayed .5s ease-in-out infinite;
+  animation-direction: alternate-reverse;
+}
+#block-editor-overlay{
+  border-image-source: url(overlay_frame.png) ;
+  border-image-slice: 16;
+  box-sizing: border-box;
+  border-width: 16px;
+  border-style: solid;
+}
+
 //forms
 $beclass : block-editor-ui-element;
 

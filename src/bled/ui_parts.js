@@ -1,7 +1,7 @@
 
 
 function bless(e){
-console.log("bless" , e);
+//console.log("bless" , e);
  e.classList.add("block-editor-ui-element");
  return e;
 }
@@ -14,6 +14,8 @@ export function blessed(ename, ...classes){
   return novice;
 }
 export function addUIpart(block , uipart){
+//funny animation GO
+
 block.appendChild(uipart);
 }
 

@@ -1,0 +1,121 @@
+let SessionLoad = 1
+let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
+let v:this_session=expand("<sfile>:p")
+silent only
+cd ~/PROJECTS_MMXX/latid/block-editor-2
+if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
+  let s:wipebuf = bufnr('%')
+endif
+set shortmess=aoO
+badd +25 webpack.config.js
+badd +14 src/index.ejs
+badd +11 test/presentation.html
+badd +205 src/bled/blockeditor.js
+badd +12 src/bled/scss/_vars.scss
+badd +633 src/bled/ui.js
+badd +15 src/bled/scss/example.scss
+badd +181 ~/.vimrc
+badd +26 src/bled/presentation.js
+badd +91 src/bled/coreblocks.js
+badd +90 src/bled/old_coreblocks\ .js
+badd +0 term://.//172619:fish
+badd +23 README.md
+badd +159 src/bled/scss/forms.scss
+badd +56 src/bled/scss/blockeditor.scss
+badd +10 src/bled/tools.js
+badd +23 src/bled/ui_parts.js
+badd +1 out/presentation.js
+argglobal
+%argdel
+edit src/bled/ui.js
+set splitbelow splitright
+wincmd _ | wincmd |
+split
+1wincmd k
+wincmd _ | wincmd |
+vsplit
+1wincmd h
+wincmd w
+wincmd w
+wincmd t
+set winminheight=0
+set winheight=1
+set winminwidth=0
+set winwidth=1
+exe '1resize ' . ((&lines * 41 + 26) / 53)
+exe 'vert 1resize ' . ((&columns * 79 + 79) / 158)
+exe '2resize ' . ((&lines * 41 + 26) / 53)
+exe 'vert 2resize ' . ((&columns * 78 + 79) / 158)
+exe '3resize ' . ((&lines * 8 + 26) / 53)
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 553 - ((40 * winheight(0) + 20) / 41)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+553
+normal! 027|
+wincmd w
+argglobal
+if bufexists("src/bled/ui.js") | buffer src/bled/ui.js | else | edit src/bled/ui.js | endif
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 60 - ((21 * winheight(0) + 20) / 41)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+60
+normal! 017|
+wincmd w
+argglobal
+if bufexists("term://.//172619:fish") | buffer term://.//172619:fish | else | edit term://.//172619:fish | endif
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+let s:l = 300 - ((7 * winheight(0) + 4) / 8)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+300
+normal! 028|
+wincmd w
+3wincmd w
+exe '1resize ' . ((&lines * 41 + 26) / 53)
+exe 'vert 1resize ' . ((&columns * 79 + 79) / 158)
+exe '2resize ' . ((&lines * 41 + 26) / 53)
+exe 'vert 2resize ' . ((&columns * 78 + 79) / 158)
+exe '3resize ' . ((&lines * 8 + 26) / 53)
+tabnext 1
+if exists('s:wipebuf') && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
+  silent exe 'bwipe ' . s:wipebuf
+endif
+unlet! s:wipebuf
+set winheight=1 winwidth=20 winminheight=1 winminwidth=1 shortmess=filnxtToOFI
+let s:sx = expand("<sfile>:p:r")."x.vim"
+if file_readable(s:sx)
+  exe "source " . fnameescape(s:sx)
+endif
+let &so = s:so_save | let &siso = s:siso_save
+doautoall SessionLoadPost
+unlet SessionLoad
+" vim: set ft=vim :

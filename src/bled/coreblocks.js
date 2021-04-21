@@ -190,3 +190,102 @@ blocks.header = function(){
   }
 
 }//header
+
+blocks.code = function(){
+  const defdata = {
+    code: "10 LOREM\n20 IPSUM\n30 GOTO 10" ,
+    language: ""
+  }
+  let codeViewer = function(data){
+    console.log("Code viewer" , data);
+    var d = data;
+
+
+    if(!data||Object.keys(d).length<1){
+      console.log("Default data");
+      d = defdata;
+      console.log(d.code);
+    };
+    console.log(d.code);
+    return str2dom(`<pre class="${d.language}"><code>${d.code}</code></pre>`)
+  }
+
+  let codeEditor = function(data , saver){
+     let private_data = data;
+     if(!data||Object.keys(private_data).length<1){
+      private_data = defdata;
+     }
+    
+    let outer = document.createElement("span");
+    let pre = document.createElement("pre");
+    let code = document.createElement("code")
+    code.innerText = private_data.code;
+    code.dataset.no_text_toolbox = "1";
+    
+    saver(outer , private_data);
+    code.setAttribute("contenteditable", true);
+    pre.appendChild(code);
+    outer.appendChild(pre);
+    code.addEventListener("keyup", function(){
+        private_data.code = code.innerText;
+        saver(outer , private_data);
+    });
+
+    //language selector
+    let languages = [
+      {
+        label: "No highlighting",
+        class: ""
+      },
+      {
+        label: "Auto",
+        class: "auto"
+      },
+      {
+        label: "Bash",
+        class: "bash"
+      },
+      {
+        label: "C",
+        class: "cpp"
+      },
+      {
+        label: "HTML",
+        class: "html"
+      },
+      {
+        label: "Java Script",
+        class: "javascript"
+      },
+      {
+        label: "Python",
+        class: "python"
+      },
+    ]
+   let opts = blessed("select");
+   languages.forEach(function(l){
+    let op =blessed("option");
+    op.value = l.class;
+    op.innerHTML = l.label;
+    opts.appendChild(op);
+   });
+
+   opts.addEventListener("change" , function(){
+      private_data.class = opts.value;
+      pre.setAttribute("class", opts.value)
+      saver(outer , private_data);
+   });
+
+   uiparts.addUIpart(outer, uiparts.wrapToPanel(uiparts.addLabel("Language" , opts)));
+
+    return outer;
+
+     
+  };
+
+  return {
+  view: codeViewer,
+  edit: codeEditor
+  }
+
+}//code

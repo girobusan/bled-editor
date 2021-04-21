@@ -96,15 +96,18 @@ export function Ask(pr) {
 }
 
 export function editorOverlay(blockeditor){
-  const pad = 10;
+  if(document.getElementById("block-editor-overlay")){
+    return;
+  }
+  const pad = 6;
   var overlay = document.createElement("div");
   overlay.id = "block-editor-overlay";
   overlay.style.position = "absolute";
   overlay.style.display = "none";
   overlay.style.zIndex = "1000";
-  overlay.style.borderRadius = (pad/2) + "px";
-  overlay.style.border = "2px dashed " + Colours.light;
-  overlay.style.backgroundColor = "rgba( 0 , 161 , 171 , .3 )";
+  //overlay.style.borderRadius = (pad/2) + "px";
+  //overlay.style.border = "1px dashed " + Colours.light;
+  overlay.style.backgroundColor = "rgba( 0 , 161 , 171 , .01 )";
   overlay.overlayedNode = null;
   document.body.appendChild(overlay);
 
@@ -112,6 +115,7 @@ export function editorOverlay(blockeditor){
     if(!overlay.overlayedNode){return};
     //console.log("Go edit")
     overlay.style.display = "none";
+    overlay.overlayedNode.classList.remove("block-editor-overlayed-block")
     blockeditor.editBlock(overlay.overlayedNode);
     e.preventDefault()
 
@@ -129,14 +133,18 @@ export function editorOverlay(blockeditor){
   }
 
   
+  window.addEventListener("mouseout", function(e){
+   //console.log("out" , e.target.id);
+   if(e.target.id=="block-editor-overlay"){
+        overlay.overlayedNode.classList.remove("block-editor-overlayed-block")
+   }
+  })
   window.addEventListener("mouseover", function(e){
     //console.log("mouseover...")
-    if(overlay.style.pointerEvents==="none"){
-      return;
-    }
     if(e.target.id=="block-editor-overlay"){
       return;
     }
+    //console.log(e.target);
 
     let weAt = checkTarget(e.target , function(n){
       return (n.classList.contains("block-editor-content-block") &&
@@ -144,28 +152,43 @@ export function editorOverlay(blockeditor){
 
     });
     if(!weAt){
-      overlay.overlayedNode= null;
+      if(overlay.overlayedNode){
+        overlay.overlayedNode.classList.remove("block-editor-overlayed-block")
+        overlay.overlayedNode= null;
+      }
       overlay.style.display = "none";
       return;
 
     }
     overlay.overlayedNode = weAt;
+    overlay.overlayedNode.classList.add("block-editor-overlayed-block")
+    let ostyle = window.getComputedStyle(overlay.overlayedNode);
+    let ow = parseFloat(ostyle.width)  ;
+    let oh = parseFloat(ostyle.height);
+    let om = parseFloat(ostyle.marginTop);
+    let omb = parseFloat(ostyle.marginBottom);
+
     //console.log("RUN!");
     //it's a block
     let targetBbox = weAt.getBoundingClientRect();
+    
     //console.log("Show overlay" , weAt.classList);
     overlay.style.display = "block";
-    overlay.style.width = targetBbox.width + (pad*2) + "px";
-    overlay.style.height = targetBbox.height + (pad*2) + "px";
-    overlay.style.top = targetBbox.top - (pad) + "px";
-    overlay.style.left = targetBbox.left -(pad) + "px";
+    overlay.style.width = ow +  "px";
+    overlay.style.height = (oh +om + omb) +  "px";
+    overlay.style.top = (targetBbox.top -om)  + "px";
+    overlay.style.left = targetBbox.left  + "px";
   })
 }
 
 export function tooltips() {
     //console.log("engaging tooltips");
-
+    const tt_id = "block-editor-ui-tooltip";
+    if(document.getElementById(tt_id)){
+      return;
+    }
     let tt = document.createElement("div");
+    tt.id = tt_id;
     tt.style.position = "absolute";
     tt.style.display = "none";
     tt.style.zIndex = 20;
@@ -197,7 +220,7 @@ export function tooltips() {
 }
 
 function getSymbol(posX, posY) {
-    console.log("position", posX, posY)
+    //console.log("position", posX, posY)
     const symbols = "«»“”–—·¶Ѣѣ¤₽€£×≈".split("");
 
     //create table
@@ -263,11 +286,16 @@ function getSymbol(posX, posY) {
 }
 
 export function textTools() {
+  const ttools_id = "blockeditor-text-tools";
+  if(document.getElementById(ttools_id)){
+    return;
+  }
 console.log("Init text tools");
     let current_element = null;
     let ttools = document.createElement("div");
     ttools.style.minWidth = "100px";
     ttools.classList.add("text_toolbox");
+    ttools.id = ttools_id;
     //ttools.style.minHeight = "24px";
     ttools.style.backgroundColor = Colours.dark;
     ttools.style.position = "absolute";
@@ -581,6 +609,7 @@ export function addBlockControls(block, ed) {
     {
       label: "Delete block",
       icon: icons.del,
+      color: "#EC663C",
       handler: function () {
         ed.removeBlock(block)
       }
@@ -627,7 +656,7 @@ export function addBlockControls(block, ed) {
         mi.style.borderRadius = "12px";
         mi.style.paddingTop = "4px";
         mi.style.marginBottom = "4px";
-        mi.style.backgroundColor = Colours.light;
+        mi.style.backgroundColor = e.color ? e.color : Colours.light;
         mi.style.paddingLeft="1px";
         mi.style.fill = "white";
         mi.style.overflow = "hidden";

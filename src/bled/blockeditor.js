@@ -23,6 +23,7 @@ export function BlockEditor({ selector }) {
     this.editors = {
     }; 
     this.blocks = [];
+    this.stash = null;
     this.addMenu = [];  // units for add block menu
 
     //Unique ID generation. 
@@ -62,16 +63,17 @@ export function BlockEditor({ selector }) {
     }
 
     this.hide = function () {
-        this.blockdata = this.save();
+        this.stash = this.save();
         this.element.innerHTML = "";
         return my;
         
     }
 
     this.show = function () {
-        this.setBlocks(this.blockdata);
+        this.setBlocks(this.stash);
         UI.tooltips();
         UI.textTools();
+        UI.editorOverlay(my);
         return my;
     }
 
@@ -319,13 +321,14 @@ export function makeBasicEditor(el) {
         edit: Coreblocks.header().edit,
         label: 'Header'
     });
-    /*
     editor.registerEditor({
         type: "code",
         icon: UI.icons.code,
-        make: Coreblocks.code,
-        label: 'Code snippet'
+        view: Coreblocks.code().view,
+        edit: Coreblocks.code().edit,
+        label: 'Code'
     });
+    /*
     editor.registerEditor({
         type: "raw",
         icon: UI.icons.raw,
