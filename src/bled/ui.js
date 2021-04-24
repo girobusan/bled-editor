@@ -428,7 +428,7 @@ console.log("Init text tools");
 
     document.body.addEventListener("click", function (e) {
         let eic = testEditableContainer(e.target);
-        if (eic && !e.target.dataset.no_text_toolbox) {
+        if (eic && !e.target.dataset.no_text_toolbox && !target.classList.contains("blockeditor-no-text-tools")) {
             current_element = eic;
             //console.log("click" , ttools);
             let tgt = eic.getBoundingClientRect();

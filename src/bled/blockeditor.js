@@ -190,6 +190,7 @@ export function BlockEditor({ selector }) {
       .forEach( b=>my.viewBlock(b) )
     }
     this.editBlock = function(block){
+     console.log("EDIt" , block)
       // switch off edit mode on all other blocks
       this.uneditBlocks();
       //create editable version of the block
@@ -206,7 +207,7 @@ export function BlockEditor({ selector }) {
           e.dataset.blockData = JSON.stringify(d) 
         },
         my,
-        block.getElementBoundingBox
+        block.getBoundingClientRect()
       );
       //add bells and whistles
       d3.select(edited)
@@ -328,6 +329,13 @@ export function makeBasicEditor(el) {
         edit: Coreblocks.code().edit,
         label: 'Code'
     });
+    editor.registerEditor({
+        type: "markdown",
+        icon: UI.icons.markdown,
+        label: "Markdown block",
+        edit: Coreblocks.markdown().edit,
+        view: Coreblocks.markdown().view
+    });
     /*
     editor.registerEditor({
         type: "raw",
@@ -376,12 +384,6 @@ export function makeBasicEditor(el) {
         icon: UI.icons.material.report,
         make: Coreblocks.badge,
         label: "Badge",
-    });
-    editor.registerEditor({
-        type: "markdown",
-        icon: UI.icons.markdown,
-        make: Coreblocks.markdown,
-        label: "Markdown block",
     });
     */
     //console.log(UI.icons.material.list);

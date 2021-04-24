@@ -84,6 +84,14 @@ label.#{$beclass}{
   display: block;
   flex-grow: 0;
 }
+textarea.#{$beclass}{
+  white-space: pre-wrap;
+  font-size: 1em;
+  line-height: 140%;
+  border: 1px solid $color_main;
+  padding: $ui_block_padding*2;
+
+}
 //containers
 .group.#{$beclass}{
   display: block;

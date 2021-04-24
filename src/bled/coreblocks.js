@@ -1,11 +1,8 @@
-import * as UI from "./ui";
+//import * as UI from "./ui";
 import {bless , blessed} from "./ui_parts";
-import {
-    templates
-} from "./tools";
-//import { curveBundle } from "d3";
 import * as uiparts from "./ui_parts";
 require("./scss/blockeditor.scss");
+var md = require("markdown-it")();
 
 const d3 = Object.assign({}, require("d3-selection"));
 //UTILITY
@@ -21,6 +18,14 @@ return ts.firstChild;
 
 function createMagic(txt){
  return "#!#"; //:REDO
+}
+
+function checkData(data , defdata){
+  if(!data || Object.keys(data).length <1){
+    return defdata
+  }else{
+    return data;
+  }
 }
 
 //export var constructors = {};
@@ -261,7 +266,8 @@ blocks.code = function(){
         label: "Python",
         class: "python"
       },
-    ]
+    ];
+
    let opts = blessed("select");
    languages.forEach(function(l){
     let op =blessed("option");
@@ -289,3 +295,35 @@ blocks.code = function(){
   }
 
 }//code
+
+blocks.markdown = function(data, saver){
+   
+  var defdata = {"markdown": "### Markdown\n\n1. Lorem Ipsun Dolor\n1. Set Amet"} ;
+
+  function mdEdit( data , saver , blockeditor , bbox ){
+    let meditor = blessed("textarea" , "blockeditor-no-text-tools");
+    let outer = document.createElement("div");
+    outer.appendChild(meditor);
+    let private_data = checkData(data, defdata);
+    meditor.value = private_data.markdown;
+    saver(outer , {"markdown" : meditor.value});
+
+    meditor.style.minHeight = bbox.height + "px";
+    meditor.style.width = "100%";
+    meditor.addEventListener("keyup" , ()=>saver(outer , {"markdown": meditor.value}));
+    return outer;
+  }
+  function mdView (data){
+    let view = document.createElement("div");
+    view.classList.add("markdown");
+    view.innerHTML = md.render(data.markdown||"*Lorem Ipsum*");
+    //console.log("MDVIEW" , view , data);
+    
+    return view;
+  }
+  return {
+   edit: mdEdit,
+   view: mdView
+  }
+
+}

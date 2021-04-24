@@ -13,7 +13,7 @@ Goals
 
 1. Small footprint
 1. Extensible
-1. WYSIWYG (almost)
+1. WYSIWYG (almost) 
 
 
 Origin of name
