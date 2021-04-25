@@ -23,6 +23,12 @@ var small_testdata =
        }
     },
     {
+    type: "raw",
+    data: {
+    "html": "<div style='font-size:2rem'> Raw &#128031; HTML</div>"
+    }
+    },
+    {
       "type": "code",
       "data":{
         "code" : "console.log('lorem ipsum');\nlet Lorem = 'Ipsum';\n//that code is not real",
@@ -41,6 +47,12 @@ var small_testdata =
        "data":{
           "text":"Но основной его смысл в том, чтобы собрать страницу из визуальных блоков. Например, список — отдельный блок со своими параметрами."
        }
+    },
+    {
+      "type": "markdown",
+      "data":{
+        "markdown": "### Markdown\n\n1. Lorem Ipsun Dolor\n1. Set Amet" 
+      }
     }
  ]
  

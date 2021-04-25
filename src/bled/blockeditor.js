@@ -336,6 +336,13 @@ export function makeBasicEditor(el) {
         edit: Coreblocks.markdown().edit,
         view: Coreblocks.markdown().view
     });
+    editor.registerEditor({
+        type: "raw",
+        icon: UI.icons.raw,
+        label: "Raw HTML",
+        edit: Coreblocks.raw().edit,
+        view: Coreblocks.raw().view
+    });
     /*
     editor.registerEditor({
         type: "raw",

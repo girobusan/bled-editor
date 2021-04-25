@@ -302,8 +302,11 @@ blocks.markdown = function(data, saver){
 
   function mdEdit( data , saver , blockeditor , bbox ){
     let meditor = blessed("textarea" , "blockeditor-no-text-tools");
-    let outer = document.createElement("div");
-    outer.appendChild(meditor);
+    let editor_title = blessed("h5" );
+    editor_title.innerHTML = "Markdown";
+    let outer = uiparts.wrapToPanel(editor_title , meditor);
+    //outer.appendChild(editor_title);
+    //outer.appendChild(meditor);
     let private_data = checkData(data, defdata);
     meditor.value = private_data.markdown;
     saver(outer , {"markdown" : meditor.value});
@@ -326,4 +329,36 @@ blocks.markdown = function(data, saver){
    view: mdView
   }
 
+}//markdown
+
+blocks.raw = function(){
+ var defdata = { html: "<div style='font-size:2rem'> Lorem &#128031; Ipsum</div>"};
+ function rawEdit( data , saver , blockeditor , bbox ){
+    var pdata = checkData(data, defdata);
+    let raweditor = blessed("textarea" , "blockeditor-no-text-tools");
+    let hdr = blessed("h5");
+    hdr.innerHTML = "Raw HTML";
+    let outer =uiparts.wrapToPanel(hdr,raweditor) ;
+    outer.appendChild(hdr);
+    outer.appendChild(raweditor);
+    raweditor.value = pdata.html;
+    saver(outer , { "html" : raweditor.value});
+    raweditor.addEventListener("keyup" , function(){
+      saver(outer , {"html" : raweditor.value});
+    });
+    return outer;
+
+  }
+
+  function rawView(data){
+  let c = document.createElement("div");
+  c.classList.add("html");
+  c.innerHTML = data.html;
+  return c;
+
+  }
+  return {
+  edit: rawEdit,
+  view: rawView
+  }
 }

@@ -46,9 +46,6 @@ $beclass : block-editor-ui-element;
   font-size: $ui_font_size;
   line-height: $ui_line_height;
   color: $color_dark;
-         *{
-           all:unset;
-         }
 }
 select.#{$beclass}{
 
@@ -86,10 +83,14 @@ label.#{$beclass}{
 }
 textarea.#{$beclass}{
   white-space: pre-wrap;
-  font-size: 1em;
+  font-size: 1.2em;
   line-height: 140%;
   border: 1px solid $color_main;
-  padding: $ui_block_padding*2;
+  padding: $ui_block_padding*1;
+  color: black;
+  width: 100%;
+  background-color: white;
+  //margin-bottom: $ui_block_padding*1.5;
 
 }
 //containers
@@ -106,7 +107,7 @@ textarea.#{$beclass}{
 }
 .panel.#{$beclass}{
   background-color: $color_pale;
-  padding: $ui_block_padding $ui_block_padding*2;
+  padding: $ui_block_padding $ui_block_padding;
   border-radius: $ui_corner_radius;
   & &{
     padding: 0;
@@ -131,4 +132,9 @@ textarea.#{$beclass}{
 h5.#{$beclass}{
   text-transform: uppercase;
   font-weight: bold;
+  letter-spacing: 0.1em;
+  margin-bottom: $ui_block_padding;
+  &.light{
+    color: white;
+  }
 }
