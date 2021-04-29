@@ -42,6 +42,7 @@ blocks.paragraph = function(){
 
     //save data on any change
     myeditor.addEventListener("input", ()=>saver(myeditor , {text: editform.innerHTML}));
+    myeditor.addEventListener("paste", ()=>saver(myeditor , {text: editform.innerHTML}));
     saver(myeditor , {text: editform.innerHTML});
 
     //split on enter
@@ -361,4 +362,72 @@ blocks.raw = function(){
   edit: rawEdit,
   view: rawView
   }
-}
+}//raw
+
+blocks.quote = function(){
+  /*
+  *  <blockquote> <span>text</span> 
+  *     <footer> <cite> Author </cite>
+  *  </blockquote>
+  *
+  */
+  let defdata = {
+   "text": "Lorem ipsum, dolor sit? Amet...",
+   "caption": "Marcus Tullius Cicero"
+  }
+  let quoteEdit = function( data , saver , blockeditor , bbox ){
+    //test and set the initial data
+    let private_data = checkData(data, defdata);
+
+   //build html nodes 
+    let outer = document.createElement("blockquote");
+    let footer = document.createElement("footer");
+    let editspan = document.createElement("span");
+    editspan.setAttribute("contenteditable", true)
+    editspan.innerHTML = private_data.text;
+    let cite = document.createElement("cite");
+    cite.setAttribute("contenteditable", true);
+    cite.innerHTML = private_data.caption;
+    //tree
+    footer.appendChild(cite);
+    outer.appendChild(editspan);
+    outer.appendChild(footer);
+    //
+    //event handlers
+    editspan.addEventListener("input", function(){
+         private_data.text = editspan.innerHTML;
+         saver(outer , private_data);
+    });
+    cite.addEventListener("input", function(){
+         private_data.caption = cite.innerHTML;
+         saver(outer , private_data);
+      
+    })
+    //first save of data
+    saver(outer , private_data);
+    footer.appendChild(cite);
+    outer.appendChild(editspan);
+    outer.appendChild(footer);
+
+    return outer;
+  };
+
+  let quoteView = function(data){
+    if(data.caption)
+    {
+      return str2dom(`<blockquote>
+        <span>${data.text}</span>
+        <footer>
+        <cite>${data.caption}</cite>
+        </footer>
+      </blockquote>`)
+    }
+    return str2dom(`<blockquote>${data.text}</blockquote>`)
+    };
+
+  return {
+    edit: quoteEdit,
+    view: quoteView
+  }
+}//QUOTE
+

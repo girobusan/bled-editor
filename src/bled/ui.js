@@ -43,7 +43,7 @@ icons.material.attachment = require("./svg/attach_file-24px.svg");
 
 icons.material.report = require("./svg/report-24px.svg");
 
-icons.material.quote = require("./svg/format_quote-24px.svg");
+//icons.material.quote = require("./svg/format_quote-24px.svg");
 icons.material.list = require("./svg/format_list_bulleted-24px.svg");
 icons.material.video = require("./svg/videocam-24px.svg");
 icons.material.quote = require("./svg/format_quote-24px.svg");

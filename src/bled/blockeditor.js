@@ -343,19 +343,14 @@ export function makeBasicEditor(el) {
         edit: Coreblocks.raw().edit,
         view: Coreblocks.raw().view
     });
-    /*
-    editor.registerEditor({
-        type: "raw",
-        icon: UI.icons.raw,
-        make: Coreblocks.raw,
-        label: 'Raw HTML'
-    });
     editor.registerEditor({
         type: "quote",
         icon: UI.icons.material.quote,
-        make: Coreblocks.blockquote,
-        label: 'Blockquote'
+        label: "Quote",
+        edit: Coreblocks.quote().edit,
+        view: Coreblocks.quote().view
     });
+    /*
     editor.registerEditor({
         type: "image",
         icon: UI.icons.material.image,
