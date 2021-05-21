@@ -1,4 +1,4 @@
-
+const upload_icon = require("./svg/tray-arrow-up.svg");
 
 function bless(e){
 //console.log("bless" , e);
@@ -27,9 +27,28 @@ export function wrapToDiv(wclass, ...elems){
   return wrapper;
 
 }
+
+export function niceFileInput(callback , label){
+ 
+ let form_container = blessed("div" , "nice_file_input");
+
+ let rid = "id" + parseInt(Math.random()*100000);
+ let myform = document.createElement("input");
+ myform.type = "file";
+ myform.id = rid;
+ myform.addEventListener("change", function(){ callback(myform) });
+ let mylabel = document.createElement("label");
+ mylabel.innerHTML = upload_icon;
+ mylabel.setAttribute("for", rid)
+ form_container.appendChild(myform);
+ form_container.appendChild(mylabel);
+ return form_container;
+
+}
 export function topLabel(lbl , el){
    let le = blessed("div" , "vgroup");
    let lb = blessed("label");
+   lb.innerText = lbl;
    le.appendChild(lb);
    le.appendChild(el);
    return le;

@@ -91,35 +91,16 @@ function restoreSelection(range) {
 
 //smalltalk.prompt("Latid", question, "");
 
+
+
 export function Ask(pr) {
      return  smalltalk.prompt("Block editor" , pr , "")
 }
 
 export function editorOverlay(blockeditor){
-  if(document.getElementById("block-editor-overlay")){
-    return;
-  }
-  const pad = 6;
-  var overlay = document.createElement("div");
-  overlay.id = "block-editor-overlay";
-  overlay.style.position = "absolute";
-  overlay.style.display = "none";
-  overlay.style.zIndex = "1000";
-  //overlay.style.borderRadius = (pad/2) + "px";
-  //overlay.style.border = "1px dashed " + Colours.light;
-  overlay.style.backgroundColor = "rgba( 0 , 161 , 171 , .01 )";
+  var overlay = {};
   overlay.overlayedNode = null;
-  document.body.appendChild(overlay);
 
-  overlay.addEventListener("click", function(e){
-    if(!overlay.overlayedNode){return};
-    //console.log("Go edit")
-    overlay.style.display = "none";
-    overlay.overlayedNode.classList.remove("block-editor-overlayed-block")
-    blockeditor.editBlock(overlay.overlayedNode);
-    e.preventDefault()
-
-  } )
   
   function checkTarget(element , condition){
     if( element.nodeName=='BODY' || element.nodeName=='HTML'  ){
@@ -132,13 +113,18 @@ export function editorOverlay(blockeditor){
     return checkTarget(element.parentNode , condition);
   }
 
-  
-  window.addEventListener("mouseout", function(e){
-   //console.log("out" , e.target.id);
-   if(e.target.id=="block-editor-overlay"){
-        overlay.overlayedNode.classList.remove("block-editor-overlayed-block")
-   }
+  window.addEventListener("click", function(){
+  //if something overlayed?
+  if(!overlay.overlayedNode){
+  return;
+  }else{
+  blockeditor.editBlock(overlay.overlayedNode);
+  }
   })
+
+  
+
+  
   window.addEventListener("mouseover", function(e){
     //console.log("mouseover...")
     if(e.target.id=="block-editor-overlay"){
@@ -156,28 +142,19 @@ export function editorOverlay(blockeditor){
         overlay.overlayedNode.classList.remove("block-editor-overlayed-block")
         overlay.overlayedNode= null;
       }
-      overlay.style.display = "none";
       return;
 
     }
     overlay.overlayedNode = weAt;
     overlay.overlayedNode.classList.add("block-editor-overlayed-block")
-    let ostyle = window.getComputedStyle(overlay.overlayedNode);
-    let ow = parseFloat(ostyle.width)  ;
-    let oh = parseFloat(ostyle.height);
-    let om = parseFloat(ostyle.marginTop);
-    let omb = parseFloat(ostyle.marginBottom);
+    overlay.overlayedNode.addEventListener("mouseout" , ()=>overlay.overlayedNode.classList.remove("block-editor-overlayed-block"));
+    
 
     //console.log("RUN!");
     //it's a block
     let targetBbox = weAt.getBoundingClientRect();
     
     //console.log("Show overlay" , weAt.classList);
-    overlay.style.display = "block";
-    overlay.style.width = ow +  "px";
-    overlay.style.height = (oh +om + omb) +  "px";
-    overlay.style.top = (targetBbox.top -om)  + "px";
-    overlay.style.left = targetBbox.left  + "px";
   })
 }
 

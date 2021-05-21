@@ -413,7 +413,7 @@ blocks.quote = function(){
   };
 
   let quoteView = function(data){
-    if(data.caption)
+    if(data.caption && data.caption.trim()!="")
     {
       return str2dom(`<blockquote>
         <span>${data.text}</span>
@@ -431,3 +431,134 @@ blocks.quote = function(){
   }
 }//QUOTE
 
+/*
+ * IMAGE
+ *  == props and classes
+ * stretched
+ * left
+ * right
+ * noresize | noResize ??
+ *
+ * withBorder     =>  bordered
+ * withBackground =>  with_background
+ *
+ * == other data 
+ * caption
+ * src
+ * altText
+ *
+ */
+blocks.image = function(){
+
+  const nosrc = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciICB2aWV3Qm94PSIwIDAgMTM1LjQ2NyAxMzUuNDY3IiBzdHJva2U9IiM1NTUiIHhtbG5zOnY9Imh0dHBzOi8vdmVjdGEuaW8vbmFubyI+PHBhdGggZD0iTTAgMGgxMzUuNDY3djEzNS40NjdIMHoiIGZpbGw9IiNkM2QzZDMiIHN0cm9rZS13aWR0aD0iLjI2NSIvPjxnIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iLjI2NyI+PHBhdGggZD0iTS4xMDIuMDYzbDEzNS4yNjIgMTM1LjM0MSIvPjxwYXRoIGQ9Ik0xMzUuMzY0LjA2M0wuMTAyIDEzNS40MDQiLz48L2c+PC9zdmc+Cg==";
+  const prop2class =     [
+    ["stretched" , "stretched"],
+    ["withBackground" , "with_background"],
+    ["withBorder" , "bordered"],
+    ["left" , "left"],
+    ["right" , "right"],
+    ["noresize" , "noresize"],
+  ]
+  ;
+
+  function props2classStr(dataprops){
+    return prop2class.reduce(
+      function(a,e){
+        if(dataprops[e[0]]){
+          a+=" " + e[1]
+        };
+        return a;
+      } , ""
+    );
+  }
+  var defdata = {
+    src: "",
+    
+    caption: "Lorem ipsum"
+  }
+  let imgView = function(data){
+    let mdata;
+    if(!data||!data.src){
+    console.log("Data is empty")
+    mdata = Object.assign({}, defdata);
+    console.log(mdata)
+    }else{
+    mdata = Object.assign({}, data)
+    }
+    console.log( "Image viewer caption" , mdata.caption);
+    let cptblock = mdata.caption ? `<figcaption>` + mdata.caption + `</figcaption>`  : "";
+    let figclass = props2classStr(mdata) ;
+    console.log( mdata.caption);
+
+    let tag = `<figure class="${figclass}"><img src="${mdata.src}">${cptblock}</figure>`
+    return str2dom(tag);
+  }
+  //
+  let imgEdit = function( data , saver , blockeditor , bbox ){
+    //build UI
+    let private_data = Object.assign({} , Object.keys(data).length >1 ? data : defdata);
+    //create Proxy for dynamic changes
+    let proxy_data = new Proxy(private_data , {
+      set: function(t,p,v){
+        if(p=='src'){
+          img_tag.setAttribute("src", v);
+        }
+        t[p] = v;
+        saver( outer_container , t);
+        return true;
+      }
+    } )
+    let outer_container = document.createElement("span");
+    saver(outer_container , proxy_data);
+    //classes
+    //figure display
+    let figure_tag = document.createElement("figure");
+    let img_tag = document.createElement("img");
+    img_tag.addEventListener("error", ()=>img_tag.src=nosrc);
+    img_tag.src = proxy_data.src || defdata.src;
+    let caption_tag = document.createElement("figcaption");
+    caption_tag.setAttribute("contenteditable", true);
+    caption_tag.addEventListener("input", ()=>proxy_data.caption = caption_tag.innerHTML)
+    caption_tag.innerHTML = proxy_data.caption;
+    //compose
+    figure_tag.appendChild(img_tag);
+    figure_tag.appendChild((caption_tag));
+    //
+
+    //all of top part
+    let top_part = figure_tag;
+    //
+    //:w
+    //
+    //row: src , upload
+    let input_src = blessed("input");
+    input_src.addEventListener("input" , function(){
+        //console.log(this.value);
+        proxy_data.src = this.value;
+    })
+    input_src.type = "text";
+    input_src.value = proxy_data.src;
+    let input_form = uiparts.topLabel(  "Source", input_src);
+    input_form.style.flexGrow = 1;
+    //
+    let callback = function(f){
+    console.info("Form callback", f);
+    }
+    let upload = uiparts.topLabel("Upload a file", uiparts.niceFileInput(callback));
+
+    let row_1 = uiparts.wrapToRow(input_form , upload);
+
+    //row: alt text
+    //row: link
+    let edit_panel = blessed("div" , "panel");
+    edit_panel.appendChild(row_1);
+
+    outer_container.appendChild(top_part);
+    outer_container.appendChild(edit_panel);
+    return outer_container;
+  }
+  return{
+    edit: imgEdit,
+    view: imgView
+  }
+};

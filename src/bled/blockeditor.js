@@ -350,6 +350,13 @@ export function makeBasicEditor(el) {
         edit: Coreblocks.quote().edit,
         view: Coreblocks.quote().view
     });
+    editor.registerEditor({
+        type: "image",
+        icon: UI.icons.material.image,
+        label: "Quote",
+        edit: Coreblocks.image().edit,
+        view: Coreblocks.image().view
+    });
     /*
     editor.registerEditor({
         type: "image",

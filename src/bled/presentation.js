@@ -49,6 +49,14 @@ var small_testdata =
        }
     },
     {
+       "type":"image",
+       "data":{
+          "src":"kitty.jpg",
+          "noresie" : true,
+          "caption" : "Kitty"
+       }
+    },
+    {
       "type": "markdown",
       "data":{
         "markdown": "### Markdown\n\n1. Lorem Ipsun Dolor\n1. Set Amet" 
