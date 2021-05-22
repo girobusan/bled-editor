@@ -1,6 +1,6 @@
 const upload_icon = require("./svg/tray-arrow-up.svg");
 
-function bless(e){
+export function bless(e){
 //console.log("bless" , e);
  e.classList.add("block-editor-ui-element");
  return e;
@@ -44,6 +44,12 @@ export function niceFileInput(callback , label){
  form_container.appendChild(mylabel);
  return form_container;
 
+}
+export function panelHeader(panel,header){
+ let ph = blessed("h5");
+ ph.innerHTML = header;
+ panel.appendChild(ph);
+ return panel;
 }
 export function topLabel(lbl , el){
    let le = blessed("div" , "vgroup");

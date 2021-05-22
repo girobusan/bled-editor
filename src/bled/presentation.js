@@ -52,7 +52,7 @@ var small_testdata =
        "type":"image",
        "data":{
           "src":"kitty.jpg",
-          "noresie" : true,
+          "noresize" : true,
           "caption" : "Kitty"
        }
     },

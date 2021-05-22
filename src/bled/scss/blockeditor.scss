@@ -60,7 +60,10 @@ select.#{$beclass}{
     display: block;
   }
 }
-
+hr.#{$beclass}{
+  height: $ui_block_padding;
+  display: block;
+}
 input.#{$beclass}{
   border-radius: $ui_corner_radius;
   padding: 4px;
@@ -77,15 +80,28 @@ input[type=text].#{$beclass} {
   border: 1px solid $color_main;
   background-color: white;
 }
+input[type=checkbox].#{$beclass} {
+  border: 1px solid $color_main;
+  background-color: white;
+  display: inline-block;
+  width: 16px;
+  line-height: 8px;
+  height: 16px;
+  flex-grow: 0;
+  &:checked{
+    background-color: $color_main;
+  }
+}
 input[type=file].#{$beclass}{
   height: 24px;
   padding: 0;
-  background-color: white;
+  background-color: $color_main;
 }
 
 label.#{$beclass}{
   display: block;
   flex-grow: 0;
+  padding: $ui_block_padding/2 0;
 }
 textarea.#{$beclass}{
   white-space: pre-wrap;
@@ -101,8 +117,11 @@ textarea.#{$beclass}{
 }
 //containers
 .group.#{$beclass}{
-  display: block;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
   padding:0;
+  
 }
 .vgroup.#{$beclass}{
   display: flex;
@@ -126,9 +145,12 @@ textarea.#{$beclass}{
   flex-direction: row;
   align-items: baseline;
   justify-content: stretch;
+  flex-wrap: wrap;
+  padding-bottom: $ui_block_padding/2;
 
   *{
     margin-right: $ui_block_padding;
+    flex-grow: 1;
     &:last-child{
       margin-right: 0;
     }
@@ -156,6 +178,7 @@ h5.#{$beclass}{
 .nice_file_input.#{$beclass}{
   overflow: hidden;
   position: relative;
+  flex-grow: 0 !important;
   input{
     width: 5px;
     height:5px;

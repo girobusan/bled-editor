@@ -532,27 +532,74 @@ blocks.image = function(){
     //
     //row: src , upload
     let input_src = blessed("input");
+    input_src.type = "text";
+
     input_src.addEventListener("input" , function(){
         //console.log(this.value);
         proxy_data.src = this.value;
     })
-    input_src.type = "text";
     input_src.value = proxy_data.src;
     let input_form = uiparts.topLabel(  "Source", input_src);
-    input_form.style.flexGrow = 1;
+    //input_form.style.flexGrow = 1;
     //
     let callback = function(f){
     console.info("Form callback", f);
     }
     let upload = uiparts.topLabel("Upload a file", uiparts.niceFileInput(callback));
+    upload.style.flexGrow = 0;
 
     let row_1 = uiparts.wrapToRow(input_form , upload);
 
-    //row: alt text
-    //row: link
-    let edit_panel = blessed("div" , "panel");
-    edit_panel.appendChild(row_1);
+    //row: alt text row: link
 
+    let alt_text = blessed("input");
+    alt_text.type = "text";
+    alt_text.value = proxy_data.alt || "";
+    alt_text.addEventListener("input" , function(){
+       proxy_data.alt = this.value;
+    })
+
+    let link_url = blessed("input");
+    link_url.type = "text";
+
+    let row_2 = uiparts.wrapToRow(
+      uiparts.topLabel("Alt text" , alt_text),
+      uiparts.topLabel("Link to" , link_url)
+    );
+
+    // checkboxes - classes
+
+    let chboxes = prop2class.map(function(e){
+      //let chbx = document.createElement("input");
+      let chbx = blessed("input");
+      chbx.type = "checkbox";
+      chbx.style.flexGrow = 0;
+      chbx.classList.add(e[1])
+
+      if(proxy_data[e[0]]){
+        chbx.setAttribute("checked" , true);
+      }
+      chbx.addEventListener("change", function(){
+         proxy_data[e[0]] = this.checked;
+      })
+      let chlbl = blessed("label");
+      chlbl.innerText = e[0];
+      return uiparts.group(chbx , chlbl);
+
+    });
+
+    let row_3 = uiparts.wrapToRow(...chboxes);
+
+
+    let edit_panel = blessed("div" , "panel");
+    //uiparts.panelHeader(edit_panel, "Image");
+    edit_panel.appendChild(row_1);
+    edit_panel.appendChild(row_2);
+    
+    edit_panel.appendChild(blessed("hr"));
+    edit_panel.appendChild(row_3);
+    
+    
     outer_container.appendChild(top_part);
     outer_container.appendChild(edit_panel);
     return outer_container;
