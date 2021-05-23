@@ -82,14 +82,27 @@ input[type=text].#{$beclass} {
 }
 input[type=checkbox].#{$beclass} {
   border: 1px solid $color_main;
-  background-color: white;
+  background-color: $color_pale;
   display: inline-block;
+  position: relative;
   width: 16px;
   line-height: 8px;
   height: 16px;
   flex-grow: 0;
   &:checked{
-    background-color: $color_main;
+    //background-color: $color_main;
+    text-align: center;
+    &:after{
+      content: " " ;
+      display: block;
+      width: 10px;
+      height: 10px;
+      background-color: $color_main;
+      border-radius: $ui_corner_radius/2;
+      position: absolute;
+      left: 2px;
+      top:2px;
+    }
   }
 }
 input[type=file].#{$beclass}{

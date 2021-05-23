@@ -22,4 +22,58 @@ pre{
 
 }
 
+figure{
+  padding: 16px;
+  margin: 0px;  
+
+  &.with_background{
+    background: #444;
+    color: white;
+    img{
+      border: 1px solid #eeeeee;
+    }
+    figcaption{
+      width: 50%;
+      margin:0 auto;
+      text-align: center;
+    }
+  }
+
+  figcaption{
+    font-size: .75em;
+  }
+  img{
+    display:block;
+    margin: 0 auto 12px auto;
+  }
+  &.stretched{
+    img{
+      width: 100%;
+    }
+  }
+  &.noresize{
+    img{
+      max-width: 100%;
+    }
+  }
+  &.bordered{
+    img{
+      border: 4px solid gray;
+    }
+  }
+  &.left{
+    float:left;
+    margin-right: 48px;
+  }
+  &.right{
+    float:right;
+    margin-left: 48px;
+  }
+  &.left , &.right{
+    width:33%;
+    padding:0px;
+  }
+
+}
+
 

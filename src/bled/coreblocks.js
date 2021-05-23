@@ -451,15 +451,17 @@ blocks.quote = function(){
 blocks.image = function(){
 
   const nosrc = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciICB2aWV3Qm94PSIwIDAgMTM1LjQ2NyAxMzUuNDY3IiBzdHJva2U9IiM1NTUiIHhtbG5zOnY9Imh0dHBzOi8vdmVjdGEuaW8vbmFubyI+PHBhdGggZD0iTTAgMGgxMzUuNDY3djEzNS40NjdIMHoiIGZpbGw9IiNkM2QzZDMiIHN0cm9rZS13aWR0aD0iLjI2NSIvPjxnIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iLjI2NyI+PHBhdGggZD0iTS4xMDIuMDYzbDEzNS4yNjIgMTM1LjM0MSIvPjxwYXRoIGQ9Ik0xMzUuMzY0LjA2M0wuMTAyIDEzNS40MDQiLz48L2c+PC9zdmc+Cg==";
-  const prop2class =     [
-    ["stretched" , "stretched"],
-    ["withBackground" , "with_background"],
-    ["withBorder" , "bordered"],
-    ["left" , "left"],
-    ["right" , "right"],
-    ["noresize" , "noresize"],
+  const prop2class = [
+    ["stretched" , "stretched" , "Stretched"],
+    ["withBackground" , "with_background" , "With background"],
+    ["withBorder" , "bordered" , "With border"],
+    ["left" , "left" , "Left"],
+    ["right" , "right" , "Right"],
+    ["noresize" , "noresize" , "No resize"],
   ]
   ;
+
+  const justProps = prop2class.map(e=>e[0]);
 
   function props2classStr(dataprops){
     return prop2class.reduce(
@@ -500,10 +502,16 @@ blocks.image = function(){
     //create Proxy for dynamic changes
     let proxy_data = new Proxy(private_data , {
       set: function(t,p,v){
+        t[p] = v;
         if(p=='src'){
           img_tag.setAttribute("src", v);
+        };
+        if(justProps.indexOf(p)!=-1){
+        //set or remove class
+        let newclassstr = props2classStr(t);
+        figure_tag.setAttribute("class", newclassstr)
+
         }
-        t[p] = v;
         saver( outer_container , t);
         return true;
       }
@@ -513,6 +521,7 @@ blocks.image = function(){
     //classes
     //figure display
     let figure_tag = document.createElement("figure");
+    figure_tag.setAttribute("class", props2classStr(proxy_data));
     let img_tag = document.createElement("img");
     img_tag.addEventListener("error", ()=>img_tag.src=nosrc);
     img_tag.src = proxy_data.src || defdata.src;
@@ -543,7 +552,12 @@ blocks.image = function(){
     //input_form.style.flexGrow = 1;
     //
     let callback = function(f){
-    console.info("Form callback", f);
+     //upload
+     blockeditor.upload(f.files[0])
+     .then(function(r){
+       proxy_data.src = r.file.url;
+       input_src.value = r.file.url;
+     })
     }
     let upload = uiparts.topLabel("Upload a file", uiparts.niceFileInput(callback));
     upload.style.flexGrow = 0;
@@ -583,7 +597,7 @@ blocks.image = function(){
          proxy_data[e[0]] = this.checked;
       })
       let chlbl = blessed("label");
-      chlbl.innerText = e[0];
+      chlbl.innerText = e[2];
       return uiparts.group(chbx , chlbl);
 
     });
