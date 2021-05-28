@@ -475,12 +475,13 @@ blocks.image = function(){
   }
   var defdata = {
     src: "",
+    file: {url: ""},
     
     caption: "Lorem ipsum"
   }
   let imgView = function(data){
     let mdata;
-    if(!data||!data.src){
+    if(!data||!data.file){
     console.log("Data is empty")
     mdata = Object.assign({}, defdata);
     console.log(mdata)
@@ -492,7 +493,7 @@ blocks.image = function(){
     let figclass = props2classStr(mdata) ;
     console.log( mdata.caption);
 
-    let tag = `<figure class="${figclass}"><img src="${mdata.src}">${cptblock}</figure>`
+    let tag = `<figure class="${figclass}"><img src="${mdata.file.url}" alt="${mdata.alt_text || ""}">${cptblock}</figure>`
     return str2dom(tag);
   }
   //
@@ -503,8 +504,9 @@ blocks.image = function(){
     let proxy_data = new Proxy(private_data , {
       set: function(t,p,v){
         t[p] = v;
-        if(p=='src'){
-          img_tag.setAttribute("src", v);
+        console.log("P" , p)
+        if(p=='file'){
+          img_tag.setAttribute("src", v.url);
         };
         if(justProps.indexOf(p)!=-1){
         //set or remove class
@@ -524,7 +526,7 @@ blocks.image = function(){
     figure_tag.setAttribute("class", props2classStr(proxy_data));
     let img_tag = document.createElement("img");
     img_tag.addEventListener("error", ()=>img_tag.src=nosrc);
-    img_tag.src = proxy_data.src || defdata.src;
+    img_tag.src = proxy_data.file.url || defdata.src;
     let caption_tag = document.createElement("figcaption");
     caption_tag.setAttribute("contenteditable", true);
     caption_tag.addEventListener("input", ()=>proxy_data.caption = caption_tag.innerHTML)
@@ -547,7 +549,7 @@ blocks.image = function(){
         //console.log(this.value);
         proxy_data.src = this.value;
     })
-    input_src.value = proxy_data.src;
+    input_src.value = proxy_data.file.url;
     let input_form = uiparts.topLabel(  "Source", input_src);
     //input_form.style.flexGrow = 1;
     //
@@ -555,11 +557,11 @@ blocks.image = function(){
      //upload
      blockeditor.upload(f.files[0])
      .then(function(r){
-       proxy_data.src = r.file.url;
+       proxy_data.file = {url : r.file.url};
        input_src.value = r.file.url;
      })
     }
-    let upload = uiparts.topLabel("Upload a file", uiparts.niceFileInput(callback));
+    let upload = uiparts.topLabel("Upload new file", uiparts.niceFileInput(callback));
     upload.style.flexGrow = 0;
 
     let row_1 = uiparts.wrapToRow(input_form , upload);
@@ -568,9 +570,9 @@ blocks.image = function(){
 
     let alt_text = blessed("input");
     alt_text.type = "text";
-    alt_text.value = proxy_data.alt || "";
+    alt_text.value = proxy_data.alt_text || "";
     alt_text.addEventListener("input" , function(){
-       proxy_data.alt = this.value;
+       proxy_data.alt_text = this.value;
     })
 
     let link_url = blessed("input");
@@ -623,3 +625,113 @@ blocks.image = function(){
     view: imgView
   }
 };
+blocks.video = function(){
+  const videoProps = [
+  ["autoplay" , "Autoplay" ],
+  ["loop" , "Loop" ],
+  ["muted" , "Muted" ],
+  ["controls" , "Controls" ],
+  ["preload" , "Preload" ],
+
+  ]
+  const props2propstr = function(d){
+   return videoProps.filter(e=>d[e[0]]).map(e=>e[0]).join(" ");
+  }
+
+  const propsApply = function(d, e){
+    videoProps.forEach(function(pe){
+      if(d[pe[0]]){
+        e.setAttribute(pe[0] , true );
+      }else{
+        e.removeAttribute(pe[0] );
+      }
+    });
+    return e;
+  }
+
+  let videoView = function(datain){
+  var data = Object.assign({} , datain && datain.file && datain.file.url ? datain : {file:{url: ""}});
+
+  return str2dom(`<div class="video"><video style="pointer-events: none" src="${data.file.url || ''}" ${props2propstr(data)} class="${data.class || ''}" poster="${data.poster||''}">
+  Video not found or in wrong format
+  </video></div>`);
+
+
+  }
+
+  let videoEdit = function( data , saver , blockeditor , bbox ){
+
+  var editor_data = Object.assign({} , data && data.file && data.file.url ? data : {file:{url: ""}});
+  var pdata = new Proxy(editor_data , {
+    set: function(t,p,v){
+       t[p] = v;
+       
+       saver(outer , pdata);
+       return true;
+    }
+  })
+  const outer = document.createElement("span");
+  saver(outer , pdata);
+  var videotag = document.createElement("video");
+  videotag = propsApply(pdata , videotag);
+
+  videotag.src = pdata.file.url;
+
+  outer.appendChild(videotag);
+  //panel
+
+  let editor = blessed("div" , "panel");
+  //video src , video upload
+  let src_form = blessed("input");
+  src_form.type = "text";
+  src_form.value = pdata.file.url;
+  let upld_video = uiparts.niceFileInput(()=>true, "Upload video file");
+  //
+  editor.appendChild(uiparts.wrapToRow(
+  uiparts.topLabel ("Video source" , src_form) , 
+  uiparts.unFlexGrow(uiparts.topLabel( "Upload video",   upld_video), 0.2)));
+
+  // poster, poster upload
+  let poster_src = blessed("input");
+  poster_src.type = "text";
+  let upld_poster = uiparts.niceFileInput(()=>true, "Upload poster");
+  editor.appendChild(
+    uiparts.wrapToRow(
+      uiparts.topLabel("Poster source" , poster_src),
+      uiparts.unFlexGrow( 
+        uiparts.topLabel("Upload poster" , upld_poster), 0.2
+      )
+    )
+  );
+  //viedo attrs
+
+  let chboxes = videoProps.map(function(e){
+  let chb = blessed("input");
+  chb.type = "checkbox";
+  if(pdata[e[0]]){
+   chb.setAttribute("checked" , true);
+  };
+
+  chb.addEventListener("change" , function(){
+    pdata[e[0]] = this.checked;
+  })
+  let lbl = blessed("label");
+
+  lbl.innerHTML = e[1];
+  return uiparts.group(chb,lbl);
+  });
+
+  editor.appendChild(blessed("hr"));
+  editor.appendChild(uiparts.wrapToRow(...chboxes));
+
+
+  
+outer.appendChild(editor);
+return outer;
+  }
+
+ return {
+ edit: videoEdit,
+ view: videoView
+ }
+}

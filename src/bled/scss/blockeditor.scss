@@ -160,6 +160,9 @@ textarea.#{$beclass}{
   justify-content: stretch;
   flex-wrap: wrap;
   padding-bottom: $ui_block_padding/2;
+  label{
+    flex-grow: 0;
+  }
 
   *{
     margin-right: $ui_block_padding;

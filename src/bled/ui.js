@@ -113,8 +113,9 @@ export function editorOverlay(blockeditor){
     return checkTarget(element.parentNode , condition);
   }
 
-  window.addEventListener("click", function(){
+  window.addEventListener("mouseup", function(){
   //if something overlayed?
+  console.log("Window click")
   if(!overlay.overlayedNode){
   return;
   }else{
@@ -147,7 +148,6 @@ export function editorOverlay(blockeditor){
     }
     overlay.overlayedNode = weAt;
     overlay.overlayedNode.classList.add("block-editor-overlayed-block")
-    overlay.overlayedNode.addEventListener("mouseout" , ()=>overlay.overlayedNode.classList.remove("block-editor-overlayed-block"));
     
 
     //console.log("RUN!");

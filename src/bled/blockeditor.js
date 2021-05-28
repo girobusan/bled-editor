@@ -353,23 +353,19 @@ export function makeBasicEditor(el) {
     editor.registerEditor({
         type: "image",
         icon: UI.icons.material.image,
-        label: "Quote",
+        label: "Image",
         edit: Coreblocks.image().edit,
         view: Coreblocks.image().view
     });
-    /*
-    editor.registerEditor({
-        type: "image",
-        icon: UI.icons.material.image,
-        make: Coreblocks.image,
-        label: 'Image'
-    });
+    
     editor.registerEditor({
         type: "video",
         icon: UI.icons.material.video,
-        make: Coreblocks.video,
-        label: 'Video'
+        label: "Video",
+        edit: Coreblocks.video().edit,
+        view: Coreblocks.video().view
     });
+    /*
     editor.registerEditor({
         type: "list",
         icon: UI.icons.material.list,

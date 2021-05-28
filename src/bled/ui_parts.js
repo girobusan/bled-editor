@@ -5,6 +5,11 @@ export function bless(e){
  e.classList.add("block-editor-ui-element");
  return e;
 }
+
+export function unFlexGrow(e , g){
+e.style.flexGrow = g || 0;
+return e;
+}
 export function blessed(ename, ...classes){
   let novice =  bless(document.createElement(ename));
   if(classes.length>0)

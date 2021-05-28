@@ -49,17 +49,29 @@ var small_testdata =
        }
     },
     {
-       "type":"image",
-       "data":{
-          "src":"kitty.jpg",
-          "noresize" : true,
-          "caption" : "Kitty"
-       }
+      "type":"image",
+      "data":{
+        "file": {
+          "url":"kitty.jpg",
+
+        },
+        "noresize" : true,
+        "caption" : "Kitty"
+      }
     },
     {
       "type": "markdown",
       "data":{
         "markdown": "### Markdown\n\n1. Lorem Ipsun Dolor\n1. Set Amet" 
+      }
+    },
+    {
+      type : "video",
+      data: {
+       "controls" : true,
+        "file": {
+          url: "video.mp4"
+        }
       }
     }
  ]
